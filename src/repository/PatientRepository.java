@@ -2,6 +2,7 @@ package repository;
 
 import java.io.*;
 import java.util.*;
+import java.time.LocalDate;
 import model.Patient;
 import model.User;
 import enums.Gender;
@@ -68,34 +69,34 @@ private Patient fromCsvString(String csvLine) {
 }
 
     // Main function to save patient to CSV
-    public void save(Patient patient) {
-        try {
-            // Check if patient already exists
-            List<Patient> patients = loadAllPatients();
-            boolean exists = false;
+    // public void save(Patient patient) {
+    //     try {
+    //         // Check if patient already exists
+    //         List<Patient> patients = loadAllPatients();
+    //         boolean exists = false;
             
-            // Create or append to file
-            try (FileWriter fw = new FileWriter(CSV_FILE, true);
-                 BufferedWriter bw = new BufferedWriter(fw);
-                 PrintWriter out = new PrintWriter(bw)) {
+    //         // Create or append to file
+    //         try (FileWriter fw = new FileWriter(CSV_FILE, true);
+    //              BufferedWriter bw = new BufferedWriter(fw);
+    //              PrintWriter out = new PrintWriter(bw)) {
                 
-                // If file is empty, write header
-                if (new File(CSV_FILE).length() == 0) {
-                    out.println(CSV_HEADER);
-                }
+    //             // If file is empty, write header
+    //             if (new File(CSV_FILE).length() == 0) {
+    //                 out.println(CSV_HEADER);
+    //             }
                 
-                // Write patient data
-                out.println(patient.toCsvString());
+    //             // Write patient data
+    //             out.println(patient.toCsvString());
                 
-            } catch (IOException e) {
-                System.err.println("Error writing to CSV: " + e.getMessage());
-                throw e;
-            }
+    //         } catch (IOException e) {
+    //             System.err.println("Error writing to CSV: " + e.getMessage());
+    //             throw e;
+    //         }
             
-        } catch (IOException e) {
-            System.err.println("Failed to save patient: " + e.getMessage());
-        }
-    }
+    //     } catch (IOException e) {
+    //         System.err.println("Failed to save patient: " + e.getMessage());
+    //     }
+    // }
 
     // Helper method to create CSV file and directory if they don't exist
     private void createCsvIfNotExists() {
@@ -111,24 +112,24 @@ private Patient fromCsvString(String csvLine) {
         }
     }
 
-    // Helper method to load all patients (useful for checking duplicates)
-    private List<Patient> loadAllPatients() {
-        List<Patient> patients = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE))) {
-            String line;
-            boolean firstLine = true;
-            while ((line = reader.readLine()) != null) {
-                if (firstLine) {  // Skip header
-                    firstLine = false;
-                    continue;
-                }
-                Patient patient = new Patient();
-                patient.fromCsvString(line);
-                patients.add(patient);
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading CSV: " + e.getMessage());
-        }
-        return patients;
-    }
-}
+//     // Helper method to load all patients (useful for checking duplicates)
+//     private List<Patient> loadAllPatients() {
+//         List<Patient> patients = new ArrayList<>();
+//         try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE))) {
+//             String line;
+//             boolean firstLine = true;
+//             while ((line = reader.readLine()) != null) {
+//                 if (firstLine) {  // Skip header
+//                     firstLine = false;
+//                     continue;
+//                 }
+//                 Patient patient = new Patient();
+//                 patient.fromCsvString(line);
+//                 patients.add(patient);
+//             }
+//         } catch (IOException e) {
+//             System.err.println("Error reading CSV: " + e.getMessage());
+//         }
+//         return patients;
+//     }
+ }
