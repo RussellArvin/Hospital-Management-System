@@ -13,8 +13,7 @@ public class UserService {
 
     public User Login(String id, String password){
         Patient patient = patientRepository.findOne(id);
-
-        if(patient.validatePassword(password)) return patient;
+        if(patient != null && patient.validatePassword(password)) return patient;
         else return null;
     }
 }

@@ -9,7 +9,7 @@ import enums.Gender;
 import enums.BloodType;
 
 public class PatientRepository {
-    private static final String CSV_FILE = "data/patients.csv";
+    private static final String CSV_FILE = "data/patient.csv";
     private static final String CSV_HEADER = "id,password,name,dateOfBirth,gender,bloodType,phone,email";
 
     // Constructor - creates data directory and CSV file if they don't exist
