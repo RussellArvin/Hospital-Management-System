@@ -16,6 +16,57 @@ public class PatientRepository {
         createCsvIfNotExists();
     }
 
+    public Patient findOne(String id) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE))) {
+        String line;
+        boolean firstLine = true;
+        
+        while ((line = reader.readLine()) != null) {
+            // Skip header line
+            if (firstLine) {
+                firstLine = false;
+                continue;
+            }
+            
+            // Parse the line into patient
+            Patient patient = fromCsvString(line);
+            
+            // Check if this is the patient we're looking for
+            if (patient.getId().equals(id)) {
+                return patient;
+            }
+        }
+    } catch (IOException e) {
+        System.err.println("Error reading CSV while finding patient: " + e.getMessage());
+    }
+    
+    // Return null if patient not found
+    return null;
+}
+
+// You might also want to modify your fromCsvString method to handle date better:
+private Patient fromCsvString(String csvLine) {
+    String[] parts = csvLine.split(",");
+    if (parts.length < 8) {
+        throw new IllegalArgumentException("Invalid CSV format");
+    }
+
+    try {
+        return new Patient(
+            parts[0],                           // id
+            parts[1],                           // password
+            parts[2],                           // name
+            LocalDate.parse(parts[3]),          // dateOfBirth - parse string to LocalDate
+            Gender.valueOf(parts[4]),           // gender
+            BloodType.valueOf(parts[5]),        // bloodType
+            Integer.parseInt(parts[6]),         // phone - parse string to int
+            parts[7]                            // email
+        );
+    } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Error parsing CSV data: " + e.getMessage());
+    }
+}
+
     // Main function to save patient to CSV
     public void save(Patient patient) {
         try {
@@ -57,29 +108,6 @@ public class PatientRepository {
             } catch (IOException e) {
                 System.err.println("Error creating CSV file: " + e.getMessage());
             }
-        }
-    }
-
-    // Repository knows how to create a Patient from CSV string
-    private Patient fromCsvString(String csvLine) {
-        String[] parts = csvLine.split(",");
-        if (parts.length < 8) {
-            throw new IllegalArgumentException("Invalid CSV format");
-        }
-
-        try {
-            return new Patient(
-                parts[0],                    // id
-                parts[1],                    // password
-                parts[2],                    // name
-                parts[3],                    // dateOfBirth
-                Gender.valueOf(parts[4]),    // gender
-                BloodType.valueOf(parts[5]), // bloodType
-                parts[6],                    // phone
-                parts[7]                     // email
-            );
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Error parsing CSV data: " + e.getMessage());
         }
     }
 
