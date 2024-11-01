@@ -34,7 +34,7 @@ public class Main {
                 String password = scanner.nextLine();
 
                 // Try to login
-                User user = userService.login(id, password);
+                User user = userService.Login(id, password);
 
                 if (user != null) {
                     System.out.println("\nLogin successful!");

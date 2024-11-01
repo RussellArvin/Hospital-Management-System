@@ -14,7 +14,7 @@ public class Patient extends User {
     private String email;
 
 
-    Patient(
+    public Patient(
         String id,
         String password, 
         String name, 
