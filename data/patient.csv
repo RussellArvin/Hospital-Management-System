@@ -1,0 +1,4 @@
+id,password,name,dateOfBirth,gender,bloodType,phone,email
+P001,password123,John Doe,1990-01-01,MALE,A_POSITIVE,1234567890,john.doe@email.com
+P002,password456,Jane Smith,1985-05-15,FEMALE,B_NEGATIVE,9876543210,jane.smith@email.com
+P003,password789,Bob Wilson,1978-12-25,MALE,O_POSITIVE,5555555555,bob.wilson@email.com
