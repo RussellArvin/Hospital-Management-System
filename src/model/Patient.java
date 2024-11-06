@@ -5,10 +5,10 @@ import enums.Gender;
 import enums.BloodType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Patient extends User {
     private LocalDate dateOfBirth; 
-    private Gender gender;
     private BloodType bloodType;
     private int phoneNumber;
     private String email;
@@ -18,32 +18,35 @@ public class Patient extends User {
         String id,
         String password, 
         String name, 
+        int age,
         LocalDate dateOfBirth, 
         Gender gender, 
         BloodType bloodType,
         int phoneNumber,
         String email
     ){
-        super(id,password,name);
+        super(id,password,name,age,gender);
         this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
         this.bloodType = bloodType;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
-
-    Patient(
+    
+    public Patient(
         String id,
-        String name, 
-        LocalDate dateOfBirth, 
-        Gender gender, 
+        String password,
+        String name,
+        int age,
+        Gender gender,
+        LocalDate dateOfBirth,
         BloodType bloodType,
         int phoneNumber,
-        String email
+        String email,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
     ){
-        super(id,name);
+        super(id, password, name, age, gender, createdAt, updatedAt);
         this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
         this.bloodType = bloodType;
         this.phoneNumber = phoneNumber;
         this.email = email;

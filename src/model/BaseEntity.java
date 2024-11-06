@@ -13,6 +13,16 @@ public abstract class BaseEntity implements Entity {
         this.updatedAt = LocalDateTime.now();
     }
 
+    protected BaseEntity(
+        String id,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+    ){
+        this.id = id;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     @Override
     public String getId(){
         return id;
