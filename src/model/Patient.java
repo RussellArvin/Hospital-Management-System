@@ -86,4 +86,8 @@ public class Patient extends User {
             updatedAt.toString()        // from BaseEntity
         );
     }
+
+        public LocalDate getDateOfBirth() {
+            return this.dateOfBirth;
+        }
 }

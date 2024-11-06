@@ -3,8 +3,7 @@ package main;
 import java.util.Scanner; 
 
 import repository.PatientRepository;
-import service.UserService;
-import model.Patient;
+import service.AuthService;
 import model.User;
 
 
@@ -12,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         // Initialize repositories and services
         PatientRepository patientRepository = new PatientRepository();
-        UserService userService = new UserService(patientRepository);
+        AuthService authService = new AuthService(patientRepository);
         
         // Create scanner for user input
         Scanner scanner = new Scanner(System.in);
@@ -34,7 +33,7 @@ public class Main {
                 String password = scanner.nextLine();
 
                 // Try to login
-                User user = userService.Login(id, password);
+                User user = authService.Login(id, password);
 
                 if (user != null) {
                     System.out.println("\nLogin successful!");
