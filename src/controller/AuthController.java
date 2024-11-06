@@ -1,20 +1,28 @@
 package controller;
 
 import java.util.Scanner;
+
+import model.Doctor;
 import model.Patient;
 import model.User;
+import repository.DoctorRepository;
 import repository.PatientRepository;
 import service.AuthService;
 import ui.LoginMenuUI;
 
 public class AuthController extends BaseController<LoginMenuUI> {
     private PatientRepository patientRepository;
+    private DoctorRepository doctorRepository;
+
     private AuthService authService;
 
     public AuthController(Scanner scanner) {
         super(new LoginMenuUI(),scanner);  // Fixed constructor parameter order to match BaseController
+
         this.patientRepository = new PatientRepository();
-        this.authService = new AuthService(this.patientRepository);
+        this.doctorRepository = new DoctorRepository();
+
+        this.authService = new AuthService(this.patientRepository,this.doctorRepository);
     }
 
     public void handleUserInput() {
@@ -63,6 +71,15 @@ public class AuthController extends BaseController<LoginMenuUI> {
                 this.patientRepository
             );
             patientController.handleUserInput();
+        }
+
+        if(user instanceof Doctor doctor){
+            DoctorController doctorController = new DoctorController(
+                this.scanner,
+                doctor,
+                this.doctorRepository
+            );
+            doctorController.handleUserInput();
         }
     }
 }
