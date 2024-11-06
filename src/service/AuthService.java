@@ -1,9 +1,11 @@
 package service;
 
+import model.Administrator;
 import model.Doctor;
 import model.Patient;
 import model.Pharmacist;
 import model.User;
+import repository.AdministratorRepository;
 import repository.DoctorRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
@@ -12,15 +14,18 @@ public class AuthService {
     private PatientRepository patientRepository;
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
+    private AdministratorRepository administratorRepository;
 
     public AuthService(
         PatientRepository patientRepository,
         DoctorRepository doctorRepository,
-        PharmacistRepository pharmacistRepository
+        PharmacistRepository pharmacistRepository,
+        AdministratorRepository administratorRepository
     ) {
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.pharmacistRepository = pharmacistRepository;
+        this.administratorRepository = administratorRepository;
     }
 
     public User Login(String id, String password) {
@@ -50,6 +55,14 @@ public class AuthService {
         if (pharmacist != null && pharmacist.validatePassword(password)) {
             return pharmacist;
         } else if(pharmacist != null && !pharmacist.validatePassword(password)){
+            return null;
+        }
+
+        //Handle Administrator
+        Administrator admin = administratorRepository.findOne(id);
+        if (admin != null && admin.validatePassword(password)) {
+            return admin;
+        } else if(admin != null && !admin.validatePassword(password)){
             return null;
         }
 

@@ -2,10 +2,12 @@ package controller;
 
 import java.util.Scanner;
 
+import model.Administrator;
 import model.Doctor;
 import model.Patient;
 import model.Pharmacist;
 import model.User;
+import repository.AdministratorRepository;
 import repository.DoctorRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
@@ -16,6 +18,7 @@ public class AuthController extends BaseController<LoginMenuUI> {
     private PatientRepository patientRepository;
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
+    private AdministratorRepository administratorRepository;
 
     private AuthService authService;
 
@@ -25,8 +28,14 @@ public class AuthController extends BaseController<LoginMenuUI> {
         this.patientRepository = new PatientRepository();
         this.doctorRepository = new DoctorRepository();
         this.pharmacistRepository = new PharmacistRepository();
+        this.administratorRepository = new AdministratorRepository();
 
-        this.authService = new AuthService(this.patientRepository,this.doctorRepository, this.pharmacistRepository);
+        this.authService = new AuthService(
+            this.patientRepository,
+            this.doctorRepository, 
+            this.pharmacistRepository,
+            this.administratorRepository
+        );
     }
 
     public void handleUserInput() {
@@ -93,6 +102,15 @@ public class AuthController extends BaseController<LoginMenuUI> {
                 this.pharmacistRepository
             );
             pharmacistController.handleUserInput();
+        }
+
+        if(user instanceof Administrator admin){
+            AdministratorController administratorController = new AdministratorController(
+                this.scanner,
+                admin,
+                this.administratorRepository
+            );
+            administratorController.handleUserInput();
         }
     }
 }
