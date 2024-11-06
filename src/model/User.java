@@ -49,7 +49,17 @@ public abstract class User extends BaseEntity{
     }
     
     @Override
-    public abstract String toCsvString();
+    public String toCsvString() {
+        return String.join(",", 
+            id, 
+            password, 
+            name, 
+            String.valueOf(age), 
+            gender.toString(),
+            createdAt.toString(), 
+            updatedAt.toString()
+        );
+    }
 
     public abstract void displayMenu();
 }
