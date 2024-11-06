@@ -4,15 +4,18 @@ import java.util.Scanner;
 
 import model.Doctor;
 import model.Patient;
+import model.Pharmacist;
 import model.User;
 import repository.DoctorRepository;
 import repository.PatientRepository;
+import repository.PharmacistRepository;
 import service.AuthService;
 import ui.LoginMenuUI;
 
 public class AuthController extends BaseController<LoginMenuUI> {
     private PatientRepository patientRepository;
     private DoctorRepository doctorRepository;
+    private PharmacistRepository pharmacistRepository;
 
     private AuthService authService;
 
@@ -21,8 +24,9 @@ public class AuthController extends BaseController<LoginMenuUI> {
 
         this.patientRepository = new PatientRepository();
         this.doctorRepository = new DoctorRepository();
+        this.pharmacistRepository = new PharmacistRepository();
 
-        this.authService = new AuthService(this.patientRepository,this.doctorRepository);
+        this.authService = new AuthService(this.patientRepository,this.doctorRepository, this.pharmacistRepository);
     }
 
     public void handleUserInput() {
@@ -80,6 +84,15 @@ public class AuthController extends BaseController<LoginMenuUI> {
                 this.doctorRepository
             );
             doctorController.handleUserInput();
+        }
+
+        if(user instanceof Pharmacist pharmacist){
+            PharmacistController pharmacistController = new PharmacistController(
+                this.scanner,
+                pharmacist,
+                this.pharmacistRepository
+            );
+            pharmacistController.handleUserInput();
         }
     }
 }
