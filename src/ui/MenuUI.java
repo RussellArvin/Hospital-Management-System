@@ -9,13 +9,9 @@ public abstract class MenuUI {
            maxLength = Math.max(maxLength, option.length());
        }
        
-       // Add padding for borders
-       maxLength += 6;  // 3 spaces on each side
-       
-       // Create border line
+       maxLength += 6;  
        String border = "=".repeat(maxLength);
        
-       // Print menu with consistent borders
        System.out.println("\n" + border);
        System.out.println("   " + title + " ".repeat(maxLength - title.length() - 3));
        System.out.println(border);

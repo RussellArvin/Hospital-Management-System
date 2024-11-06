@@ -59,16 +59,14 @@ public class CsvFileManager {
     }
 
     public void appendLine(String line) {
-        try (FileWriter fw = new FileWriter(filePath, true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-            
+        try (FileWriter fw = new FileWriter(filePath, true)) {
             // If file is empty, write header first
             if (new File(filePath).length() == 0) {
-                out.println(header);
+                fw.write(header + System.lineSeparator());
             }
             
-            out.println(line);
+            // Write the new line with a proper line separator
+            fw.write(line + System.lineSeparator());
             
         } catch (IOException e) {
             throw new RuntimeException("Error appending to CSV: " + e.getMessage());

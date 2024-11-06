@@ -59,6 +59,26 @@ public class Patient extends User {
         this.email = email;
     }
 
+    public int getAge(){
+        return this.age;
+    }
+
+    public Gender getGender(){
+        return this.gender;
+    }
+
+    public int getPhoneNumber(){
+        return this.phoneNumber;
+    }
+
+    public String getEmail(){
+        return this.email;
+    }
+
+    public BloodType getBloodType(){
+        return this.bloodType;
+    }
+
 
     @Override
     public void displayMenu() {
