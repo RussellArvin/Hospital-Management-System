@@ -6,7 +6,7 @@ import enums.BloodType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Patient extends User {
+public class Patient extends RegularUser {
     private LocalDate dateOfBirth; 
     private BloodType bloodType;
     private int phoneNumber;

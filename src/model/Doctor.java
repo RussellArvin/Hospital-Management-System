@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import enums.Gender;
 
-public class Doctor extends User {
+public class Doctor extends RegularUser {
     private int startWorkHours;
     private int endWorkHours;
 
