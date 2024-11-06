@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 public class Appointment extends BaseEntity{
     private String doctorId;
     private String patientId;
-    private LocalDateTime dateTime;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
     private AppointmentStatus status;
     private String cancelReason;
     
@@ -14,13 +15,15 @@ public class Appointment extends BaseEntity{
     public Appointment(
         String patientId,
         String doctorId,
-        LocalDateTime dateTime
+        LocalDateTime startDateTime,
+        LocalDateTime endDateTime
     ) {
         super(BaseEntity.generateUUID());
 
         this.patientId = patientId;
         this.doctorId = doctorId;
-        this.dateTime = dateTime;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.status = AppointmentStatus.REQUESTED;
         this.cancelReason = null;
     }
@@ -49,7 +52,8 @@ public class Appointment extends BaseEntity{
             id,                         // from BaseEntity
             patientId,
             doctorId,
-            dateTime.toString(),        // LocalDateTime to string
+            startDateTime.toString(),
+            endDateTime.toString(),
             status.toString(),          // enum to string
             cancelReason != null ? cancelReason.replace(",", ";") : "",  // handle null and escape commas
             createdAt.toString(),       // from BaseEntity
