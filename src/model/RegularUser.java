@@ -34,4 +34,17 @@ public abstract class RegularUser extends User {
         this.age = age;
         this.gender = gender;
     }
+
+    @Override
+    public String toCsvString() {
+        return String.join(",", 
+            id, 
+            password, 
+            name,
+            String.valueOf(age),
+            gender.toString(),
+            createdAt.toString(), 
+            updatedAt.toString()
+        );
+    }
 }
