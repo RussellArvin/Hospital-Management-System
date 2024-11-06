@@ -1,6 +1,5 @@
 package model;
 
-import model.BaseEntity;
 import enums.Gender;
 import enums.BloodType;
 
@@ -37,8 +36,8 @@ public class Patient extends User {
         String password,
         String name,
         int age,
-        Gender gender,
         LocalDate dateOfBirth,
+        Gender gender,
         BloodType bloodType,
         int phoneNumber,
         String email,

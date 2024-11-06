@@ -14,6 +14,7 @@ public class AuthService {
     }
 
     public User Login(String id, String password) {
+        System.out.println("Login");
         if (id == null || password == null) {
             return null;
         }

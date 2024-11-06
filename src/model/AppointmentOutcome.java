@@ -1,6 +1,5 @@
 package model;
 
-import model.BaseEntity;
 import enums.AppointmentServiceType;
 
 public class AppointmentOutcome extends BaseEntity {
