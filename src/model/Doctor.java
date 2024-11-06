@@ -10,10 +10,10 @@ public class Doctor extends User {
 
     public Doctor(
         String id,
+        String password,
         String name,
         int age,
         Gender gender,
-        String password,
         int startWorkHours,
         int endWorkHours,
         LocalDateTime createdAt,
