@@ -20,6 +20,10 @@ public class CsvFileManager {
         createFileIfNotExists();
     }
 
+    public String getHeader(){
+        return this.header;
+    }
+
     public void createFileIfNotExists() {
         File file = new File(filePath);
         file.getParentFile().mkdirs();
@@ -105,6 +109,44 @@ public class CsvFileManager {
         } catch (IOException e) {
             System.err.println("Error writing to CSV: " + e.getMessage());
         }
+    }
+
+    public String findLineByColumnValue(String columnName, String searchValue) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            // Read header line first
+            String headerLine = reader.readLine();
+            if (headerLine == null) {
+                return null;
+            }
+    
+            // Split header into columns and find the index of the target column
+            String[] headers = headerLine.split(",");
+            int columnIndex = -1;
+            for (int i = 0; i < headers.length; i++) {
+                if (headers[i].trim().equals(columnName)) {
+                    columnIndex = i;
+                    break;
+                }
+            }
+    
+            // If column name not found in headers
+            if (columnIndex == -1) {
+                throw new IllegalArgumentException("Column name '" + columnName + "' not found in CSV headers");
+            }
+    
+            // Read through file looking for matching value in the correct column
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                // Check if the line has enough columns and the value matches
+                if (values.length > columnIndex && values[columnIndex].trim().equals(searchValue)) {
+                    return line;
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error searching CSV: " + e.getMessage());
+        }
+        return null;
     }
 
 }

@@ -1,4 +1,4 @@
-package validators;
+package validator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

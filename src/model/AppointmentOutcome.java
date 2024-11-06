@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+
 import enums.AppointmentServiceType;
 
 public class AppointmentOutcome extends BaseEntity {
@@ -19,7 +21,21 @@ public class AppointmentOutcome extends BaseEntity {
         this.consultationNotes = consultationNotes;
     }
 
-        @Override
+    public AppointmentOutcome(
+        String id,
+        String appointmentId,
+        AppointmentServiceType serviceType,
+        String consultationNotes,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+    ){
+        super(id,createdAt, updatedAt);
+        this.appointmentId = appointmentId;
+        this.serviceType = serviceType;
+        this.consultationNotes = consultationNotes;
+    }
+
+    @Override
     public String toCsvString() {
         // Escape any commas in consultationNotes to prevent CSV parsing issues
         String escapedNotes = consultationNotes.replace(",", ";");

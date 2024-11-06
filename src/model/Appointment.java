@@ -28,6 +28,29 @@ public class Appointment extends BaseEntity{
         this.cancelReason = null;
     }
 
+    public Appointment(
+        String id,
+        String patientId,
+        String doctorId,
+        LocalDateTime startDateTime,
+        LocalDateTime endDateTime,
+        AppointmentStatus status,
+        String cancelReason,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
+    ) {
+        super(id, createdAt, updatedAt);
+
+        this.patientId = patientId;
+        this.doctorId = doctorId;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.status = status;
+        this.cancelReason = cancelReason;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public void confirm(){
         this.status = AppointmentStatus.CONFIRMED;
     }

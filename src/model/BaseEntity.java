@@ -30,7 +30,6 @@ public abstract class BaseEntity implements Entity {
 
     public void setId(String id){
         this.id = id;
-        setUpdatedAt();  // Fixed: call the method properly
     }
 
     public void setUpdatedAt(){

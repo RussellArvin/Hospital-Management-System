@@ -2,12 +2,12 @@ package service;
 
 import model.Patient;
 import repository.PatientRepository;
-import validators.InputValidator;
+import validator.InputValidator;
 
-public class PersonalInfoService {
+public class PatientInfoService {
     private final PatientRepository patientRepository;
 
-    public PersonalInfoService(
+    public PatientInfoService(
         PatientRepository patientRepository
     ) {
         this.patientRepository = patientRepository;
