@@ -60,6 +60,4 @@ public abstract class User extends BaseEntity{
             updatedAt.toString()
         );
     }
-
-    public abstract void displayMenu();
 }

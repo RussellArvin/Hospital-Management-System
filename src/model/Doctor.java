@@ -30,15 +30,12 @@ public class Doctor extends User {
             id,
             password,
             name,
+            String.valueOf(age),
+            gender.toString(),
             String.valueOf(startWorkHours),
             String.valueOf(endWorkHours),
             createdAt.toString(),
             updatedAt.toString()
         );
-    }
-
-    @Override
-    public void displayMenu(){
-        return;
     }
 }

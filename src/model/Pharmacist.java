@@ -17,10 +17,4 @@ public class Pharmacist extends User {
 
         super(id, password, name, age, gender, createdAt, updatedAt);
     }
-
-    @Override
-    public void displayMenu() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'displayMenu'");
-    }
 }
