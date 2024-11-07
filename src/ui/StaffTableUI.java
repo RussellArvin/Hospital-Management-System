@@ -7,30 +7,31 @@ import model.User;
 import model.Administrator;
 import model.Doctor;
 import model.Pharmacist;
+import service.StaffService;
+import enums.Gender;
 
 public class StaffTableUI {
     private static final int COLUMNS = 7; // ID, Name, Age, Gender, Role, Created At, Updated At
     
-    public static User display(User[] users, Scanner scanner) {
+    public static void display(User[] users, Scanner scanner, StaffService staffService) {
         final int PAGE_SIZE = 10;
         int currentIndex = 0;
-        User[] filteredUsers = users; // Keep track of filtered users
-
+        User[] filteredUsers = users;
+        
         while (true) {
-            // Clear console
             System.out.print("\033[H\033[2J");
             System.out.flush();
             
-            // Display table
             displayTable(filteredUsers, currentIndex, PAGE_SIZE);
             
-            // Show options
             System.out.println("\nOptions:");
             System.out.println("N - Next Page");
             System.out.println("P - Previous Page");
+            System.out.println("A - Add User");
             System.out.println("U - Update User");
+            System.out.println("R - Remove User");
             System.out.println("F - Filter Users");
-            System.out.println("R - Reset Filter");
+            System.out.println("C - Clear Filter");
             System.out.println("Q - Back to Menu");
             System.out.print("Choose an option: ");
             
@@ -49,25 +50,124 @@ public class StaffTableUI {
                     }
                     break;
 
+                case "A":
+                    try {
+                        System.out.println("\nSelect user type:");
+                        System.out.println("1. Administrator");
+                        System.out.println("2. Doctor");
+                        System.out.println("3. Pharmacist");
+                        System.out.print("Choose type: ");
+                        String type = scanner.nextLine();
+
+                        System.out.print("Enter name: ");
+                        String name = scanner.nextLine();
+                        System.out.print("Enter age: ");
+                        int age = Integer.parseInt(scanner.nextLine());
+                        System.out.print("Enter gender (M/F): ");
+                        String gender = scanner.nextLine().toUpperCase();
+                        if (!gender.equals("M") && !gender.equals("F")) {
+                            throw new IllegalArgumentException("Invalid gender");
+                        }
+                        System.out.print("Enter password: ");
+                        String password = scanner.nextLine();
+                        
+                        String error = staffService.addUser(type, name, age, gender, password);
+                        if(error != null) {
+                            System.out.println("Error: " + error);
+                            System.out.println("Press Enter to continue...");
+                            scanner.nextLine();
+                        } else {
+                            filteredUsers = users = staffService.getAllStaffData();
+                            currentIndex = 0;
+                        }
+                    } catch(NumberFormatException e) {
+                        System.out.println("Error: Please enter valid numbers");
+                        System.out.println("Press Enter to continue...");
+                        scanner.nextLine();
+                    } catch(IllegalArgumentException e) {
+                        System.out.println("Error: " + e.getMessage());
+                        System.out.println("Press Enter to continue...");
+                        scanner.nextLine();
+                    }
+                    break;
+
+                case "R":
+                    System.out.print("Enter user ID to remove: ");
+                    String removeId = scanner.nextLine();
+                    System.out.print("Are you sure? (Y/N): ");
+                    if (scanner.nextLine().toUpperCase().equals("Y")) {
+                        String error = staffService.removeUser(removeId);
+                        if(error != null) {
+                            System.out.println("Error: " + error);
+                            System.out.println("Press Enter to continue...");
+                            scanner.nextLine();
+                        } else {
+                            filteredUsers = users = staffService.getAllStaffData();
+                            currentIndex = 0;
+                        }
+                    }
+                    break;
+
                 case "U":
-                    User selectedUser = promptUserSelection(filteredUsers, scanner);
-                    if (selectedUser != null) {
-                        return selectedUser;
+                    System.out.print("\nEnter user ID to update: ");
+                    String userId = scanner.nextLine();
+                    
+                    System.out.println("\nSelect field to update:");
+                    System.out.println("1. Name");
+                    System.out.println("2. Age");
+                    System.out.println("3. Password");
+                    System.out.print("Choose option: ");
+                    String updateChoice = scanner.nextLine();
+
+                    try {
+                        String error = null;
+                        switch(updateChoice) {
+                            case "1":
+                                System.out.print("Enter new name: ");
+                                String newName = scanner.nextLine();
+                                error = staffService.updateUserName(userId, newName);
+                                break;
+                            case "2":
+                                System.out.print("Enter new age: ");
+                                int newAge = Integer.parseInt(scanner.nextLine());
+                                error = staffService.updateUserAge(userId, newAge);
+                                break;
+                            case "3":
+                                System.out.print("Enter new password: ");
+                                String newPassword = scanner.nextLine();
+                                error = staffService.updateUserPassword(userId, newPassword);
+                                break;
+                            default:
+                                System.out.println("Invalid option");
+                                continue;
+                        }
+
+                        if(error != null) {
+                            System.out.println("Error: " + error);
+                            System.out.println("Press Enter to continue...");
+                            scanner.nextLine();
+                        } else {
+                            filteredUsers = users = staffService.getAllStaffData();
+                        }
+                    } catch(NumberFormatException e) {
+                        System.out.println("Error: Please enter valid numbers");
+                        System.out.println("Press Enter to continue...");
+                        scanner.nextLine();
                     }
                     break;
 
                 case "F":
                     filteredUsers = filterUsers(users, scanner);
-                    currentIndex = 0; // Reset to first page after filtering
+                    currentIndex = 0;
                     break;
 
-                case "R":
-                    filteredUsers = users; // Reset to original array
+                case "C":
+                    filteredUsers = users;
                     currentIndex = 0;
                     break;
                     
                 case "Q":
-                    return null;
+                    return;
                     
                 default:
                     System.out.println("Invalid option. Press Enter to continue...");
@@ -120,27 +220,6 @@ public class StaffTableUI {
             return "Pharmacist";
         }
         return "Unknown";
-    }
-
-    private static User promptUserSelection(User[] users, Scanner scanner) {
-        System.out.print("\nEnter the ID of the user to update (or press Enter to cancel): ");
-        String selectedId = scanner.nextLine().trim();
-        
-        if (selectedId.isEmpty()) {
-            return null;
-        }
-
-        // Find user with matching ID
-        for (User user : users) {
-            if (user.getId().equals(selectedId)) {
-                System.out.println("\nSelected user: " + user.getName() + " (" + determineUserRole(user) + ")");
-                return user;
-            }
-        }
-
-        System.out.println("User not found. Press Enter to continue...");
-        scanner.nextLine();
-        return null;
     }
 
     private static User[] filterUsers(User[] users, Scanner scanner) {

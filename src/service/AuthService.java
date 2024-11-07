@@ -15,6 +15,7 @@ public class AuthService {
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
     private AdministratorRepository administratorRepository;
+    private UserService userService;
 
     public AuthService(
         PatientRepository patientRepository,
@@ -26,6 +27,7 @@ public class AuthService {
         this.doctorRepository = doctorRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.administratorRepository = administratorRepository;
+        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
     }
 
     public User Login(String id, String password) {
@@ -33,36 +35,12 @@ public class AuthService {
         if (id == null || password == null) {
             return null;
         }
-        
-        //Handle patient
-        Patient patient = patientRepository.findOne(id);
-        if (patient != null && patient.validatePassword(password)) {
-            return patient;
-        } else if(patient != null && !patient.validatePassword(password)){
-            return null;
-        }
 
-        //Handle Doctor
-        Doctor doctor = doctorRepository.findOne(id);
-        if (doctor != null && doctor.validatePassword(password)) {
-            return doctor;
-        } else if(doctor != null && !doctor.validatePassword(password)){
-            return null;
+        User user = userService.findOne(id);
+        if(user != null && user.validatePassword(password)){
+            return user;
         }
-
-        //Handle Pharmarcist
-        Pharmacist pharmacist = pharmacistRepository.findOne(id);
-        if (pharmacist != null && pharmacist.validatePassword(password)) {
-            return pharmacist;
-        } else if(pharmacist != null && !pharmacist.validatePassword(password)){
-            return null;
-        }
-
-        //Handle Administrator
-        Administrator admin = administratorRepository.findOne(id);
-        if (admin != null && admin.validatePassword(password)) {
-            return admin;
-        } else if(admin != null && !admin.validatePassword(password)){
+        else if(user!= null && !user.validatePassword(password)){
             return null;
         }
 

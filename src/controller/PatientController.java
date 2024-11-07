@@ -43,7 +43,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
                 return;
             }
             else {
-                System.out.println("Invalid option!");
+               super.invalidOption();
             }
         }
     }

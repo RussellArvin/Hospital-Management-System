@@ -21,6 +21,37 @@ public class Medicine extends BaseEntity {
         this.lowStockAlert = lowStockAlert;
     }
 
+    public Medicine(
+        String name,
+        int stock,
+        int lowStockAlert
+    ) {
+        super();
+        this.name = name;
+        this.stock = stock;
+        this.lowStockAlert = lowStockAlert;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getStock(){
+        return this.stock;
+    }
+
+    public void setStock(int stock){
+        this.stock = stock;
+    }
+
+    public int getLowStockAlert(){
+        return this.lowStockAlert;
+    }
+
+    public void setLowStockAlert(int stock){
+        this.lowStockAlert = stock;
+    }
+
     public String toCsvString(){
         return String.join(",",
             id,

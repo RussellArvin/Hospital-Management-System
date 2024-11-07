@@ -6,12 +6,14 @@ import model.Pharmacist;
 import model.User;
 import repository.AdministratorRepository;
 import repository.DoctorRepository;
+import repository.PatientRepository;
 import repository.PharmacistRepository;
 
 public class StaffService {
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
     private AdministratorRepository administratorRepository;
+    private UserService userService;
 
     public StaffService(
         DoctorRepository doctorRepository,
@@ -21,6 +23,7 @@ public class StaffService {
         this.doctorRepository = doctorRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.administratorRepository = administratorRepository;
+        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, new PatientRepository());
     }
 
 
@@ -38,5 +41,9 @@ public class StaffService {
         System.arraycopy(administrators, 0, staff, doctors.length + pharmacists.length, administrators.length);
     
         return staff;
+    }
+
+    public void removeUser(String userId){
+        User user = userService.findOne
     }
 }

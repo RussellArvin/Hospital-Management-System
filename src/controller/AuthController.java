@@ -9,6 +9,7 @@ import model.Pharmacist;
 import model.User;
 import repository.AdministratorRepository;
 import repository.DoctorRepository;
+import repository.MedicineRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 import service.AuthService;
@@ -19,6 +20,7 @@ public class AuthController extends BaseController<LoginMenuUI> {
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
     private AdministratorRepository administratorRepository;
+    private MedicineRepository medicineRepository;
 
     private AuthService authService;
 
@@ -29,6 +31,7 @@ public class AuthController extends BaseController<LoginMenuUI> {
         this.doctorRepository = new DoctorRepository();
         this.pharmacistRepository = new PharmacistRepository();
         this.administratorRepository = new AdministratorRepository();
+        this.medicineRepository = new MedicineRepository();
 
         this.authService = new AuthService(
             this.patientRepository,
@@ -99,7 +102,8 @@ public class AuthController extends BaseController<LoginMenuUI> {
             PharmacistController pharmacistController = new PharmacistController(
                 this.scanner,
                 pharmacist,
-                this.pharmacistRepository
+                this.pharmacistRepository,
+                this.medicineRepository
             );
             pharmacistController.handleUserInput();
         }

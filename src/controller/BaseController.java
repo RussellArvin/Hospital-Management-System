@@ -21,6 +21,10 @@ public abstract class BaseController<T extends MenuUI> implements Controller {
 
     public void handleLogout(User user) {
         System.out.printf("\nSuccessfully Logged out. Thank you, %s!\n", user.getName());
-     }
+    }
+
+    public void invalidOption(){
+        System.out.println("Invalid option!");
+    }
 }
  
