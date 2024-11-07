@@ -1,31 +1,20 @@
 package repository;
 
-import java.util.List;
-
 import model.Administrator;
 import repository.base.CsvRepository;
 import repository.mapper.AdministratorMapper;
 
-public class AdministratorRepository extends CsvRepository<Administrator> {
+// AdministratorRepository
+public class AdministratorRepository extends CsvRepository<Administrator, AdministratorMapper> {
     private static final String CSV_FILE = "data/administrators.csv";
-    private static final String CSV_HEADER = "id,password,salt,name,createdAt,updatedAt";
+    private static final String CSV_HEADER = "...";  // your header here
 
     public AdministratorRepository() {
-        super(CSV_FILE, CSV_HEADER);
+        super(CSV_FILE, CSV_HEADER, new AdministratorMapper());
     }
 
-    public Administrator findOne(String id) {
-        String line = this.fileManager.readLine(id);
-        if(line == null) return null;
-        return AdministratorMapper.fromCsvString(line);
-    }
-
-    public Administrator[] findAll(){
-        List<String> lines = this.fileManager.readAllLines();
-        return lines.stream()
-               .map(AdministratorMapper::fromCsvString)
-               .toArray(Administrator[]::new);
+    @Override
+    public Administrator[] findAll() {
+        return super.findAll(Administrator.class);
     }
 }
-
-

@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 import enums.Gender;
 import model.Doctor;
 
-public class DoctorMapper {
-    public static Doctor fromCsvString(String csvLine){
+public class DoctorMapper implements BaseMapper<Doctor> {
+    public Doctor fromCsvString(String csvLine){
         String[] parts = csvLine.split(",");
 
         return new Doctor(

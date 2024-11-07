@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import enums.AppointmentStatus;
 import model.Appointment;
 
-public class AppointmentMapper {
-    public static Appointment fromCsvString(String csvLine) {
+public class AppointmentMapper implements BaseMapper<Appointment> {
+    public Appointment fromCsvString(String csvLine) {
         String[] parts = csvLine.split(",");
 
         return new Appointment (

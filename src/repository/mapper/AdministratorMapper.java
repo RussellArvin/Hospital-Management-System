@@ -6,14 +6,14 @@ import java.time.LocalDateTime;
 import enums.Gender;
 import model.Administrator;
 
-public class AdministratorMapper {
-    public static Administrator fromCsvString(String csvLine){
+public class AdministratorMapper implements BaseMapper<Administrator> {
+    public Administrator fromCsvString(String csvLine){
         String[] parts = csvLine.split(",");
 
         return new Administrator(
             parts[0],
             parts[1],
-             parts[2].getBytes(StandardCharsets.UTF_8),
+            parts[2].getBytes(StandardCharsets.UTF_8),
             parts[3],
             Integer.parseInt(parts[4]),
             Gender.valueOf(parts[5]),

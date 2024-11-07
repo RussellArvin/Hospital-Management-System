@@ -7,8 +7,8 @@ import enums.BloodType;
 import enums.Gender;
 import model.Patient;
 
-public class PatientMapper {
-    public static Patient fromCsvString(String csvLine){
+public class PatientMapper implements BaseMapper<Patient> {
+    public  Patient fromCsvString(String csvLine){
         String[] parts = csvLine.split(",");
         
         return new Patient(

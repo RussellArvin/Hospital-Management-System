@@ -4,22 +4,21 @@ import model.AppointmentOutcome;
 import repository.base.CsvRepository;
 import repository.mapper.AppointmentOutcomeMapper;
 
-public class AppointmentOutcomeRepository extends CsvRepository<AppointmentOutcome> {
+public class AppointmentOutcomeRepository extends CsvRepository<AppointmentOutcome,AppointmentOutcomeMapper> {
     private static final String CSV_FILE = "data/appointment-outcomes.csv";
     private static final String CSV_HEADER = "id,appointmentId,serviceType,consultationNotes,createdAt,updatedAt";
 
     public AppointmentOutcomeRepository(){
-        super(CSV_FILE,CSV_HEADER);
-    }
-
-    public AppointmentOutcome findOne(String id){
-        String line = this.fileManager.readLine(id);
-        if(line == null) return null;
-        return AppointmentOutcomeMapper.fromCsvString(line);
+        super(CSV_FILE,CSV_HEADER,new AppointmentOutcomeMapper());
     }
 
     public AppointmentOutcome findOneByAppointmentId(String appointmentId){
         String line = this.fileManager.findLineByColumnValue("appointmentId", appointmentId);
-        return AppointmentOutcomeMapper.fromCsvString(line);
+        return mapper.fromCsvString(line);
+    }
+
+    @Override
+    public AppointmentOutcome[] findAll() {
+        return super.findAll(AppointmentOutcome.class);
     }
 }
