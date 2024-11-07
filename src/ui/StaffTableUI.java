@@ -1,6 +1,7 @@
 package ui;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Scanner;
 import model.User;
 import model.Administrator;
@@ -13,6 +14,7 @@ public class StaffTableUI {
     public static User display(User[] users, Scanner scanner) {
         final int PAGE_SIZE = 10;
         int currentIndex = 0;
+        User[] filteredUsers = users; // Keep track of filtered users
 
         while (true) {
             // Clear console
@@ -20,13 +22,15 @@ public class StaffTableUI {
             System.out.flush();
             
             // Display table
-            displayTable(users, currentIndex, PAGE_SIZE);
+            displayTable(filteredUsers, currentIndex, PAGE_SIZE);
             
             // Show options
             System.out.println("\nOptions:");
             System.out.println("N - Next Page");
             System.out.println("P - Previous Page");
             System.out.println("U - Update User");
+            System.out.println("F - Filter Users");
+            System.out.println("R - Reset Filter");
             System.out.println("Q - Back to Menu");
             System.out.print("Choose an option: ");
             
@@ -34,7 +38,7 @@ public class StaffTableUI {
             
             switch (choice) {
                 case "N":
-                    if (currentIndex + PAGE_SIZE < users.length) {
+                    if (currentIndex + PAGE_SIZE < filteredUsers.length) {
                         currentIndex += PAGE_SIZE;
                     }
                     break;
@@ -46,10 +50,20 @@ public class StaffTableUI {
                     break;
 
                 case "U":
-                    User selectedUser = promptUserSelection(users, scanner);
+                    User selectedUser = promptUserSelection(filteredUsers, scanner);
                     if (selectedUser != null) {
                         return selectedUser;
                     }
+                    break;
+
+                case "F":
+                    filteredUsers = filterUsers(users, scanner);
+                    currentIndex = 0; // Reset to first page after filtering
+                    break;
+
+                case "R":
+                    filteredUsers = users; // Reset to original array
+                    currentIndex = 0;
                     break;
                     
                 case "Q":
@@ -127,5 +141,100 @@ public class StaffTableUI {
         System.out.println("User not found. Press Enter to continue...");
         scanner.nextLine();
         return null;
+    }
+
+    private static User[] filterUsers(User[] users, Scanner scanner) {
+        System.out.println("\nFilter by:");
+        System.out.println("1. Role");
+        System.out.println("2. Age");
+        System.out.println("3. Gender");
+        System.out.print("Choose filter option (or press Enter to cancel): ");
+        
+        String choice = scanner.nextLine();
+        
+        switch (choice) {
+            case "1":
+                return filterByRole(users, scanner);
+            case "2":
+                return filterByAge(users, scanner);
+            case "3":
+                return filterByGender(users, scanner);
+            default:
+                return users;
+        }
+    }
+
+    private static User[] filterByRole(User[] users, Scanner scanner) {
+        System.out.println("\nSelect role:");
+        System.out.println("1. Administrator");
+        System.out.println("2. Doctor");
+        System.out.println("3. Pharmacist");
+        System.out.print("Choose role: ");
+        
+        String choice = scanner.nextLine();
+        String targetRole;
+        
+        switch (choice) {
+            case "1":
+                targetRole = "Administrator";
+                break;
+            case "2":
+                targetRole = "Doctor";
+                break;
+            case "3":
+                targetRole = "Pharmacist";
+                break;
+            default:
+                return users;
+        }
+        
+        return Arrays.stream(users)
+            .filter(user -> determineUserRole(user).equals(targetRole))
+            .toArray(User[]::new);
+    }
+
+    private static User[] filterByAge(User[] users, Scanner scanner) {
+        System.out.print("\nEnter minimum age: ");
+        String minAgeStr = scanner.nextLine();
+        System.out.print("Enter maximum age: ");
+        String maxAgeStr = scanner.nextLine();
+        
+        try {
+            int minAge = minAgeStr.isEmpty() ? 0 : Integer.parseInt(minAgeStr);
+            int maxAge = maxAgeStr.isEmpty() ? Integer.MAX_VALUE : Integer.parseInt(maxAgeStr);
+            
+            return Arrays.stream(users)
+                .filter(user -> user.getAge() >= minAge && user.getAge() <= maxAge)
+                .toArray(User[]::new);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid age format. Filter cancelled.");
+            scanner.nextLine();
+            return users;
+        }
+    }
+
+    private static User[] filterByGender(User[] users, Scanner scanner) {
+        System.out.println("\nSelect gender:");
+        System.out.println("1. Male");
+        System.out.println("2. Female");
+        System.out.print("Choose gender: ");
+        
+        String choice = scanner.nextLine();
+        String targetGender;
+        
+        switch (choice) {
+            case "1":
+                targetGender = "MALE";
+                break;
+            case "2":
+                targetGender = "FEMALE";
+                break;
+            default:
+                return users;
+        }
+        
+        return Arrays.stream(users)
+            .filter(user -> user.getGender().toString().equals(targetGender))
+            .toArray(User[]::new);
     }
 }
