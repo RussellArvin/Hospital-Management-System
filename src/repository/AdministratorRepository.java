@@ -7,7 +7,7 @@ import repository.mapper.AdministratorMapper;
 // AdministratorRepository
 public class AdministratorRepository extends CsvRepository<Administrator, AdministratorMapper> {
     private static final String CSV_FILE = "data/administrators.csv";
-    private static final String CSV_HEADER = "...";  // your header here
+    private static final String CSV_HEADER = "id,password,salt,name,age,gendercreatedAt,updatedAt";
 
     public AdministratorRepository() {
         super(CSV_FILE, CSV_HEADER, new AdministratorMapper());
