@@ -18,6 +18,9 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
     }
 
     public void save(T entity) {
+        T duplicateEntity = this.findOne(entity.getId());
+        if(duplicateEntity != null) throw new RuntimeException("Item already exists for ID: " + entity.getId());
+
         this.fileManager.appendLine(entity.toCsvString());
     }
 
