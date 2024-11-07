@@ -7,7 +7,13 @@ public abstract class BaseEntity implements Entity {
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
 
-    protected BaseEntity(String id){
+    protected BaseEntity(){
+        this.id = BaseEntity.generateUUID();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    protected BaseEntity(String id) {
         this.id = id;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
