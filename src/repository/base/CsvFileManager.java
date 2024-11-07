@@ -2,6 +2,7 @@ package repository.base;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.RandomAccessFile;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -58,20 +59,40 @@ public class CsvFileManager {
         return null;
     }
 
-    public void appendLine(String line) {
-        try (FileWriter fw = new FileWriter(filePath, true)) {
-            // If file is empty, write header first
-            if (new File(filePath).length() == 0) {
-                fw.write(header + System.lineSeparator());
-            }
-            
-            // Write the new line with a proper line separator
-            fw.write(line + System.lineSeparator());
-            
-        } catch (IOException e) {
-            throw new RuntimeException("Error appending to CSV: " + e.getMessage());
-        }
-    }
+public void appendLine(String line) {
+   try {
+       // Read last character to check if file ends with newline
+       boolean needsNewline = false;
+       File file = new File(filePath);
+       
+       if (file.length() > 0) {
+           try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+               if (file.length() > 0) {
+                   raf.seek(file.length() - 1);
+                   int lastChar = raf.read();
+                   needsNewline = lastChar != '\n';
+               }
+           }
+       }
+
+       // Open file in append mode
+       try (FileWriter fw = new FileWriter(filePath, true)) {
+           // If file is empty, write header
+           if (file.length() == 0) {
+               fw.write(header + System.lineSeparator());
+           }
+           // Add newline if needed
+           else if (needsNewline) {
+               fw.write(System.lineSeparator());
+           }
+           
+           // Write the new line with a line separator
+           fw.write(line + System.lineSeparator());
+       }
+   } catch (IOException e) {
+       throw new RuntimeException("Error appending to CSV: " + e.getMessage());
+   }
+}
 
     public List<String> readAllLines() {
         List<String> lines = new ArrayList<>();
