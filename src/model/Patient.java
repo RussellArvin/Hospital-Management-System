@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Patient extends RegularUser {
+public class Patient extends User {
     private LocalDate dateOfBirth; 
     private BloodType bloodType;
     private int phoneNumber;
@@ -60,14 +60,6 @@ public class Patient extends RegularUser {
 
     public void setEmail(String email){
         this.email = email;
-    }
-
-    public int getAge(){
-        return this.age;
-    }
-
-    public Gender getGender(){
-        return this.gender;
     }
 
     public int getPhoneNumber(){

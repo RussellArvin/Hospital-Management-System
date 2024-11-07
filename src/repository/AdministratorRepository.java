@@ -1,5 +1,7 @@
 package repository;
 
+import java.util.List;
+
 import model.Administrator;
 import repository.base.CsvRepository;
 import repository.mapper.AdministratorMapper;
@@ -16,6 +18,13 @@ public class AdministratorRepository extends CsvRepository<Administrator> {
         String line = this.fileManager.readLine(id);
         if(line == null) return null;
         return AdministratorMapper.fromCsvString(line);
+    }
+
+    public Administrator[] findAll(){
+        List<String> lines = this.fileManager.readAllLines();
+        return lines.stream()
+               .map(AdministratorMapper::fromCsvString)
+               .toArray(Administrator[]::new);
     }
 }
 

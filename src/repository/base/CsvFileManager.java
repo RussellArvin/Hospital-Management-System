@@ -75,16 +75,22 @@ public class CsvFileManager {
 
     public List<String> readAllLines() {
         List<String> lines = new ArrayList<>();
+        boolean isFirstLine = true;  // Flag to track header line
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;  // Skip the header line
+                }
                 lines.add(line);
             }
         } catch (IOException e) {
             throw new RuntimeException("Error reading CSV: " + e.getMessage());
         }
         return lines;
-    }
+     }
 
     public void writeAllLines(List<String> lines) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {

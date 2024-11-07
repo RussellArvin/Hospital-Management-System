@@ -36,6 +36,14 @@ public abstract class BaseEntity implements Entity {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public LocalDateTime getCreatedAt(){
+        return this.createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt(){
+        return this.updatedAt;
+    }
+
     public static String generateUUID(){
         UUID uuid = UUID.randomUUID();
         return uuid.toString();

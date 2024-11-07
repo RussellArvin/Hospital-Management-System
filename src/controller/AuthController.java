@@ -108,7 +108,9 @@ public class AuthController extends BaseController<LoginMenuUI> {
             AdministratorController administratorController = new AdministratorController(
                 this.scanner,
                 admin,
-                this.administratorRepository
+                this.administratorRepository,
+                this.doctorRepository,
+                this.pharmacistRepository
             );
             administratorController.handleUserInput();
         }

@@ -10,16 +10,22 @@ public abstract class User extends BaseEntity{
     protected String password;
     protected byte[] salt;
     protected String name;
+    protected int age;
+    protected Gender gender;
     public User(
         String id, 
         String password,
         byte[] salt,
-        String name
+        String name,
+        int age,
+        Gender gender
     ){
         super(id);
         this.password = password;
         this.salt = salt;
         this.name = name;
+        this.age = age;
+        this.gender = gender;
     }
 
     public User(
@@ -27,6 +33,8 @@ public abstract class User extends BaseEntity{
         String password,
         byte[] salt,
         String name,
+        int age,    
+        Gender gender,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ){
@@ -34,10 +42,20 @@ public abstract class User extends BaseEntity{
         this.salt = salt;
         this.password = password;
         this.name = name;
+        this.age = age;
+        this.gender = gender;
     }
     
     public String getName(){
         return name;
+    }
+
+    public int getAge(){
+        return this.age;
+    }
+
+    public Gender getGender(){
+        return this.gender;
     }
 
     public boolean validatePassword(String password){
