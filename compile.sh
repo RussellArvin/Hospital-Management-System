@@ -5,6 +5,7 @@ mkdir -p data
 
 echo "Compiling Java files..."
 javac -d bin -cp bin src/ui/*.java
+javac -d bin -cp bin src/util/*.java
 javac -d bin -cp bin src/validator/*.java
 javac -d bin -cp src/enums/*.java
 javac -d bin -cp bin src/controller/*.java

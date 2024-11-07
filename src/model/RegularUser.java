@@ -1,5 +1,6 @@
 package model;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import enums.Gender;
@@ -11,11 +12,12 @@ public abstract class RegularUser extends User {
     public RegularUser(
         String id, 
         String password,
+        byte[] salt,
         String name,
         int age,
         Gender gender
     ){
-        super(id,password,name);
+        super(id,password,salt,name);
         this.age = age;
         this.gender = gender;
     }
@@ -23,6 +25,7 @@ public abstract class RegularUser extends User {
     public RegularUser(
         String id,
         String password,
+        byte[] salt,
         String name,
         int age,    
         Gender gender,
@@ -30,7 +33,7 @@ public abstract class RegularUser extends User {
         LocalDateTime updatedAt
     ) {
 
-        super(id, password, name, createdAt, updatedAt);
+        super(id, password, salt, name, createdAt, updatedAt);
         this.age = age;
         this.gender = gender;
     }
@@ -39,7 +42,8 @@ public abstract class RegularUser extends User {
     public String toCsvString() {
         return String.join(",", 
             id, 
-            password, 
+            password,
+            new String(salt, StandardCharsets.UTF_8), // from salt
             name,
             String.valueOf(age),
             gender.toString(),

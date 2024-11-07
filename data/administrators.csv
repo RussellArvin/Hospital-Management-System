@@ -1,2 +1,2 @@
-id,password,name,createdAt,updatedAt
-A001,password123,Admin Arvin,2024-03-20T10:30:00,2024-03-20T10:30:00
+id,password,salt,name,createdAt,updatedAt
+A001,4Gy6sJtz3+/IiGfEzAgFCJeg8MiVu/CKTPfdFoeG2yk=,[B@2b05039f,Admin Arvin,2024-03-20T10:30:00,2024-03-20T10:30:00

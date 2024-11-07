@@ -1,5 +1,6 @@
 package repository.mapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import model.Administrator;
@@ -11,9 +12,10 @@ public class AdministratorMapper {
         return new Administrator(
             parts[0],
             parts[1],
-            parts[2],
-            LocalDateTime.parse(parts[3]),
-            LocalDateTime.parse(parts[4])
+             parts[2].getBytes(StandardCharsets.UTF_8),
+            parts[3],
+            LocalDateTime.parse(parts[4]),
+            LocalDateTime.parse(parts[5])
         );
     }
 }

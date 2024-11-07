@@ -1,5 +1,6 @@
 package model;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import enums.Gender;
@@ -11,6 +12,7 @@ public class Doctor extends RegularUser {
     public Doctor(
         String id,
         String password,
+        byte[] salt,
         String name,
         int age,
         Gender gender,
@@ -19,7 +21,7 @@ public class Doctor extends RegularUser {
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
-        super(id,password,name,age,gender,createdAt,updatedAt);
+        super(id,password,salt,name,age,gender,createdAt,updatedAt);
         this.startWorkHours = startWorkHours;
         this.endWorkHours = endWorkHours;
     }
@@ -29,6 +31,7 @@ public class Doctor extends RegularUser {
         return String.join(",",
             id,
             password,
+            new String(salt, StandardCharsets.UTF_8), // from salt
             name,
             String.valueOf(age),
             gender.toString(),

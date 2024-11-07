@@ -3,6 +3,7 @@ package model;
 import enums.Gender;
 import enums.BloodType;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,7 +16,8 @@ public class Patient extends RegularUser {
 
     public Patient(
         String id,
-        String password, 
+        String password,
+        byte[] salt,
         String name, 
         int age,
         LocalDate dateOfBirth, 
@@ -24,7 +26,7 @@ public class Patient extends RegularUser {
         int phoneNumber,
         String email
     ){
-        super(id,password,name,age,gender);
+        super(id,password,salt,name,age,gender);
         this.dateOfBirth = dateOfBirth;
         this.bloodType = bloodType;
         this.phoneNumber = phoneNumber;
@@ -34,6 +36,7 @@ public class Patient extends RegularUser {
     public Patient(
         String id,
         String password,
+        byte[] salt,
         String name,
         int age,
         LocalDate dateOfBirth,
@@ -44,7 +47,7 @@ public class Patient extends RegularUser {
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ){
-        super(id, password, name, age, gender, createdAt, updatedAt);
+        super(id, password, salt, name, age, gender, createdAt, updatedAt);
         this.dateOfBirth = dateOfBirth;
         this.bloodType = bloodType;
         this.phoneNumber = phoneNumber;
@@ -84,6 +87,7 @@ public class Patient extends RegularUser {
         return String.join(",",
             id,                         // from BaseEntity
             password,                   // from User
+            new String(salt, StandardCharsets.UTF_8), // from salt
             name,                       // from User
             dateOfBirth.toString(),     // LocalDate to string
             gender.toString(),          // enum to string

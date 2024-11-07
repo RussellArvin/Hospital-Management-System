@@ -8,6 +8,7 @@ public class Pharmacist extends RegularUser {
     public Pharmacist(
         String id,
         String password,
+        byte[] salt,
         String name,
         int age,    
         Gender gender,
@@ -15,6 +16,6 @@ public class Pharmacist extends RegularUser {
         LocalDateTime updatedAt
     ) {
 
-        super(id, password, name, age, gender, createdAt, updatedAt);
+        super(id, password, salt, name, age, gender, createdAt, updatedAt);
     }
 }

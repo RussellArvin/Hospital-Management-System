@@ -1,3 +1,6 @@
+package util;
+
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.SecureRandom;
@@ -31,20 +34,5 @@ public class PasswordUtil {
     public static boolean verifyPassword(String originalPassword, String storedPassword, byte[] salt) throws Exception {
         String newHash = hashPassword(originalPassword, salt);
         return newHash.equals(storedPassword);
-    }
-
-    public static void main(String[] args) throws Exception {
-        String password = "mySecurePassword";
-        
-        // Generate a salt
-        byte[] salt = generateSalt();
-        
-        // Hash the password
-        String hashedPassword = hashPassword(password, salt);
-        System.out.println("Hashed Password: " + hashedPassword);
-        
-        // Verify the password
-        boolean isPasswordCorrect = verifyPassword("mySecurePassword", hashedPassword, salt);
-        System.out.println("Password verification: " + isPasswordCorrect);
     }
 }

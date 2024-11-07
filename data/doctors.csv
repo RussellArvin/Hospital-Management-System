@@ -1,2 +1,2 @@
-id,password,name,age,gender,startWorkHours,endWorkHours,createdAt,updatedAt
-D001,password123,Russell Arvin,25,MALE,9,8,2024-03-20T10:30:00,2024-03-20T10:30:00
+id,password,salt,name,age,gender,startWorkHours,endWorkHours,createdAt,updatedAt
+D001,4Gy6sJtz3+/IiGfEzAgFCJeg8MiVu/CKTPfdFoeG2yk=,[B@2b05039f,Russell Arvin,25,MALE,9,8,2024-03-20T10:30:00,2024-03-20T10:30:00

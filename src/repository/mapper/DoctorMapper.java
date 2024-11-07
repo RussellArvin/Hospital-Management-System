@@ -1,5 +1,6 @@
 package repository.mapper;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 import enums.Gender;
@@ -12,13 +13,14 @@ public class DoctorMapper {
         return new Doctor(
             parts[0],
             parts[1],
-            parts[2],
-            Integer.parseInt(parts[3]),
-            Gender.valueOf(parts[4]),
-            Integer.parseInt(parts[5]),
+            parts[2].getBytes(StandardCharsets.UTF_8),
+            parts[3],
+            Integer.parseInt(parts[4]),
+            Gender.valueOf(parts[5]),
             Integer.parseInt(parts[6]),
-            LocalDateTime.parse(parts[7]),
-            LocalDateTime.parse(parts[8])
+            Integer.parseInt(parts[7]),
+            LocalDateTime.parse(parts[8]),
+            LocalDateTime.parse(parts[9])
         );
     }
 }

@@ -6,7 +6,7 @@ import repository.mapper.DoctorMapper;
 
 public class DoctorRepository extends CsvRepository<Doctor> {
     private static final String CSV_FILE = "data/doctors.csv";
-    private static final String CSV_HEADER = "id,password,name,age,gender,startWorkHours,endWorkHours,createdAt,updatedAt";
+    private static final String CSV_HEADER = "id,password,salt,name,age,gender,startWorkHours,endWorkHours,createdAt,updatedAt";
 
     public DoctorRepository(){
         super(CSV_FILE,CSV_HEADER);

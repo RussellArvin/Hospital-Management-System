@@ -1,4 +1,2 @@
-id,password,name,age,dateOfBirth,gender,bloodType,phoneNumber,email,createdAt,updatedAt
-P001,password123,John Doe,23,1990-01-01,MALE,A_POSITIVE,1234567890,john.doe@email.com,2024-03-20T10:30:00,2024-03-20T10:30:00
-P002,password456,Jane Smith,24,1985-05-15,FEMALE,B_NEGATIVE,9876543210,jane.smith@email.com,2024-03-20T10:30:00,2024-03-20T10:30:00
-P003,password789,Bob Wilson,25,1978-12-25,MALE,O_POSITIVE,5555555555,bob.wilson@email.com,2024-03-20T10:30:00,2024-03-20T10:30:00
+id,password,salt,name,age,dateOfBirth,gender,bloodType,phoneNumber,email,createdAt,updatedAt
+P001,4Gy6sJtz3+/IiGfEzAgFCJeg8MiVu/CKTPfdFoeG2yk=,[B@2b05039f,John Doe,23,1990-01-01,MALE,A_POSITIVE,1234567890,john.doe@email.com,2024-03-20T10:30:00,2024-03-20T10:30:00
