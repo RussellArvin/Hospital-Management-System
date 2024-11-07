@@ -74,4 +74,17 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
     
         this.fileManager.writeAllLines(updatedLines);
     }
+
+    public void delete(String id) {
+        T entity = findOne(id);
+        if(entity == null) {
+            throw new RuntimeException("Item not found for deletion: " + id);
+        }
+        
+        try {
+            this.fileManager.deleteLine(id);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Failed to delete item: " + e.getMessage());
+        }
+    }
 }

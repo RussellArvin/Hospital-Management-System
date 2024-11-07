@@ -153,4 +153,34 @@ public class CsvFileManager {
         return null;
     }
 
+    public void deleteLine(String id) {
+        List<String> allLines = new ArrayList<>();
+        boolean found = false;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            // Add header first
+            allLines.add(reader.readLine());
+            
+            // Read remaining lines
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(id + ",")) {
+                    found = true;
+                    continue; // Skip this line (delete)
+                }
+                allLines.add(line);
+            }
+            
+            if (!found) {
+                throw new RuntimeException("No record found with ID: " + id);
+            }
+            
+            // Write back all lines except the deleted one
+            writeAllLines(allLines);
+            
+        } catch (IOException e) {
+            throw new RuntimeException("Error deleting from CSV: " + e.getMessage());
+        }
+    }
+
 }
