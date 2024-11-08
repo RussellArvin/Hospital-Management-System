@@ -19,6 +19,8 @@ public class MedicineRepository extends CsvRepository<Medicine,MedicineMapper> {
 
     public Medicine findOneByName(String name){
         String line = this.fileManager.findLineByColumnValue("name", name);
+        
+        if(line == null) return null;
         return mapper.fromCsvString(line);
     }
 }

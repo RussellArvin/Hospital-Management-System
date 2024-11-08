@@ -14,6 +14,8 @@ public class AppointmentOutcomeRepository extends CsvRepository<AppointmentOutco
 
     public AppointmentOutcome findOneByAppointmentId(String appointmentId){
         String line = this.fileManager.findLineByColumnValue("appointmentId", appointmentId);
+        
+        if(line == null) return null;
         return mapper.fromCsvString(line);
     }
 
