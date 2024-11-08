@@ -70,7 +70,7 @@ public class AdministratorController extends BaseController<AdministratorMenuUI>
 
     private void handleReplenishmentRequests(){
         ReplenishmentRequestDetail[] requests = replenishmentRequestService.getRequests();
-        ReplenishmentRequestTableUI.display(requests,scanner,true,replenishmentRequestService);
+        ReplenishmentRequestTableUI.display(requests,scanner,true,replenishmentRequestService,this.admin.getId());
     }
 
     private void handleStaffManagement(Scanner scanner) {

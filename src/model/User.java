@@ -50,6 +50,10 @@ public abstract class User extends BaseEntity{
         return name;
     }
 
+    public void setName(String name){
+        this.name = name;
+    }
+
     public int getAge(){
         return this.age;
     }
@@ -64,6 +68,17 @@ public abstract class User extends BaseEntity{
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void setPassword(String password) throws Exception{
+        byte[] salt = PasswordUtil.generateSalt();
+        String hashedPassword = PasswordUtil.hashPassword(password, salt);
+        this.password = hashedPassword;
+        this.salt = salt;
+    }
+
+    public void setAge(int age){
+        this.age = age;
     }
     
     @Override

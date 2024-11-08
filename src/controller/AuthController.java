@@ -13,7 +13,9 @@ import repository.MedicineRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 import service.AuthService;
+import service.UserService;
 import ui.LoginMenuUI;
+import enums.UserRole;
 
 public class AuthController extends BaseController<LoginMenuUI> {
     private PatientRepository patientRepository;
@@ -23,6 +25,7 @@ public class AuthController extends BaseController<LoginMenuUI> {
     private MedicineRepository medicineRepository;
 
     private AuthService authService;
+    private UserService userService;
 
     public AuthController(Scanner scanner) {
         super(new LoginMenuUI(),scanner);  // Fixed constructor parameter order to match BaseController
@@ -39,6 +42,8 @@ public class AuthController extends BaseController<LoginMenuUI> {
             this.pharmacistRepository,
             this.administratorRepository
         );
+
+        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
     }
 
     public void handleUserInput() {
@@ -47,13 +52,20 @@ public class AuthController extends BaseController<LoginMenuUI> {
             String choice = scanner.nextLine();
 
             if(choice.equals("1")){
-                User user = handleLogin();
+                User user = handlePatientLogin();
                 if(user != null){
                     handleUserRole(user);
                 }
                 return;
             }
             else if(choice.equals("2")){
+                User user = handleStaffLogin();
+                if(user != null){
+                    handleUserRole(user);
+                }
+                return;
+            }
+            else if(choice.equals("3")){
                 return;
             } else {
                 System.out.println("Invalid option!");;
@@ -61,7 +73,7 @@ public class AuthController extends BaseController<LoginMenuUI> {
         }
     }
 
-    private User handleLogin() {
+    private User handlePatientLogin() {
         System.out.print("Enter ID: ");
         String id = scanner.nextLine();
 
@@ -79,44 +91,67 @@ public class AuthController extends BaseController<LoginMenuUI> {
         }
     }
 
+    private User handleStaffLogin() {
+        System.out.print("Enter ID: ");
+        String id = scanner.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        User user = authService.Login(id, password);
+
+        if(user == null) {
+            System.out.println("\nLogin failed. Invalid ID or password.");
+            return null;
+        } else {
+            System.out.println("\nLogin Successful");
+            System.out.println("Welcome, " + user.getName());
+            return user;
+        }
+    }
+
+
     private void handleUserRole(User user) {
-        if(user instanceof Patient patient) { 
-            PatientController patientController = new PatientController(
-                this.scanner,
-                patient,
-                this.patientRepository
-            );
-            patientController.handleUserInput();
-        }
+        UserRole role = userService.determineRole(user);
 
-        if(user instanceof Doctor doctor){
-            DoctorController doctorController = new DoctorController(
-                this.scanner,
-                doctor,
-                this.doctorRepository
-            );
-            doctorController.handleUserInput();
-        }
-
-        if(user instanceof Pharmacist pharmacist){
-            PharmacistController pharmacistController = new PharmacistController(
-                this.scanner,
-                pharmacist,
-                this.pharmacistRepository,
-                this.medicineRepository
-            );
-            pharmacistController.handleUserInput();
-        }
-
-        if(user instanceof Administrator admin){
-            AdministratorController administratorController = new AdministratorController(
-                this.scanner,
-                admin,
-                this.administratorRepository,
-                this.doctorRepository,
-                this.pharmacistRepository
-            );
-            administratorController.handleUserInput();
+        switch(role){
+            case PATIENT:
+                PatientController patientController = new PatientController(
+                    this.scanner,
+                    (Patient) user,
+                    this.patientRepository
+                );
+                patientController.handleUserInput();
+                break;
+            case DOCTOR:
+                DoctorController doctorController = new DoctorController(
+                    this.scanner,
+                    (Doctor) user,
+                    this.doctorRepository
+                );
+                doctorController.handleUserInput();
+                break;
+            case PHARMACIST:
+                PharmacistController pharmacistController = new PharmacistController(
+                    this.scanner,
+                    (Pharmacist) user,
+                    this.pharmacistRepository,
+                    this.medicineRepository
+                );
+                pharmacistController.handleUserInput();
+                break;
+            case ADMINISTRATOR:
+                AdministratorController administratorController = new AdministratorController(
+                    this.scanner,
+                    (Administrator) user,
+                    this.administratorRepository,
+                    this.doctorRepository,
+                    this.pharmacistRepository
+                );
+                administratorController.handleUserInput();
+                break;
+            default:
+                System.out.println("Invalid role!");
+                return;
         }
     }
 }

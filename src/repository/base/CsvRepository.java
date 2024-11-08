@@ -30,15 +30,19 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
         return mapper.fromCsvString(line);
     }
 
-    //TODO: Handle this?
-    @SuppressWarnings("unchecked")
     protected T[] findAll(Class<T> entityClass) {
         List<String> lines = this.fileManager.readAllLines();
+        return mapLines(lines, entityClass);
+    }
+
+    protected T[] mapLines(List<String> lines, Class<T> entityClass){
         List<T> entities = lines.stream()
-                .filter(line -> !line.equals(this.fileManager.getHeader()))
-                .map(mapper::fromCsvString)
-                .collect(Collectors.toList());
-                
+        .filter(line -> !line.equals(this.fileManager.getHeader()))
+        .map(mapper::fromCsvString)
+        .collect(Collectors.toList());
+        
+        //TODO: handle this
+        @SuppressWarnings("unchecked")
         T[] array = (T[]) Array.newInstance(entityClass, entities.size());
         return entities.toArray(array);
     }
@@ -75,9 +79,11 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
         this.fileManager.writeAllLines(updatedLines);
     }
 
-    public void delete(String id) {
-        T entity = findOne(id);
-        if(entity == null) {
+    public void delete(T entity) {
+        String id = entity.getId();
+        T entityExists = findOne(id);
+
+        if(entityExists == null) {
             throw new RuntimeException("Item not found for deletion: " + id);
         }
         

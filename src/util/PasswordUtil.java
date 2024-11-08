@@ -3,6 +3,8 @@ package util;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -16,10 +18,18 @@ public class PasswordUtil {
 
     // Method to generate a salt
     public static byte[] generateSalt() {
-        SecureRandom sr = new SecureRandom(); // No algorithm specified, no exception
-        byte[] salt = new byte[16]; // You can specify any length for the salt
-        sr.nextBytes(salt); // Generate the salt
-        return salt;
+        SecureRandom sr = new SecureRandom();
+        StringBuilder salt = new StringBuilder();
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        
+        // Generate a salt of length 16
+        for (int i = 0; i < 16; i++) {
+            int index = sr.nextInt(chars.length());
+            salt.append(chars.charAt(index));
+        }
+        
+        // Convert the string to byte[] using UTF-8 encoding
+        return salt.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     // Method to hash a password

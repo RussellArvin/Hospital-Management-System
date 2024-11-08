@@ -136,6 +136,56 @@ public void appendLine(String line) {
         }
     }
 
+    public List<String> findLinesByColumnValue(String columnName, String searchValue) {
+        if (columnName == null || columnName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Column name cannot be null or empty");
+        }
+        if (searchValue == null) {
+            throw new IllegalArgumentException("Search value cannot be null");
+        }
+    
+        List<String> matchingLines = new ArrayList<>();
+        boolean headerProcessed = false;
+        int columnIndex = -1;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Process header on first line
+                if (!headerProcessed) {
+                    String[] headers = line.split(",");
+                    for (int i = 0; i < headers.length; i++) {
+                        if (headers[i].trim().equals(columnName)) {
+                            columnIndex = i;
+                            break;
+                        }
+                    }
+                    
+                    if (columnIndex == -1) {
+                        throw new IllegalArgumentException("Column name '" + columnName + "' not found in CSV headers");
+                    }
+                    
+                    headerProcessed = true;
+                    continue;
+                }
+    
+                // Process data lines
+                try {
+                    String[] values = line.split(",");
+                    if (values.length > columnIndex && values[columnIndex].trim().equals(searchValue)) {
+                        matchingLines.add(line);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Warning: Failed to process line: " + line);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading CSV file: " + e.getMessage(), e);
+        }
+        
+        return matchingLines;
+    }
+
     public String findLineByColumnValue(String columnName, String searchValue) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             // Read header line first

@@ -47,7 +47,7 @@ public class InventoryService {
     ) {
         Medicine medicine = this.medicineRepository.findOne(medicineId);
         if(medicine == null) return "Medicine not found";
-        this.medicineRepository.delete(medicineId);
+        this.medicineRepository.delete(medicine);
         return null;
     }
 

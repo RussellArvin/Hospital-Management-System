@@ -1,5 +1,6 @@
 package service;
 
+import enums.ReplenishmentRequestStatus;
 import model.Medicine;
 import model.Pharmacist;
 import model.ReplenishmentRequest;
@@ -23,14 +24,61 @@ public class ReplenishmentRequestService {
         this.pharmacistRepository = pharmacistRepository;
     }
 
+    public String getMedicineId(String medicineName){
+        Medicine medicine = this.medicineRepository.findOneByName(medicineName);
+        if(medicine == null) return null;
+        return medicine.getId();
+    }
+
+    public String createRequest(
+        String medicineId,
+        String pharmacistId,
+        int newAmount
+    ){
+        try{
+            Medicine medicine = this.medicineRepository.findOne(medicineId);
+            Pharmacist pharmacist = this.pharmacistRepository.findOne(pharmacistId);
+            if(medicine == null) return "Unable to identify medicine";
+            if(pharmacist == null) return "Unable to identify pharmacist";
+
+            ReplenishmentRequest request = new ReplenishmentRequest(medicineId, pharmacistId, newAmount);
+            this.replenishmentRequestRepository.save(request);
+            return null;
+        }catch(Exception e){
+            return "Something went wrong when creating request";
+        }
+    }
+
+    public String updateRequestStatus(
+        String requestId,
+        ReplenishmentRequestStatus status
+    ) {
+        try{
+            ReplenishmentRequest request = this.replenishmentRequestRepository.findOne(requestId);
+            if(request == null) return "Request can't be found";
+
+            if(status == ReplenishmentRequestStatus.APPROVED){
+                Medicine medicine = this.medicineRepository.findOne(request.getMedicineId());
+                medicine.setStock(medicine.getStock() + request.getNewAmount());
+
+                medicineRepository.update(medicine);
+            }
+
+            request.setStatus(status);
+            this.replenishmentRequestRepository.update(request);
+            return null;
+        }catch(Exception e){
+            return "Something went wrong with updating request Status";
+        }
+    }
+
     public ReplenishmentRequestDetail[] getRequests() {
-        ReplenishmentRequest[] requests = replenishmentRequestRepository.findAll();
+        ReplenishmentRequest[] requests = replenishmentRequestRepository.findByStatus(ReplenishmentRequestStatus.PENDING);
         ReplenishmentRequestDetail[] details = new ReplenishmentRequestDetail[requests.length];
         
         for (int i = 0; i < requests.length; i++) {
             ReplenishmentRequest request = requests[i];
             
-            // Find associated Medicine and Pharmacist
             Medicine medicine = medicineRepository.findOne(request.getMedicineId());
             Pharmacist pharmacist = pharmacistRepository.findOne(request.getPharmacistId());
             
@@ -43,5 +91,26 @@ public class ReplenishmentRequestService {
         }
         
         return details;
+    }
+
+    public ReplenishmentRequestDetail[] getPharmacistRequests(String pharmacistID){
+        Pharmacist pharmacist = pharmacistRepository.findOne(pharmacistID);
+        ReplenishmentRequest[] requests = replenishmentRequestRepository.findByPharmacist(pharmacistID);
+        ReplenishmentRequestDetail[] details = new ReplenishmentRequestDetail[requests.length];
+
+        for (int i = 0; i < requests.length; i++) {
+            ReplenishmentRequest request = requests[i];
+            Medicine medicine = medicineRepository.findOne(request.getMedicineId());
+            
+            // Create detail object using the static factory method
+            details[i] = ReplenishmentRequestDetail.fromReplenishmentRequest(
+                request,
+                medicine,
+                pharmacist
+            );
+        }
+        
+        return details;
+
     }
 }

@@ -36,7 +36,7 @@ public class AuthService {
             return null;
         }
 
-        User user = userService.findOne(id);
+        User user = userService.findOne(id,true,true);
         if(user != null && user.validatePassword(password)){
             return user;
         }

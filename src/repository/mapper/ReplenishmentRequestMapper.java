@@ -8,7 +8,6 @@ import model.ReplenishmentRequest;
 public class ReplenishmentRequestMapper implements BaseMapper<ReplenishmentRequest> {
     public ReplenishmentRequest fromCsvString(String csvLine){
         String[] parts = csvLine.split(",");
-
         return new ReplenishmentRequest(
             parts[0],
             parts[1],

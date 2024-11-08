@@ -19,7 +19,7 @@ public class ReplenishmentRequest extends BaseEntity {
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
-        super(pharmacistId, createdAt, updatedAt);
+        super(id, createdAt, updatedAt);
         this.medicineId = medicineId;
         this.pharmacistId = pharmacistId;
         this.newAmount = newAmount;
@@ -29,14 +29,13 @@ public class ReplenishmentRequest extends BaseEntity {
     public ReplenishmentRequest(
         String medicineId,
         String pharmacistId,
-        int newAmount,
-        ReplenishmentRequestStatus status
+        int newAmount
     ){
         super();
         this.medicineId = medicineId;
         this.pharmacistId = pharmacistId;
         this.newAmount = newAmount;
-        this.status = status;
+        this.status = ReplenishmentRequestStatus.PENDING;
     }
 
     public int getNewAmount(){
@@ -53,6 +52,10 @@ public class ReplenishmentRequest extends BaseEntity {
 
     public ReplenishmentRequestStatus getStatus(){
         return this.status;
+    }
+
+    public void setStatus(ReplenishmentRequestStatus status){
+        this.status = status;
     }
 
     public String toCsvString(){

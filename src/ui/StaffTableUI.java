@@ -9,6 +9,7 @@ import model.Doctor;
 import model.Pharmacist;
 import service.StaffService;
 import enums.Gender;
+import enums.UserRole;
 
 public class StaffTableUI {
     private static final int COLUMNS = 7; // ID, Name, Age, Gender, Role, Created At, Updated At
@@ -49,29 +50,77 @@ public class StaffTableUI {
                         currentIndex -= PAGE_SIZE;
                     }
                     break;
-
                 case "A":
                     try {
                         System.out.println("\nSelect user type:");
-                        System.out.println("1. Administrator");
-                        System.out.println("2. Doctor");
-                        System.out.println("3. Pharmacist");
+                        System.out.println("1. " + UserRole.ADMINISTRATOR);
+                        System.out.println("2. " + UserRole.DOCTOR);
+                        System.out.println("3. " + UserRole.PHARMACIST);
                         System.out.print("Choose type: ");
-                        String type = scanner.nextLine();
+                        
+                        String typeChoice = scanner.nextLine();
+                        UserRole role;
+                        
+                        switch(typeChoice) {
+                            case "1":
+                                role = UserRole.ADMINISTRATOR;
+                                break;
+                            case "2":
+                                role = UserRole.DOCTOR;
+                                break;
+                            case "3":
+                                role = UserRole.PHARMACIST;
+                                break;
+                            default:
+                                throw new IllegalArgumentException("Invalid user type");
+                        }
 
+                        String id;
+                        while (true) {
+                            System.out.print("Enter ID: ");
+                            id = scanner.nextLine().trim();
+                            
+                            if (id.isEmpty()) {
+                                System.out.println("Error: ID cannot be empty. Press Enter to try again.");
+                                scanner.nextLine();
+                                continue;
+                            }
+
+                            if (staffService.isDuplicateId(id)) {
+                                System.out.println("Error: ID '" + id + "' is already taken. Press Enter to try again.");
+                                scanner.nextLine();
+                                continue;
+                            }
+
+                            break;
+                        }
+                        
                         System.out.print("Enter name: ");
                         String name = scanner.nextLine();
+                        
                         System.out.print("Enter age: ");
                         int age = Integer.parseInt(scanner.nextLine());
-                        System.out.print("Enter gender (M/F): ");
-                        String gender = scanner.nextLine().toUpperCase();
-                        if (!gender.equals("M") && !gender.equals("F")) {
-                            throw new IllegalArgumentException("Invalid gender");
-                        }
-                        System.out.print("Enter password: ");
-                        String password = scanner.nextLine();
                         
-                        String error = staffService.addUser(type, name, age, gender, password);
+                        // Gender selection using enum
+                        System.out.println("Select gender:");
+                        System.out.println("1. " + Gender.MALE);
+                        System.out.println("2. " + Gender.FEMALE);
+                        System.out.print("Choose gender (1/2): ");
+                        
+                        Gender gender;
+                        String genderChoice = scanner.nextLine();
+                        switch (genderChoice) {
+                            case "1":
+                                gender = Gender.MALE;
+                                break;
+                            case "2":
+                                gender = Gender.FEMALE;
+                                break;
+                            default:
+                                throw new IllegalArgumentException("Invalid gender selection");
+                        }
+                        
+                        String error = staffService.addUser(id, role, name, age, gender);
                         if(error != null) {
                             System.out.println("Error: " + error);
                             System.out.println("Press Enter to continue...");
@@ -90,7 +139,6 @@ public class StaffTableUI {
                         scanner.nextLine();
                     }
                     break;
-
                 case "R":
                     System.out.print("Enter user ID to remove: ");
                     String removeId = scanner.nextLine();
