@@ -25,9 +25,14 @@ public class ReplenishmentRequestService {
     }
 
     public String getMedicineId(String medicineName){
-        Medicine medicine = this.medicineRepository.findOneByName(medicineName);
-        if(medicine == null) return null;
-        return medicine.getId();
+        try{
+            Medicine medicine = this.medicineRepository.findOneByName(medicineName);
+            if(medicine == null) return null;
+            return medicine.getId();
+        } catch(Exception e){
+            System.out.println("Something went wrong when checking existence of medicine!");
+            return null;
+        }
     }
 
     public String createRequest(

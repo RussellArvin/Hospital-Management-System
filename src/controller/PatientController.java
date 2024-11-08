@@ -3,7 +3,6 @@ package controller;
 import java.util.Scanner;
 
 import model.Patient;
-import repository.PatientRepository;
 import service.MedicalRecordService;
 import ui.MedicalRecordUI;
 import ui.PatientMenuUI;
@@ -11,20 +10,18 @@ import validator.InputValidator;
 
 public class PatientController extends BaseController<PatientMenuUI> {
     private Patient patient;
-    private PatientRepository patientRepository;
 
     private MedicalRecordService medicalRecordService;
     
     public PatientController(
         Scanner scanner,
         Patient patient,
-        PatientRepository patientRepository
+        MedicalRecordService medicalRecordService
     ){
         super(new PatientMenuUI(),scanner);
 
         this.patient = patient;
-        this.patientRepository = patientRepository;
-        this.medicalRecordService= new MedicalRecordService(this.patientRepository);
+        this.medicalRecordService = medicalRecordService;
     }
 
     public void handleUserInput() {

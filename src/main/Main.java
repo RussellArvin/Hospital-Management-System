@@ -2,14 +2,14 @@ package main;
 
 import java.util.Scanner;
 
-import controller.AuthController;
+import controller.MainController;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        AuthController authController = new AuthController(scanner);
-        authController.handleUserInput();
+        MainController mainController = new MainController(scanner);
+        mainController.handleUserInput();
 
         scanner.close();
     }

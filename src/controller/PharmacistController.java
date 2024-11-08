@@ -5,9 +5,6 @@ import java.util.Scanner;
 import model.Medicine;
 import model.Pharmacist;
 import model.ReplenishmentRequestDetail;
-import repository.MedicineRepository;
-import repository.PharmacistRepository;
-import repository.ReplenishmentRequestRepository;
 import service.InventoryService;
 import service.ReplenishmentRequestService;
 import ui.InventoryTableUI;
@@ -16,26 +13,19 @@ import ui.ReplenishmentRequestTableUI;
 
 public class PharmacistController extends BaseController<PharmacistMenuUI> {
     private Pharmacist pharmacist;
-
-    private PharmacistRepository pharmacistRepository;
-    private MedicineRepository medicineRepository;
-    private ReplenishmentRequestRepository replenishmentRequestRepository;
     private InventoryService inventoryService;
     private ReplenishmentRequestService replenishmentRequestService;
 
     public PharmacistController(
         Scanner scanner,
         Pharmacist pharmacist,
-        PharmacistRepository  pharmacistRepository,
-        MedicineRepository medicineRepository
+        InventoryService inventoryService,
+        ReplenishmentRequestService replenishmentRequestService
     ){
         super(new PharmacistMenuUI(),scanner);
         this.pharmacist = pharmacist;
-        this.pharmacistRepository = pharmacistRepository;
-        this.medicineRepository = medicineRepository;
-        this.replenishmentRequestRepository = new ReplenishmentRequestRepository();
-        this.inventoryService = new InventoryService(medicineRepository);
-        this.replenishmentRequestService = new ReplenishmentRequestService(this.replenishmentRequestRepository, medicineRepository, pharmacistRepository);
+        this.inventoryService = inventoryService;
+        this.replenishmentRequestService = replenishmentRequestService;
     }
 
     public void handleUserInput() {
@@ -63,7 +53,7 @@ public class PharmacistController extends BaseController<PharmacistMenuUI> {
     }
     
     private void viewInventory() {
-        Medicine[] medicine = this.medicineRepository.findAll();
+        Medicine[] medicine = inventoryService.getAllMedicines();
         InventoryTableUI.display(medicine, scanner, false, inventoryService);
     }
 }

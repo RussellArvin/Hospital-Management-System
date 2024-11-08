@@ -12,22 +12,33 @@ import repository.DoctorRepository;
 import repository.MedicineRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
+import repository.ReplenishmentRequestRepository;
 import service.AuthService;
+import service.InventoryService;
+import service.MedicalRecordService;
+import service.ReplenishmentRequestService;
+import service.StaffService;
 import service.UserService;
 import ui.LoginMenuUI;
 import enums.UserRole;
 
-public class AuthController extends BaseController<LoginMenuUI> {
+public class MainController extends BaseController<LoginMenuUI> {
     private PatientRepository patientRepository;
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
     private AdministratorRepository administratorRepository;
     private MedicineRepository medicineRepository;
+    private ReplenishmentRequestRepository replenishmentRequestRepository;
 
     private AuthService authService;
     private UserService userService;
+    private MedicalRecordService medicalRecordService;
+    private InventoryService inventoryService;
+    private ReplenishmentRequestService replenishmentRequestService;
+    private StaffService staffService;
 
-    public AuthController(Scanner scanner) {
+
+    public MainController(Scanner scanner) {
         super(new LoginMenuUI(),scanner);  // Fixed constructor parameter order to match BaseController
 
         this.patientRepository = new PatientRepository();
@@ -35,6 +46,7 @@ public class AuthController extends BaseController<LoginMenuUI> {
         this.pharmacistRepository = new PharmacistRepository();
         this.administratorRepository = new AdministratorRepository();
         this.medicineRepository = new MedicineRepository();
+        this.replenishmentRequestRepository = new ReplenishmentRequestRepository();
 
         this.authService = new AuthService(
             this.patientRepository,
@@ -43,7 +55,12 @@ public class AuthController extends BaseController<LoginMenuUI> {
             this.administratorRepository
         );
 
+        this.inventoryService = new InventoryService(medicineRepository);
+
+        this.medicalRecordService = new MedicalRecordService(patientRepository);
+        this.replenishmentRequestService = new ReplenishmentRequestService(replenishmentRequestRepository, medicineRepository, pharmacistRepository);
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
+        this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,this.userService);
     }
 
     public void handleUserInput() {
@@ -118,7 +135,7 @@ public class AuthController extends BaseController<LoginMenuUI> {
                 PatientController patientController = new PatientController(
                     this.scanner,
                     (Patient) user,
-                    this.patientRepository
+                    this.medicalRecordService
                 );
                 patientController.handleUserInput();
                 break;
@@ -134,8 +151,8 @@ public class AuthController extends BaseController<LoginMenuUI> {
                 PharmacistController pharmacistController = new PharmacistController(
                     this.scanner,
                     (Pharmacist) user,
-                    this.pharmacistRepository,
-                    this.medicineRepository
+                    this.inventoryService,
+                    this.replenishmentRequestService
                 );
                 pharmacistController.handleUserInput();
                 break;
@@ -143,9 +160,9 @@ public class AuthController extends BaseController<LoginMenuUI> {
                 AdministratorController administratorController = new AdministratorController(
                     this.scanner,
                     (Administrator) user,
-                    this.administratorRepository,
-                    this.doctorRepository,
-                    this.pharmacistRepository
+                    replenishmentRequestService,
+                    staffService,
+                    inventoryService
                 );
                 administratorController.handleUserInput();
                 break;

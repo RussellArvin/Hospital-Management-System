@@ -6,7 +6,6 @@ import enums.Gender;
 import enums.UserRole;
 import model.Administrator;
 import model.Doctor;
-import model.Patient;
 import model.Pharmacist;
 import model.User;
 import repository.AdministratorRepository;
@@ -25,12 +24,14 @@ public class StaffService {
     public StaffService(
         DoctorRepository doctorRepository,
         PharmacistRepository pharmacistRepository,
-        AdministratorRepository administratorRepository
+        AdministratorRepository administratorRepository,
+        PatientRepository patientRepository,
+        UserService userService
     ) {
         this.doctorRepository = doctorRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.administratorRepository = administratorRepository;
-        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, new PatientRepository());
+        this.userService = userService;
     }
 
 
