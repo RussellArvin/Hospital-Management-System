@@ -53,6 +53,10 @@ public class ReplenishmentRequest extends BaseEntity {
     public ReplenishmentRequestStatus getStatus(){
         return this.status;
     }
+    
+    public void setNewAmount(int newAmount) {
+        this.newAmount = newAmount;
+    }
 
     public void setStatus(ReplenishmentRequestStatus status){
         this.status = status;

@@ -5,11 +5,9 @@ import enums.ReplenishmentRequestStatus;
 
 //TODO: REFACTOR THIS
 
-public class ReplenishmentRequestDetail extends BaseEntity {
+public class ReplenishmentRequestDetail extends ReplenishmentRequest {
     private Medicine medicine;
     private Pharmacist pharmacist;
-    private int newAmount;
-    private ReplenishmentRequestStatus status;
 
     public ReplenishmentRequestDetail(
         String id,
@@ -20,24 +18,9 @@ public class ReplenishmentRequestDetail extends BaseEntity {
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
-        super(id, createdAt, updatedAt);
+        super(id, medicine.getId(), pharmacist.getId(), newAmount, status, createdAt, updatedAt);
         this.medicine = medicine;
         this.pharmacist = pharmacist;
-        this.newAmount = newAmount;
-        this.status = status;
-    }
-
-    public ReplenishmentRequestDetail(
-        Medicine medicine,
-        Pharmacist pharmacist,
-        int newAmount,
-        ReplenishmentRequestStatus status
-    ){
-        super();
-        this.medicine = medicine;
-        this.pharmacist = pharmacist;
-        this.newAmount = newAmount;
-        this.status = status;
     }
 
     // Getters
@@ -49,41 +32,13 @@ public class ReplenishmentRequestDetail extends BaseEntity {
         return pharmacist;
     }
 
-    public int getNewAmount() {
-        return newAmount;
-    }
 
-    public ReplenishmentRequestStatus getStatus() {
-        return status;
-    }
-
-    // Setters
     public void setMedicine(Medicine medicine) {
         this.medicine = medicine;
     }
 
     public void setPharmacist(Pharmacist pharmacist) {
         this.pharmacist = pharmacist;
-    }
-
-    public void setNewAmount(int newAmount) {
-        this.newAmount = newAmount;
-    }
-
-    public void setStatus(ReplenishmentRequestStatus status) {
-        this.status = status;
-    }
-
-    public String toCsvString() {
-        return String.join(",",
-            id,
-            medicine.getId(),
-            pharmacist.getId(),
-            String.valueOf(newAmount),
-            status.toString(),
-            createdAt.toString(),
-            updatedAt.toString()
-        );
     }
 
     public static ReplenishmentRequestDetail fromReplenishmentRequest(
