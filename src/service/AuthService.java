@@ -30,13 +30,12 @@ public class AuthService {
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
     }
 
-    public User Login(String id, String password) {
-        System.out.println("Login");
+    public User Login(String id, String password, boolean isStaff) {
         if (id == null || password == null) {
             return null;
         }
 
-        User user = userService.findOne(id,true,true);
+        User user = userService.findOne(id,!isStaff,isStaff);
         if(user != null && user.validatePassword(password)){
             return user;
         }

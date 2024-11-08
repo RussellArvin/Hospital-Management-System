@@ -8,11 +8,13 @@ import model.Patient;
 import model.Pharmacist;
 import model.User;
 import repository.AdministratorRepository;
+import repository.AppointmentRepository;
 import repository.DoctorRepository;
 import repository.MedicineRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 import repository.ReplenishmentRequestRepository;
+import service.AppointmentService;
 import service.AuthService;
 import service.InventoryService;
 import service.MedicalRecordService;
@@ -29,6 +31,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private AdministratorRepository administratorRepository;
     private MedicineRepository medicineRepository;
     private ReplenishmentRequestRepository replenishmentRequestRepository;
+    private AppointmentRepository appointmentRepository;
 
     private AuthService authService;
     private UserService userService;
@@ -36,6 +39,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private InventoryService inventoryService;
     private ReplenishmentRequestService replenishmentRequestService;
     private StaffService staffService;
+    private AppointmentService appointmentService;
 
 
     public MainController(Scanner scanner) {
@@ -47,6 +51,7 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.administratorRepository = new AdministratorRepository();
         this.medicineRepository = new MedicineRepository();
         this.replenishmentRequestRepository = new ReplenishmentRequestRepository();
+        this.appointmentRepository = new AppointmentRepository();
 
         this.authService = new AuthService(
             this.patientRepository,
@@ -61,6 +66,7 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.replenishmentRequestService = new ReplenishmentRequestService(replenishmentRequestRepository, medicineRepository, pharmacistRepository);
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
         this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,this.userService);
+        this.appointmentService = new AppointmentService(appointmentRepository, doctorRepository, patientRepository);
     }
 
     public void handleUserInput() {
@@ -96,7 +102,7 @@ public class MainController extends BaseController<LoginMenuUI> {
 
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
-        User user = authService.Login(id, password);
+        User user = authService.Login(id, password,false);
 
         if(user == null) {
             System.out.println("\nLogin failed. Invalid ID or password.");
@@ -114,7 +120,7 @@ public class MainController extends BaseController<LoginMenuUI> {
 
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
-        User user = authService.Login(id, password);
+        User user = authService.Login(id, password,true);
 
         if(user == null) {
             System.out.println("\nLogin failed. Invalid ID or password.");
@@ -135,7 +141,8 @@ public class MainController extends BaseController<LoginMenuUI> {
                 PatientController patientController = new PatientController(
                     this.scanner,
                     (Patient) user,
-                    this.medicalRecordService
+                    this.medicalRecordService,
+                    this.appointmentService
                 );
                 patientController.handleUserInput();
                 break;

@@ -34,8 +34,6 @@ public class StaffService {
         this.userService = userService;
     }
 
-
-
     public User[] getAllStaffData() {
         Doctor[] doctors = this.doctorRepository.findAll();
         Pharmacist[] pharmacists = this.pharmacistRepository.findAll();

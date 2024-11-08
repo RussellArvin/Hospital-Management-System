@@ -1,1 +1,2 @@
 id,doctorId,patientId,startDateTime,endDateTime,status,cancelReason,createdAt,updatedAt
+a5b7ef55-019d-465d-8ebe-8949bdad0c72,D002,P001,2024-05-24T23:30,2024-05-25T00:00,CONFIRMED,,2024-11-09T01:00:54.253305,2024-11-09T01:00:54.253346

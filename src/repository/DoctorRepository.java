@@ -16,4 +16,11 @@ public class DoctorRepository extends CsvRepository<Doctor, DoctorMapper> {
     public Doctor[] findAll() {
         return super.findAll(Doctor.class);
     }
+
+    public Doctor findOneByName(String name){
+        String line = this.fileManager.findLineByColumnValue("name", name);
+        
+        if(line == null) return null;
+        return mapper.fromCsvString(line);
+    }
 }

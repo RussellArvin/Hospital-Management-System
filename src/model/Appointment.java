@@ -13,8 +13,8 @@ public class Appointment extends BaseEntity{
     
 
     public Appointment(
-        String patientId,
         String doctorId,
+        String patientId,
         LocalDateTime startDateTime,
         LocalDateTime endDateTime
     ) {
@@ -30,8 +30,8 @@ public class Appointment extends BaseEntity{
 
     public Appointment(
         String id,
-        String patientId,
         String doctorId,
+        String patientId,
         LocalDateTime startDateTime,
         LocalDateTime endDateTime,
         AppointmentStatus status,
@@ -69,12 +69,40 @@ public class Appointment extends BaseEntity{
         this.cancelReason = cancelReason;
     }
 
+    public LocalDateTime getStartDateTime(){
+        return this.startDateTime;
+    }
+
+    public LocalDateTime getEndDateTime(){
+        return this.endDateTime;
+    }
+
+    public AppointmentStatus getStatus(){
+        return this.status;
+    }
+
+    public void setStatus(AppointmentStatus status){
+        this.status = status;
+    }
+
+    public String getPatientId(){
+        return this.patientId;
+    }
+
+    public String getDoctorId(){
+        return this.doctorId;
+    }
+
+    public String getCancelReason(){
+        return this.cancelReason;
+    }
+
     @Override
     public String toCsvString() {
         return String.join(",",
-            id,                         // from BaseEntity
+            id,
+            doctorId, 
             patientId,
-            doctorId,
             startDateTime.toString(),
             endDateTime.toString(),
             status.toString(),          // enum to string

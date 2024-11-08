@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDateTime;
 import enums.ReplenishmentRequestStatus;
 
+//TODO: REFACTOR THIS
+
 public class ReplenishmentRequestDetail extends BaseEntity {
     private Medicine medicine;
     private Pharmacist pharmacist;

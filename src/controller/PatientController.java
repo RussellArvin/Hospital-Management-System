@@ -2,8 +2,12 @@ package controller;
 
 import java.util.Scanner;
 
+import model.AppointmentDetail;
 import model.Patient;
+import service.AppointmentService;
 import service.MedicalRecordService;
+import ui.AppointmentTableUI;
+import ui.CreateAppointmentUI;
 import ui.MedicalRecordUI;
 import ui.PatientMenuUI;
 import validator.InputValidator;
@@ -12,16 +16,19 @@ public class PatientController extends BaseController<PatientMenuUI> {
     private Patient patient;
 
     private MedicalRecordService medicalRecordService;
+    private AppointmentService appointmentService;
     
     public PatientController(
         Scanner scanner,
         Patient patient,
-        MedicalRecordService medicalRecordService
+        MedicalRecordService medicalRecordService,
+        AppointmentService appointmentService
     ){
         super(new PatientMenuUI(),scanner);
 
         this.patient = patient;
         this.medicalRecordService = medicalRecordService;
+        this.appointmentService = appointmentService;
     }
 
     public void handleUserInput() {
@@ -35,6 +42,12 @@ public class PatientController extends BaseController<PatientMenuUI> {
             else if(choice.equals("2")){
                 updatePersonalInformation();
             }
+            else if(choice.equals("4")){
+                scheduleAppointment();
+            }
+            else if(choice.equals("7")){
+                viewAppointments();
+            }
             else if(choice.equals("9")) {
                 super.handleLogout(this.patient);
                 return;
@@ -43,6 +56,11 @@ public class PatientController extends BaseController<PatientMenuUI> {
                super.invalidOption();
             }
         }
+    }
+
+    public void viewAppointments(){
+        AppointmentDetail[] appointments = appointmentService.findApprovedByPatient(patient.getId());
+        AppointmentTableUI.display(appointments,scanner);
     }
 
     public void updatePersonalInformation() {
@@ -84,5 +102,9 @@ public class PatientController extends BaseController<PatientMenuUI> {
         } else {
             System.out.println("\nNo changes made.");
         }
+    }
+
+    public void scheduleAppointment(){
+        CreateAppointmentUI.display(scanner, appointmentService, patient);
     }
 }
