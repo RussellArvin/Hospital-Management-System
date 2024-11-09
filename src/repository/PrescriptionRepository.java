@@ -1,5 +1,7 @@
 package repository;
 
+import java.util.List;
+
 import model.Prescription;
 import repository.base.CsvRepository;
 import repository.mapper.PrescriptionMapper;
@@ -15,5 +17,10 @@ public class PrescriptionRepository extends CsvRepository<Prescription,Prescript
     @Override
     public Prescription[] findAll() {
         return super.findAll(Prescription.class);
+    }
+
+    public Prescription[] findManyByOutcomeId(String outcomeId){
+        List<String> lines = this.fileManager.findLinesByColumnValue("appointmentOutcomeId",outcomeId);
+        return super.mapLines(lines, Prescription.class);
     }
 }

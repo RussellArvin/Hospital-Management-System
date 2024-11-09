@@ -1,5 +1,7 @@
 package repository;
 
+import java.util.List;
+
 import model.AppointmentOutcome;
 import repository.base.CsvRepository;
 import repository.mapper.AppointmentOutcomeMapper;
@@ -22,5 +24,10 @@ public class AppointmentOutcomeRepository extends CsvRepository<AppointmentOutco
     @Override
     public AppointmentOutcome[] findAll() {
         return super.findAll(AppointmentOutcome.class);
+    }
+
+    public AppointmentOutcome[] findManyByPatientId(String patientId){
+        List<String> lines = this.fileManager.findLinesByColumnValue("patientId",patientId);
+        return super.mapLines(lines, AppointmentOutcome.class);
     }
 }
