@@ -24,7 +24,7 @@ public class AppointmentDetail extends Appointment {
         this.patient = patient;
     }
 
-    public static AppointmentDetail fromAppointmentDetail(
+    public static AppointmentDetail fromAppointment(
         Appointment appointment,
         Doctor doctor,
         Patient patient

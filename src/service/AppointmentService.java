@@ -138,7 +138,7 @@ public class AppointmentService {
             Patient patient = patientRepository.findOne(appointment.getPatientId());
 
             //Create object from static factory method
-            details[i] = AppointmentDetail.fromAppointmentDetail(
+            details[i] = AppointmentDetail.fromAppointment(
                 appointment, 
                 doctor, 
                 patient
@@ -172,7 +172,7 @@ public class AppointmentService {
             Patient patient = patientRepository.findOne(appointment.getPatientId());
 
             //Create object from static factory method
-            details[i] = AppointmentDetail.fromAppointmentDetail(
+            details[i] = AppointmentDetail.fromAppointment(
                 appointment, 
                 doctor, 
                 patient
@@ -194,7 +194,7 @@ public class AppointmentService {
             Doctor doctor = doctorRepository.findOne(appointment.getDoctorId());
 
             //Create object from static factory method
-            details[i] = AppointmentDetail.fromAppointmentDetail(
+            details[i] = AppointmentDetail.fromAppointment(
                 appointment, 
                 doctor, 
                 patient

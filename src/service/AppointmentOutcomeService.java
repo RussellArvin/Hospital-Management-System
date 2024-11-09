@@ -47,7 +47,7 @@ public class AppointmentOutcomeService {
             details[i] = AppointmentOutcomeDetail.fromAppointmentOutcome(
                 outcome, 
                 prescriptions, 
-                AppointmentDetail.fromAppointmentDetail(
+                AppointmentDetail.fromAppointment(
                     appointment, 
                     doctor, 
                     patient
