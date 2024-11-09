@@ -5,17 +5,20 @@ import java.time.LocalDateTime;
 import enums.AppointmentServiceType;
 
 public class AppointmentOutcome extends BaseEntity {
+    private String patientId;
     private String appointmentId;
     private AppointmentServiceType serviceType;
     private String consultationNotes;
     
 
     public AppointmentOutcome(
+       String patientId,
        String appointmentId,
        AppointmentServiceType serviceType,
        String consultationNotes
     ) {
-        super(BaseEntity.generateUUID());
+        super();
+        this.patientId = patientId;
         this.appointmentId = appointmentId;
         this.serviceType = serviceType;
         this.consultationNotes = consultationNotes;
@@ -23,6 +26,7 @@ public class AppointmentOutcome extends BaseEntity {
 
     public AppointmentOutcome(
         String id,
+        String patientId,
         String appointmentId,
         AppointmentServiceType serviceType,
         String consultationNotes,
@@ -33,6 +37,10 @@ public class AppointmentOutcome extends BaseEntity {
         this.appointmentId = appointmentId;
         this.serviceType = serviceType;
         this.consultationNotes = consultationNotes;
+    }
+
+    public String getPatientId(){
+        return this.patientId;
     }
 
     public String getAppointmentId(){
@@ -54,6 +62,7 @@ public class AppointmentOutcome extends BaseEntity {
         
         return String.join(",",
             id,                         // from BaseEntity
+            patientId,
             appointmentId,
             serviceType.toString(),     // enum to string
             escapedNotes,

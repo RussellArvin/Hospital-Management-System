@@ -11,10 +11,11 @@ public class AppointmentOutcomeMapper implements BaseMapper<AppointmentOutcome> 
         return new AppointmentOutcome(
             parts[0],
             parts[1],
-            AppointmentServiceType.valueOf(parts[2]),
-            parts[3],
-            LocalDateTime.parse(parts[4]),
-            LocalDateTime.parse(parts[5])
+            parts[2],
+            AppointmentServiceType.valueOf(parts[3]),
+            parts[4],
+            LocalDateTime.parse(parts[5]),
+            LocalDateTime.parse(parts[6])
         );
     }
 }

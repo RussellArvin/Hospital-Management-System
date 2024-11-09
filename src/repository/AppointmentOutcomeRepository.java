@@ -6,7 +6,7 @@ import repository.mapper.AppointmentOutcomeMapper;
 
 public class AppointmentOutcomeRepository extends CsvRepository<AppointmentOutcome,AppointmentOutcomeMapper> {
     private static final String CSV_FILE = "data/appointment-outcomes.csv";
-    private static final String CSV_HEADER = "id,appointmentId,serviceType,consultationNotes,createdAt,updatedAt";
+    private static final String CSV_HEADER = "id,patientId,appointmentId,serviceType,consultationNotes,createdAt,updatedAt";
 
     public AppointmentOutcomeRepository(){
         super(CSV_FILE,CSV_HEADER,new AppointmentOutcomeMapper());
