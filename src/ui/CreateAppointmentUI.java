@@ -5,12 +5,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import model.Patient;
+import service.AppointmentScheduleService;
 import service.AppointmentService;
 
 public class CreateAppointmentUI {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     
-    public static void display(Scanner scanner, AppointmentService appointmentService, Patient patient) {
+    public static void display(Scanner scanner, AppointmentService appointmentService, AppointmentScheduleService appointmentScheduleService, Patient patient) {
         // Define formatting
         String leftAlignFormat = "| %-30s |%n";
         String separator = "+--------------------------------+%n";
@@ -46,24 +47,38 @@ public class CreateAppointmentUI {
         // Get appointment start date and time
         LocalDateTime startDateTime = null;
         LocalDateTime endDateTime = null;
-        while (startDateTime == null) {
-            System.out.format(leftAlignFormat, "Enter Start Date/Time:");
-            System.out.format(leftAlignFormat, "(Format: YYYY-MM-DD HH:mm)");
-            String startDateTimeStr = scanner.nextLine().trim();
-            
-            try {
-                startDateTime = LocalDateTime.parse(startDateTimeStr, formatter);
-                endDateTime = startDateTime.plusMinutes(30); // Set end time to 30 minutes after start time
+        boolean isSlotValid = false;
+
+        while (!isSlotValid) {
+            while (startDateTime == null) {
+                System.out.format(leftAlignFormat, "Enter Start Date/Time:");
+                System.out.format(leftAlignFormat, "(Format: YYYY-MM-DD HH:mm)");
+                String startDateTimeStr = scanner.nextLine().trim();
                 
-                // Display the appointment time details
+                try {
+                    startDateTime = LocalDateTime.parse(startDateTimeStr, formatter);
+                    endDateTime = startDateTime.plusMinutes(30); // Set end time to 30 minutes after start time
+                    
+                    // Display the appointment time details
+                    System.out.format(separator);
+                    System.out.format(leftAlignFormat, "Start Time: " + startDateTime.format(formatter));
+                    System.out.format(leftAlignFormat, "End Time: " + endDateTime.format(formatter));
+                    System.out.format(leftAlignFormat, "Duration: 30 minutes");
+                    System.out.format(separator);
+                    
+                } catch (DateTimeParseException e) {
+                    System.out.format(leftAlignFormat, "Invalid date format!");
+                    continue;
+                }
+            }
+
+            // Check if the slot is free
+            if (appointmentScheduleService.isSlotFree(doctorId, patient.getId(), startDateTime, endDateTime)) {
+                isSlotValid = true;
+            } else {
+                System.out.format(leftAlignFormat, "Please choose another time slot");
                 System.out.format(separator);
-                System.out.format(leftAlignFormat, "Start Time: " + startDateTime.format(formatter));
-                System.out.format(leftAlignFormat, "End Time: " + endDateTime.format(formatter));
-                System.out.format(leftAlignFormat, "Duration: 30 minutes");
-                System.out.format(separator);
-                
-            } catch (DateTimeParseException e) {
-                System.out.format(leftAlignFormat, "Invalid date format!");
+                startDateTime = null; // Reset to ask for new time
                 continue;
             }
         }

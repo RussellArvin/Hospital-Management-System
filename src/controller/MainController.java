@@ -14,6 +14,7 @@ import repository.MedicineRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 import repository.ReplenishmentRequestRepository;
+import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.AuthService;
 import service.InventoryService;
@@ -40,6 +41,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private ReplenishmentRequestService replenishmentRequestService;
     private StaffService staffService;
     private AppointmentService appointmentService;
+    private AppointmentScheduleService appointmentScheduleService;
 
 
     public MainController(Scanner scanner) {
@@ -67,6 +69,7 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
         this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,this.userService);
         this.appointmentService = new AppointmentService(appointmentRepository, doctorRepository, patientRepository);
+        this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
     }
 
     public void handleUserInput() {
@@ -142,7 +145,8 @@ public class MainController extends BaseController<LoginMenuUI> {
                     this.scanner,
                     (Patient) user,
                     this.medicalRecordService,
-                    this.appointmentService
+                    this.appointmentService,
+                    this.appointmentScheduleService
                 );
                 patientController.handleUserInput();
                 break;
@@ -150,7 +154,7 @@ public class MainController extends BaseController<LoginMenuUI> {
                 DoctorController doctorController = new DoctorController(
                     this.scanner,
                     (Doctor) user,
-                    this.doctorRepository
+                    this.appointmentService
                 );
                 doctorController.handleUserInput();
                 break;

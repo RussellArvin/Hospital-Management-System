@@ -35,6 +35,18 @@ public class AppointmentOutcome extends BaseEntity {
         this.consultationNotes = consultationNotes;
     }
 
+    public String getAppointmentId(){
+        return this.appointmentId;
+    }
+
+    public AppointmentServiceType getServiceType(){
+        return this.serviceType;
+    }
+
+    public String getConsultationNotes(){
+        return this.consultationNotes;
+    }
+
     @Override
     public String toCsvString() {
         // Escape any commas in consultationNotes to prevent CSV parsing issues

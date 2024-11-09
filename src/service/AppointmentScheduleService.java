@@ -46,6 +46,15 @@ public class AppointmentScheduleService {
             return false;
         }
 
+        // Check if appointment is within doctor's working hours
+        int appointmentHour = startDateTime.getHour();
+        if (appointmentHour < doctor.getStartWorkHours() || appointmentHour >= doctor.getEndWorkHours()) {
+            System.out.println("Appointment time is outside doctor's working hours (" + 
+                String.format("%02d:00", doctor.getStartWorkHours()) + " to " + 
+                String.format("%02d:00", doctor.getEndWorkHours()) + ")");
+            return false;
+        }
+
         AppointmentDetail[] doctorAppointments = appointmentService.findByDoctor(doctorId);
         AppointmentDetail[] patientAppointments = appointmentService.findByPatient(patientId);
 
@@ -62,7 +71,6 @@ public class AppointmentScheduleService {
 
         return true;
     }
-
     /**
      * Returns an array of doctors available during the specified time slot for a given patient
      */

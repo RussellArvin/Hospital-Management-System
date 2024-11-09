@@ -2,10 +2,14 @@ package controller;
 
 import java.util.Scanner;
 
+import enums.UserRole;
+import enums.AppointmentAction;
 import model.AppointmentDetail;
 import model.Patient;
+import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.MedicalRecordService;
+import ui.AppointmentScheduleUI;
 import ui.AppointmentTableUI;
 import ui.CreateAppointmentUI;
 import ui.MedicalRecordUI;
@@ -17,18 +21,23 @@ public class PatientController extends BaseController<PatientMenuUI> {
 
     private MedicalRecordService medicalRecordService;
     private AppointmentService appointmentService;
+    private AppointmentScheduleService appointmentScheduleService;
+    private AppointmentTableUI appointmentTableUI;
     
     public PatientController(
         Scanner scanner,
         Patient patient,
         MedicalRecordService medicalRecordService,
-        AppointmentService appointmentService
+        AppointmentService appointmentService,
+        AppointmentScheduleService appointmentScheduleService
     ){
         super(new PatientMenuUI(),scanner);
 
         this.patient = patient;
         this.medicalRecordService = medicalRecordService;
         this.appointmentService = appointmentService;
+        this.appointmentScheduleService = appointmentScheduleService;
+        this.appointmentTableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, patient, UserRole.PATIENT);
     }
 
     public void handleUserInput() {
@@ -42,11 +51,20 @@ public class PatientController extends BaseController<PatientMenuUI> {
             else if(choice.equals("2")){
                 updatePersonalInformation();
             }
+            else if(choice.equals("3")){
+                AppointmentScheduleUI.display(scanner,appointmentService,UserRole.PATIENT,null);
+            }
             else if(choice.equals("4")){
                 scheduleAppointment();
             }
+            else if(choice.equals("5")){
+                appointmentTableUI.display(scanner,AppointmentAction.RESCHEDULE);
+            }
+            else if(choice.equals("6")){
+                appointmentTableUI.display(scanner,AppointmentAction.CANCEL);
+            }
             else if(choice.equals("7")){
-                viewAppointments();
+                appointmentTableUI.display(scanner,AppointmentAction.VIEW);
             }
             else if(choice.equals("9")) {
                 super.handleLogout(this.patient);
@@ -58,12 +76,8 @@ public class PatientController extends BaseController<PatientMenuUI> {
         }
     }
 
-    public void viewAppointments(){
-        AppointmentDetail[] appointments = appointmentService.findApprovedByPatient(patient.getId());
-        AppointmentTableUI.display(appointments,scanner);
-    }
 
-    public void updatePersonalInformation() {
+    private void updatePersonalInformation() {
         String phoneNumber;
         String email;
         
@@ -105,6 +119,6 @@ public class PatientController extends BaseController<PatientMenuUI> {
     }
 
     public void scheduleAppointment(){
-        CreateAppointmentUI.display(scanner, appointmentService, patient);
+        CreateAppointmentUI.display(scanner, appointmentService, appointmentScheduleService, patient);
     }
 }

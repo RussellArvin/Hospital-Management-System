@@ -51,30 +51,20 @@ public class Appointment extends BaseEntity{
         this.updatedAt = updatedAt;
     }
 
-    public void confirm(){
-        this.status = AppointmentStatus.CONFIRMED;
-    }
-
-    public void complete(){
-        this.status = AppointmentStatus.COMPLETED;
-    }
-
-    public void cancelByDoctor(String cancelReason){
-        this.status = AppointmentStatus.DOCTOR_CANCELLED;
-        this.cancelReason = cancelReason;
-    }
-
-    public void cancelByPatient(String cancelReason){
-        this.status = AppointmentStatus.PATIENT_CANCELLED;
-        this.cancelReason = cancelReason;
-    }
-
     public LocalDateTime getStartDateTime(){
         return this.startDateTime;
     }
 
+    public void setStartDateTime(LocalDateTime date){
+        this.startDateTime = date;
+    }
+
     public LocalDateTime getEndDateTime(){
         return this.endDateTime;
+    }
+
+    public void setEndDateTime(LocalDateTime date){
+        this.endDateTime = date;
     }
 
     public AppointmentStatus getStatus(){
@@ -83,6 +73,10 @@ public class Appointment extends BaseEntity{
 
     public void setStatus(AppointmentStatus status){
         this.status = status;
+    }
+
+    public void setCancelReason(String cancelReason){
+        this.cancelReason = cancelReason;
     }
 
     public String getPatientId(){

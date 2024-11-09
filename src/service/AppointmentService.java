@@ -1,5 +1,6 @@
 package service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -38,6 +39,24 @@ public class AppointmentService {
         }
     }
 
+    public String rescheduleAppointment(
+        String appointmentId,
+        LocalDateTime startDateTime,
+        LocalDateTime endDateTime
+    ){
+        try{
+            Appointment appointment = appointmentRepository.findOne(appointmentId);
+            if(appointment == null) return "Unable to find appointment";
+
+            appointment.setStartDateTime(startDateTime);
+            appointment.setEndDateTime(endDateTime);
+            appointmentRepository.update(appointment);
+            return null;
+        }catch(Exception e){
+            return "Something went wrong when rescheduling appointment";
+        }
+    }
+
     public String createAppointment(
         String patientId,
         String doctorId,
@@ -63,19 +82,24 @@ public class AppointmentService {
         }
     }
 
-    public void setStatus(
+    public String setStatus(
         String appointmentId,
-        AppointmentStatus status
+        AppointmentStatus status,
+        String cancelReason
     ) {
-        Appointment appointment = appointmentRepository.findOne(appointmentId);
-        if(appointment == null) {
-            System.out.println("Can't find appointment to update");
-            return;
+        try{
+            Appointment appointment = appointmentRepository.findOne(appointmentId);
+            if(appointment == null) {
+                return "Cant find appointment to update";
+            }
+    
+            appointment.setStatus(status);
+            if(status == AppointmentStatus.DOCTOR_CANCELLED) appointment.setCancelReason(cancelReason);
+            appointmentRepository.update(appointment);
+            return null;
+        }catch(Exception e){
+            return "Something went wrong when updating the appointment";
         }
-
-        appointment.setStatus(status);
-        appointmentRepository.update(appointment);
-        return;
     }
 
     public AppointmentDetail[] findPendingApprovedByPatient(String patientId){
@@ -89,7 +113,6 @@ public class AppointmentService {
 
     public AppointmentDetail[] findApprovedByPatient(String patientId){
         AppointmentDetail[] appointments = this.findByPatient(patientId);
-        //System.out.println(appointments.length);
 
         return Arrays.stream(appointments)
         .filter(appointment -> appointment.getStatus() == AppointmentStatus.CONFIRMED)
@@ -125,6 +148,18 @@ public class AppointmentService {
 
         return details;
 
+    }
+
+    public AppointmentDetail[] getDoctorAppointmentsByDate(String doctorId, LocalDate date){
+        AppointmentDetail[] appointments = this.findByDoctor(doctorId);
+
+        return Arrays.stream(appointments)
+            .filter(appointment -> 
+                (appointment.getStatus() == AppointmentStatus.REQUESTED || 
+                appointment.getStatus() == AppointmentStatus.CONFIRMED) &&
+                appointment.getStartDateTime().toLocalDate().equals(date)
+            )
+            .toArray(AppointmentDetail[]::new);
     }
 
     public AppointmentDetail[] findAll(){

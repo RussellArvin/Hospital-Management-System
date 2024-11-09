@@ -26,6 +26,14 @@ public class Doctor extends User {
         this.endWorkHours = endWorkHours;
     }
 
+    public int getStartWorkHours(){
+        return this.startWorkHours;
+    }
+
+    public int getEndWorkHours(){
+        return this.endWorkHours;
+    }
+
     @Override
     public String toCsvString(){
         return String.join(",",

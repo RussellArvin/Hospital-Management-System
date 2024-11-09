@@ -1,2 +1,2 @@
 id,password,salt,name,age,dateOfBirth,gender,bloodType,phoneNumber,email,createdAt,updatedAt
-P001,4Gy6sJtz3+/IiGfEzAgFCJeg8MiVu/CKTPfdFoeG2yk=,[B@2b05039f,John Doe,23,1990-01-01,MALE,A_POSITIVE,1234567890,john.doe@email.com,2024-03-20T10:30:00,2024-03-20T10:30:00
+P001,4Gy6sJtz3+/IiGfEzAgFCJeg8MiVu/CKTPfdFoeG2yk=,[B@2b05039f,John Doe,1990-01-01,MALE,A+,91709602,russell@hotmail.com,2024-03-20T10:30,2024-11-10T01:33:41.321580
