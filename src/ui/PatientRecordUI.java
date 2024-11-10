@@ -12,7 +12,6 @@ public class PatientRecordUI {
         // Define column widths and formats
         String leftAlignFormat = "| %-15s | %-30s |%n";
         String headerFormat = "| %-47s |%n";
-        String recordFormat = "| %-15s | %-30s |%n";
         String separator = "+-----------------+--------------------------------+%n";
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

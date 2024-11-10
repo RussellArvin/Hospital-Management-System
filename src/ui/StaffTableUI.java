@@ -12,7 +12,7 @@ import enums.Gender;
 import enums.UserRole;
 
 public class StaffTableUI {
-    private static final int COLUMNS = 7; // ID, Name, Age, Gender, Role, Created At, Updated At
+
     
     public static void display(User[] users, Scanner scanner, StaffService staffService) {
         final int PAGE_SIZE = 10;

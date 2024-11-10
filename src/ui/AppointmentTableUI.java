@@ -20,7 +20,6 @@ import service.AppointmentService;
 import service.InventoryService;
 
 public class AppointmentTableUI {
-    private static final int COLUMNS = 5; // ID, Doctor Name, Patient Name, Start Date, End Date
     private final AppointmentService appointmentService;
     private final AppointmentScheduleService appointmentScheduleService;
     private AppointmentOutcomeService appointmentOutcomeService;
@@ -79,6 +78,8 @@ public class AppointmentTableUI {
                     break;
                 case OUTCOME:
                     System.out.println("O - Record Outcome");
+                    break;
+                default:
                     break;
             }
             

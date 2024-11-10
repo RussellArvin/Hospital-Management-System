@@ -131,7 +131,6 @@ public class AppointmentScheduleUI {
     
     private static void displaySchedule(LocalDate date, AppointmentDetail[] appointments, String doctorName, 
         int startWorkHours, int endWorkHours, UserRole role) {
-        String columnFormat = "| %-5s | %-22s |";
         String separator = "+-------+------------------------+".repeat(TOTAL_COLUMNS) + "%n";
         
         // Header

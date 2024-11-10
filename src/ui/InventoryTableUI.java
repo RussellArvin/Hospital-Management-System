@@ -6,7 +6,6 @@ import model.Medicine;
 import service.InventoryService;
 
 public class InventoryTableUI {
-   private static final int COLUMNS = 6; // ID, Name, Stock, Low Stock Alert, Created At, Updated At
 
    public static void display(Medicine[] medicines, Scanner scanner, boolean isAdmin, InventoryService inventoryService) {
     final int PAGE_SIZE = 10;

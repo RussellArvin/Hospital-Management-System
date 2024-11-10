@@ -1,8 +1,5 @@
 package validator;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-
 public class InputValidator {
     public static boolean validatePhone(String phone) {
         return phone.matches("\\d{8}");  // Simple 8-digit validation

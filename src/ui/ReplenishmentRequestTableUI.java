@@ -9,7 +9,6 @@ import service.ReplenishmentRequestService;
 import enums.ReplenishmentRequestStatus;
 
 public class ReplenishmentRequestTableUI {
-    private static final int COLUMNS = 7; // ID, Medicine Name, Pharmacist Name, New Amount, Status, Created At, Updated At
     
     public static void display(
         ReplenishmentRequestDetail[] requests, 

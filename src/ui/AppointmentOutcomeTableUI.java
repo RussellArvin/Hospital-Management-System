@@ -3,7 +3,6 @@ package ui;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.Arrays;
-import java.util.List;
 
 import model.AppointmentOutcomeDetail;
 import model.Patient;
@@ -11,10 +10,8 @@ import model.Prescription;
 import model.PrescriptionWithMedicine;
 import service.AppointmentOutcomeService;
 import enums.PrescriptionStatus;
-import enums.UserRole;
 
 public class AppointmentOutcomeTableUI {
-    private static final int COLUMNS = 6;
     private final AppointmentOutcomeService appointmentOutcomeService;
     private AppointmentOutcomeDetail[] outcomes;
     private Patient patient;
@@ -191,7 +188,6 @@ public class AppointmentOutcomeTableUI {
     
     private void displayTable(int startIndex, int pageSize) {
         String mainSeparator = "+--------------------------------------+----------------------+----------------------+%n";
-        String prescriptionSeparator = "+                                      +                      +                      +----------------------+----------+------------+%n";
         String headerFormat = "| %-36s | %-20s | %-20s |%n";
         String prescriptionFormat = "|                                      |                      |                      | %-20s | %-8d | %-10s |%n";
         

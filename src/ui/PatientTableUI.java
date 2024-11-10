@@ -8,11 +8,9 @@ import java.util.Scanner;
 import model.MedicalRecord;
 import model.Patient;
 import service.PatientService;
-import enums.Gender;
 import enums.MedicalRecordType;
 
 public class PatientTableUI {
-    private static final int COLUMNS = 7;
     private static final int PAGE_SIZE = 10;
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 

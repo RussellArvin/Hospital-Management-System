@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import enums.AppointmentStatus;
 import model.Appointment;
-import model.AppointmentDetail;
 import model.Doctor;
 import model.Patient;
 import repository.AppointmentRepository;

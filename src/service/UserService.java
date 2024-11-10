@@ -3,8 +3,6 @@ package service;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.management.RuntimeErrorException;
-
 import enums.UserRole;
 import model.Administrator;
 import model.Doctor;
