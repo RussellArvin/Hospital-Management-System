@@ -29,6 +29,7 @@ import service.ReplenishmentRequestService;
 import service.StaffService;
 import service.UserService;
 import ui.LoginMenuUI;
+import util.Constant;
 import enums.UserRole;
 
 public class MainController extends BaseController<LoginMenuUI> {
@@ -117,6 +118,15 @@ public class MainController extends BaseController<LoginMenuUI> {
         } else {
             System.out.println("\nLogin Successful");
             System.out.println("Welcome, " + user.getName());
+            if(password.equals(Constant.DEFAULT_PASSWORD)) {
+                System.out.println("Please enter an updated password: ");
+                String updatedPassword = scanner.nextLine();
+                String error = authService.setPassword(user, updatedPassword);
+                if(error != null) {
+                    System.out.println(error);
+                    return;
+                }
+            }
             handleUserRole(user);
         }
     }

@@ -11,6 +11,17 @@ public class AuthService {
         this.userService = userService;
     }
 
+    public String setPassword(User user, String password){
+        try{
+            user.setPassword(password);
+            userService.updateUser(user);
+            return null;
+            
+        } catch(Exception e){
+            return "Something went wrong when updating password";
+        }
+    }
+
     public User Login(String id, String password, boolean isStaff) {
         if (id == null || password == null) {
             return null;
