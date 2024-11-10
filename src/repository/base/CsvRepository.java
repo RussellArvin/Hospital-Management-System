@@ -24,6 +24,12 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
         this.fileManager.appendLine(entity.toCsvString());
     }
 
+    public void saveMany(T[] entities){
+        for(int i = 0; i < entities.length; i++){
+            this.save(entities[i]);
+        }
+    }
+
     public T findOne(String id) {
         String line = this.fileManager.readLine(id);
         if(line == null) return null;

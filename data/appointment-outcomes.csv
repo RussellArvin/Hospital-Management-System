@@ -1,1 +1,2 @@
-id,appointmentId,serviceType,consultationNotes,createdAt,updatedAt
+id,patientId,appointmentId,serviceType,consultationNotes,createdAt,updatedAt
+9d6d657c-2667-42d4-849a-5f1f32218c4e,P001,c4e41ab6-636e-4d3b-83fe-51f6b6112cd2,CONSULTATION,Went well and smoothly!,2024-11-10T16:29:08.641735,2024-11-10T16:29:08.641738

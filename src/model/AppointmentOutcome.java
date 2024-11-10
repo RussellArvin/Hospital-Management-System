@@ -12,12 +12,13 @@ public class AppointmentOutcome extends BaseEntity {
     
 
     public AppointmentOutcome(
+       String id,
        String patientId,
        String appointmentId,
        AppointmentServiceType serviceType,
        String consultationNotes
     ) {
-        super();
+        super(id);
         this.patientId = patientId;
         this.appointmentId = appointmentId;
         this.serviceType = serviceType;

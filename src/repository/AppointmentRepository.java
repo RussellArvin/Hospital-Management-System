@@ -3,6 +3,7 @@ package repository;
 
 import java.util.List;
 
+import enums.AppointmentStatus;
 import model.Appointment;
 import repository.base.CsvRepository;
 import repository.mapper.AppointmentMapper;
@@ -28,6 +29,11 @@ public class AppointmentRepository extends CsvRepository<Appointment, Appointmen
     
     public Appointment[] findManyByPatientId(String patientId){
         List<String> lines = this.fileManager.findLinesByColumnValue("patientId",patientId);
+        return super.mapLines(lines, Appointment.class);
+    }
+
+    public Appointment[] findManyByStatus(AppointmentStatus status){
+        List<String> lines = this.fileManager.findLinesByColumnValue("status",status.toString());
         return super.mapLines(lines, Appointment.class);
     }
 }

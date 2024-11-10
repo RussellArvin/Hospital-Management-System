@@ -8,12 +8,14 @@ public class Prescription extends BaseEntity {
     private String appointmentOutcomeId;
     private String medicineId;
     private PrescriptionStatus status;
+    private int amount;
 
     public Prescription(
         String id,
         String appointmentOutcomeId,
         String medicineId,
         PrescriptionStatus status,
+        int amount,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
@@ -21,20 +23,38 @@ public class Prescription extends BaseEntity {
         this.appointmentOutcomeId = appointmentOutcomeId;
         this.medicineId = medicineId;
         this.status = status;
+        this.amount = amount;
     }
 
     public Prescription(
         String appointmentOutcomeId,
-        String medicineId
+        PendingPrescription pendingPrescription
     ) {
         super();
         this.appointmentOutcomeId = appointmentOutcomeId;
-        this.medicineId = medicineId;
         this.status = PrescriptionStatus.PENDING;
+        this.amount = pendingPrescription.getAmount();
+        this.medicineId = pendingPrescription.getMedicineId();
     }
 
     public void dispense(){
         this.status = PrescriptionStatus.DISPENSED;
+    }
+
+    public String getAppointmentOutcomeId(){
+        return this.appointmentOutcomeId;
+    }
+
+    public String getMedicineId(){
+        return this.medicineId;
+    }
+
+    public PrescriptionStatus getStatus(){
+        return this.status;
+    }
+
+    public int getAmount(){
+        return this.amount;
     }
 
     @Override
@@ -44,6 +64,7 @@ public class Prescription extends BaseEntity {
             appointmentOutcomeId,
             medicineId,
             status.toString(),
+            String.valueOf(amount),
             createdAt.toString(),
             updatedAt.toString()
         );

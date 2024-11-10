@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 import enums.UserRole;
 import enums.AppointmentAction;
-import model.AppointmentDetail;
 import model.Patient;
+import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
+import service.InventoryService;
 import service.MedicalRecordService;
 import ui.AppointmentScheduleUI;
 import ui.AppointmentTableUI;
@@ -29,7 +30,9 @@ public class PatientController extends BaseController<PatientMenuUI> {
         Patient patient,
         MedicalRecordService medicalRecordService,
         AppointmentService appointmentService,
-        AppointmentScheduleService appointmentScheduleService
+        AppointmentScheduleService appointmentScheduleService,
+        AppointmentOutcomeService appointmentOutcomeService,
+        InventoryService inventoryService
     ){
         super(new PatientMenuUI(),scanner);
 
@@ -37,7 +40,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
         this.medicalRecordService = medicalRecordService;
         this.appointmentService = appointmentService;
         this.appointmentScheduleService = appointmentScheduleService;
-        this.appointmentTableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, patient, UserRole.PATIENT);
+        this.appointmentTableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, appointmentOutcomeService, inventoryService, patient, UserRole.PATIENT);
     }
 
     public void handleUserInput() {

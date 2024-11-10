@@ -8,12 +8,15 @@ import model.Patient;
 import model.Pharmacist;
 import model.User;
 import repository.AdministratorRepository;
+import repository.AppointmentOutcomeRepository;
 import repository.AppointmentRepository;
 import repository.DoctorRepository;
 import repository.MedicineRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
+import repository.PrescriptionRepository;
 import repository.ReplenishmentRequestRepository;
+import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.AuthService;
@@ -33,6 +36,8 @@ public class MainController extends BaseController<LoginMenuUI> {
     private MedicineRepository medicineRepository;
     private ReplenishmentRequestRepository replenishmentRequestRepository;
     private AppointmentRepository appointmentRepository;
+    private AppointmentOutcomeRepository appointmentOutcomeRepository;
+    private PrescriptionRepository prescriptionRepository;
 
     private AuthService authService;
     private UserService userService;
@@ -42,6 +47,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private StaffService staffService;
     private AppointmentService appointmentService;
     private AppointmentScheduleService appointmentScheduleService;
+    private AppointmentOutcomeService appointmentOutcomeService;
 
 
     public MainController(Scanner scanner) {
@@ -54,6 +60,8 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.medicineRepository = new MedicineRepository();
         this.replenishmentRequestRepository = new ReplenishmentRequestRepository();
         this.appointmentRepository = new AppointmentRepository();
+        this.appointmentOutcomeRepository = new AppointmentOutcomeRepository();
+        this.prescriptionRepository = new PrescriptionRepository();
 
         this.authService = new AuthService(
             this.patientRepository,
@@ -70,6 +78,7 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,this.userService);
         this.appointmentService = new AppointmentService(appointmentRepository, doctorRepository, patientRepository);
         this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
+        this.appointmentOutcomeService = new AppointmentOutcomeService(appointmentOutcomeRepository, prescriptionRepository, appointmentRepository, doctorRepository, patientRepository, medicineRepository);
     }
 
     public void handleUserInput() {
@@ -146,7 +155,9 @@ public class MainController extends BaseController<LoginMenuUI> {
                     (Patient) user,
                     this.medicalRecordService,
                     this.appointmentService,
-                    this.appointmentScheduleService
+                    this.appointmentScheduleService,
+                    this.appointmentOutcomeService,
+                    this.inventoryService
                 );
                 patientController.handleUserInput();
                 break;
@@ -154,7 +165,10 @@ public class MainController extends BaseController<LoginMenuUI> {
                 DoctorController doctorController = new DoctorController(
                     this.scanner,
                     (Doctor) user,
-                    this.appointmentService
+                    this.appointmentService,
+                    this.appointmentOutcomeService,
+                    appointmentScheduleService,
+                    inventoryService
                 );
                 doctorController.handleUserInput();
                 break;
@@ -163,7 +177,8 @@ public class MainController extends BaseController<LoginMenuUI> {
                     this.scanner,
                     (Pharmacist) user,
                     this.inventoryService,
-                    this.replenishmentRequestService
+                    this.replenishmentRequestService,
+                    this.appointmentOutcomeService
                 );
                 pharmacistController.handleUserInput();
                 break;

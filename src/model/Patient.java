@@ -81,6 +81,7 @@ public class Patient extends User {
             password,                   // from User
             new String(salt, StandardCharsets.UTF_8), // from salt
             name,                       // from User
+            Integer.toString(age),
             dateOfBirth.toString(),     // LocalDate to string
             gender.toString(),          // enum to string
             bloodType.toString(),       // enum to string

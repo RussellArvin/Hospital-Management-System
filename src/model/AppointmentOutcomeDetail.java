@@ -6,7 +6,7 @@ import enums.AppointmentServiceType;
 
 public class AppointmentOutcomeDetail extends AppointmentOutcome {
     private AppointmentDetail appointment;
-    private Prescription[] prescriptions;
+    private PrescriptionWithMedicine[] prescriptions;
 
     public AppointmentOutcomeDetail(
         String id,
@@ -16,7 +16,7 @@ public class AppointmentOutcomeDetail extends AppointmentOutcome {
         String consultationNotes,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        Prescription[] prescriptions,
+        PrescriptionWithMedicine[] prescriptions,
         AppointmentDetail appointment
     ) {
         super(id, patientId, appointmentId, serviceType, consultationNotes, createdAt, updatedAt);
@@ -26,7 +26,7 @@ public class AppointmentOutcomeDetail extends AppointmentOutcome {
 
     public static AppointmentOutcomeDetail fromAppointmentOutcome(
         AppointmentOutcome outcome,
-        Prescription[] prescriptions,
+        PrescriptionWithMedicine[] prescriptions,
         AppointmentDetail appointment
     ){
         return new AppointmentOutcomeDetail(
@@ -43,7 +43,7 @@ public class AppointmentOutcomeDetail extends AppointmentOutcome {
 
     }
 
-    public Prescription[] getPrescriptions(){
+    public PrescriptionWithMedicine[] getPrescriptions(){
         return this.prescriptions;
     }
 

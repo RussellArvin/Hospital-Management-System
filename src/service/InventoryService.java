@@ -62,4 +62,15 @@ public class InventoryService {
         return null;
     }
 
+    public String getMedicineId(String medicineName){
+        try{
+            Medicine medicine = this.medicineRepository.findOneByName(medicineName);
+            if(medicine == null) return null;
+            return medicine.getId();
+        } catch(Exception e){
+            System.out.println("Something went wrong when checking existence of medicine!");
+            return null;
+        }
+    }
+
 }

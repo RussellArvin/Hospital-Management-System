@@ -14,8 +14,9 @@ public class PrescriptionMapper implements BaseMapper<Prescription> {
             parts[1],
             parts[2],
             PrescriptionStatus.valueOf(parts[3]),
-            LocalDateTime.parse(parts[4]),
-            LocalDateTime.parse(parts[5])
+            Integer.parseInt(parts[4]),
+            LocalDateTime.parse(parts[5]),
+            LocalDateTime.parse(parts[6])
         );
     }
 }

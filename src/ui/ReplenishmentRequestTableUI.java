@@ -4,13 +4,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
 import model.ReplenishmentRequestDetail;
+import service.InventoryService;
 import service.ReplenishmentRequestService;
 import enums.ReplenishmentRequestStatus;
 
 public class ReplenishmentRequestTableUI {
     private static final int COLUMNS = 7; // ID, Medicine Name, Pharmacist Name, New Amount, Status, Created At, Updated At
     
-    public static void display(ReplenishmentRequestDetail[] requests, Scanner scanner, boolean isAdmin, ReplenishmentRequestService requestService, String userId) {
+    public static void display(
+        ReplenishmentRequestDetail[] requests, 
+        Scanner scanner, 
+        boolean isAdmin, 
+        ReplenishmentRequestService requestService, 
+        InventoryService inventoryService,
+        String userId
+    ) {
         final int PAGE_SIZE = 10;
         int currentIndex = 0;
         ReplenishmentRequestDetail[] filteredRequests = requests;
@@ -84,7 +92,7 @@ public class ReplenishmentRequestTableUI {
 
                 case "C":
                     if (!isAdmin) {
-                        createRequest(requestService, scanner, userId);
+                        createRequest(requestService, inventoryService, scanner, userId);
                         // Refresh requests list after creation
                         filteredRequests = requests = requestService.getPharmacistRequests(userId);
                     }
@@ -190,7 +198,7 @@ public class ReplenishmentRequestTableUI {
             .toArray(ReplenishmentRequestDetail[]::new);
     }
     
-    private static void createRequest(ReplenishmentRequestService requestService, Scanner scanner, String userId) {
+    private static void createRequest(ReplenishmentRequestService requestService, InventoryService inventoryService, Scanner scanner, String userId) {
         try {
             // Get medicine name from user
             System.out.print("\nEnter medicine name: ");
@@ -204,7 +212,7 @@ public class ReplenishmentRequestTableUI {
             }
             
             // Get medicine ID from service
-            String medicineId = requestService.getMedicineId(medicineName);
+            String medicineId = inventoryService.getMedicineId(medicineName);
             if (medicineId == null) {
                 System.out.println("Error: Medicine not found");
                 System.out.println("Press Enter to continue...");

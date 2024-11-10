@@ -74,7 +74,7 @@ public class AppointmentService {
                 return "Patient could not be found";
             }
 
-            Appointment appointment = new Appointment(patientId, doctorId, startDateTime, enDateTime);
+            Appointment appointment = new Appointment(doctorId, patientId, startDateTime, enDateTime);
             appointmentRepository.save(appointment);
             return null;
         } catch(Exception e){
@@ -124,6 +124,22 @@ public class AppointmentService {
         
         return Arrays.stream(appointments)
             .filter(appointment -> appointment.getStatus() == AppointmentStatus.REQUESTED)
+            .toArray(AppointmentDetail[]::new);
+    }
+
+    public AppointmentDetail[] findCompletedByDoctor(String doctorId) {
+        AppointmentDetail[] appointments = this.findByDoctor(doctorId);
+        
+        return Arrays.stream(appointments)
+            .filter(appointment -> appointment.getStatus() == AppointmentStatus.COMPLETED)
+            .toArray(AppointmentDetail[]::new);
+    }
+
+    public AppointmentDetail[] findApprovedByDoctor(String doctorId) {
+        AppointmentDetail[] appointments = this.findByDoctor(doctorId);
+        
+        return Arrays.stream(appointments)
+            .filter(appointment -> appointment.getStatus() == AppointmentStatus.CONFIRMED)
             .toArray(AppointmentDetail[]::new);
     }
 

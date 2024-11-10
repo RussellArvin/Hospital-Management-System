@@ -4,5 +4,6 @@ public enum AppointmentAction {
     RESCHEDULE,
     CANCEL,
     APPROVE,
-    VIEW
+    VIEW,
+    OUTCOME
 }
