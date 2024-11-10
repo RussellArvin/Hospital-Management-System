@@ -1,1 +1,2 @@
 id,patientId,doctorId,type,details,createdAt,updatedAt
+31647ab2-e1ef-4ef1-b1ad-de2df3382d10,P001,D002,DIAGNOSIS,Lung Issue that is causing breathing problems,2024-11-11T03:28:37.993225,2024-11-11T03:28:37.993293

@@ -4,9 +4,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Scanner;
+
+import model.MedicalRecord;
 import model.Patient;
 import service.PatientService;
 import enums.Gender;
+import enums.MedicalRecordType;
 
 public class PatientTableUI {
     private static final int COLUMNS = 7;
@@ -37,6 +40,7 @@ public class PatientTableUI {
             System.out.println("\nOptions:");
             System.out.println("N - Next Page");
             System.out.println("P - Previous Page");
+            if(isUpdating == true) System.out.println("U - Update Patient");
             System.out.println("F - Filter Patients");
             System.out.println("C - Clear Filter");
             System.out.println("V - View Patient Details");
@@ -57,7 +61,9 @@ public class PatientTableUI {
                         currentIndex -= PAGE_SIZE;
                     }
                     break;
-
+                case "U":
+                    if(isUpdating == true) updatePatient();
+                    break;
                 case "F":
                     filterPatients();
                     break;
@@ -80,6 +86,100 @@ public class PatientTableUI {
         }
     }
 
+    private void updatePatient() {
+        System.out.print("\nEnter patient ID to update: ");
+        String patientId = scanner.nextLine().trim();
+        
+        Patient patient = Arrays.stream(filteredPatients)
+            .filter(p -> p.getId().equals(patientId))
+            .findFirst()
+            .orElse(null);
+            
+        if (patient == null) {
+            System.out.println("Patient not found.");
+            System.out.println("Press Enter to continue...");
+            scanner.nextLine();
+            return;
+        }
+
+        while (true) {
+            clearScreen();
+            
+            // Display current patient info header
+            String headerFormat = "| %-47s |%n";
+            String separator = "+-------------------------------------------------+%n";
+            System.out.format(separator);
+            System.out.format(headerFormat, "UPDATE PATIENT RECORD");
+            System.out.format(separator);
+            System.out.format("| Patient: %-41s |%n", patient.getName());
+            System.out.format("| ID: %-45s |%n", patient.getId());
+            System.out.format(separator);
+
+            // Display options
+            System.out.println("\nChoose record type to add:");
+            System.out.println("1. Add Diagnosis");
+            System.out.println("2. Add Treatment");
+            System.out.println("Q. Back to Patient List");
+            System.out.print("\nEnter choice: ");
+
+            String choice = scanner.nextLine().toUpperCase();
+
+            if (choice.equals("Q")) break;
+
+            MedicalRecordType recordType;
+            String typePrompt;
+
+            switch (choice) {
+                case "1":
+                    recordType = MedicalRecordType.DIAGNOSIS;
+                    typePrompt = "diagnosis";
+                    break;
+                case "2":
+                    recordType = MedicalRecordType.TREATMENT;
+                    typePrompt = "treatment";
+                    break;
+                default:
+                    System.out.println("Invalid option. Press Enter to continue...");
+                    scanner.nextLine();
+                    continue;
+            }
+
+            // Get record details
+            System.out.println("\nEnter " + typePrompt + " details:");
+            System.out.println("(Press Enter with empty input to cancel)");
+            String details = scanner.nextLine().trim();
+
+            if (details.isEmpty()) {
+                continue;
+            }
+
+            // Confirm with user
+            System.out.print("\nAdd this " + typePrompt + "? (Y/N): ");
+            if (!scanner.nextLine().trim().toUpperCase().equals("Y")) {
+                continue;
+            }
+
+            // Create medical record
+            String error = patientService.createMedicalRecord(
+                patient.getId(),
+                doctorId,
+                recordType,
+                details
+            );
+
+            if (error != null) {
+                System.out.println("Error: " + error);
+                System.out.println("Press Enter to continue...");
+                scanner.nextLine();
+            } else {
+                System.out.println(typePrompt.substring(0, 1).toUpperCase() + 
+                                 typePrompt.substring(1) + " added successfully!");
+                System.out.println("Press Enter to continue...");
+                scanner.nextLine();
+            }
+        }
+    }
+
     private void viewPatientDetails() {
         System.out.print("\nEnter patient ID to view details: ");
         String patientId = scanner.nextLine().trim();
@@ -95,9 +195,11 @@ public class PatientTableUI {
             scanner.nextLine();
             return;
         }
+
+        MedicalRecord[] records = patientService.getMedicalRecordsByPatientId(patientId);
         
         clearScreen();
-        PatientRecordUI.display(patient, scanner,null);
+        PatientRecordUI.display(patient, scanner,records);
     }
 
     private void displayTable() {

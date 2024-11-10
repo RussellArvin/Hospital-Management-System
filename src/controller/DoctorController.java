@@ -50,6 +50,9 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
             if(choice.equals("1")){
                 viewPatientRecords();
             }
+            else if(choice.equals("2")){
+                updatePatientRecords();
+            }
             else if(choice.equals("3")){
                 viewPersonalSchedule();
             }
@@ -72,10 +75,16 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
         }
     }
 
+    private void updatePatientRecords(){
+        Patient[] patients = doctorService.getDoctorPatients(doctor.getId());
+        PatientTableUI patientTableUI = new PatientTableUI(scanner, patientService, doctor.getId(), patients);
+        patientTableUI.display(true);
+    }
+
     private void viewPatientRecords(){
         Patient[] patients = doctorService.getDoctorPatients(doctor.getId());
         PatientTableUI patientTableUI = new PatientTableUI(scanner, patientService, doctor.getId(), patients);
-        patientTableUI.display();
+        patientTableUI.display(false);
     }
 
     private void viewPersonalSchedule(){
