@@ -57,7 +57,7 @@ public class MainController extends BaseController<LoginMenuUI> {
 
 
     public MainController(Scanner scanner) {
-        super(new LoginMenuUI(),scanner);  // Fixed constructor parameter order to match BaseController
+        super(new LoginMenuUI(),scanner);
 
         this.patientRepository = new PatientRepository();
         this.doctorRepository = new DoctorRepository();
@@ -72,9 +72,7 @@ public class MainController extends BaseController<LoginMenuUI> {
 
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
         this.authService = new AuthService(userService);
-
         this.inventoryService = new InventoryService(medicineRepository);
-
         this.medicalRecordService = new MedicalRecordService(patientRepository);
         this.replenishmentRequestService = new ReplenishmentRequestService(replenishmentRequestRepository, medicineRepository, pharmacistRepository);
         this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,this.userService);
@@ -91,18 +89,11 @@ public class MainController extends BaseController<LoginMenuUI> {
             String choice = scanner.nextLine();
 
             if(choice.equals("1")){
-                User user = handlePatientLogin();
-                if(user != null){
-                    handleUserRole(user);
-                }
-                return;
+                handleLogin(false);
+ 
             }
             else if(choice.equals("2")){
-                User user = handleStaffLogin();
-                if(user != null){
-                    handleUserRole(user);
-                }
-                return;
+                handleLogin(true);
             }
             else if(choice.equals("3")){
                 return;
@@ -112,39 +103,21 @@ public class MainController extends BaseController<LoginMenuUI> {
         }
     }
 
-    private User handlePatientLogin() {
+    private void handleLogin(boolean isStaff){
         System.out.print("Enter ID: ");
         String id = scanner.nextLine();
 
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
-        User user = authService.Login(id, password,false);
+        User user = authService.Login(id, password, isStaff);
 
         if(user == null) {
             System.out.println("\nLogin failed. Invalid ID or password.");
-            return null;
+            return;
         } else {
             System.out.println("\nLogin Successful");
             System.out.println("Welcome, " + user.getName());
-            return user;
-        }
-    }
-
-    private User handleStaffLogin() {
-        System.out.print("Enter ID: ");
-        String id = scanner.nextLine();
-
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-        User user = authService.Login(id, password,true);
-
-        if(user == null) {
-            System.out.println("\nLogin failed. Invalid ID or password.");
-            return null;
-        } else {
-            System.out.println("\nLogin Successful");
-            System.out.println("Welcome, " + user.getName());
-            return user;
+            handleUserRole(user);
         }
     }
 
