@@ -5,26 +5,32 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import enums.AppointmentStatus;
+import enums.MedicalRecordType;
 import model.Appointment;
 import model.Doctor;
+import model.MedicalRecord;
 import model.Patient;
 import repository.AppointmentRepository;
 import repository.DoctorRepository;
+import repository.MedicalRecordRepository;
 import repository.PatientRepository;
 
 public class PatientService {
     private PatientRepository patientRepository;
     private DoctorRepository doctorRepository;
     private AppointmentRepository appointmentRepository;
+    private MedicalRecordRepository medicalRecordRepository;
 
     public PatientService(
         PatientRepository patientRepository,
         AppointmentRepository appointmentRepository,
-        DoctorRepository doctorRepository
+        DoctorRepository doctorRepository,
+        MedicalRecordRepository medicalRecordRepository
     ){
         this.patientRepository = patientRepository;
         this.appointmentRepository = appointmentRepository;
         this.doctorRepository = doctorRepository;
+        this.medicalRecordRepository = medicalRecordRepository;
     }
 
     public LocalDateTime lastAppointmentWithDoctor(
@@ -46,5 +52,30 @@ public class PatientService {
                 .sorted(Comparator.reverseOrder())  
                 .findFirst()                        
                 .orElse(null);                      
+    }
+
+    public MedicalRecord[] getMedicalRecordsByPatientId(String patientId){
+        Patient patient = patientRepository.findOne(patientId);
+        if(patient == null) return null;
+
+        return medicalRecordRepository.findManyByPatientId(patientId);
+    }
+
+    public String createMedicalRecord(
+        String patientId,
+        String doctorId,
+        MedicalRecordType type,
+        String details
+    ) {
+        try{
+            Patient patient = patientRepository.findOne(patientId);
+            if(patient == null) return "Unable to find patient";
+
+            MedicalRecord record = new MedicalRecord(patientId, doctorId, type, details);
+            medicalRecordRepository.save(record);
+            return null;
+        } catch(Exception e){
+            return "Something went wrong when creating Medical Record";
+        }
     }
 }

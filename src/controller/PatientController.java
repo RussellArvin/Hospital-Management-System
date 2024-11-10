@@ -4,12 +4,14 @@ import java.util.Scanner;
 
 import enums.UserRole;
 import enums.AppointmentAction;
+import model.MedicalRecord;
 import model.Patient;
 import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.InventoryService;
 import service.MedicalRecordService;
+import service.PatientService;
 import ui.AppointmentOutcomeTableUI;
 import ui.AppointmentScheduleUI;
 import ui.AppointmentTableUI;
@@ -26,6 +28,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
     private AppointmentScheduleService appointmentScheduleService;
     private AppointmentTableUI appointmentTableUI;
     private AppointmentOutcomeTableUI outcomeUI;
+    private PatientService patientService;
     
     public PatientController(
         Scanner scanner,
@@ -34,7 +37,8 @@ public class PatientController extends BaseController<PatientMenuUI> {
         AppointmentService appointmentService,
         AppointmentScheduleService appointmentScheduleService,
         AppointmentOutcomeService appointmentOutcomeService,
-        InventoryService inventoryService
+        InventoryService inventoryService,
+        PatientService patientService
     ){
         super(new PatientMenuUI(),scanner);
 
@@ -42,6 +46,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
         this.medicalRecordService = medicalRecordService;
         this.appointmentService = appointmentService;
         this.appointmentScheduleService = appointmentScheduleService;
+        this.patientService = patientService;
         this.appointmentTableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, appointmentOutcomeService, inventoryService, patient, UserRole.PATIENT);
         this.outcomeUI = new AppointmentOutcomeTableUI(appointmentOutcomeService, patient);
     }
@@ -52,7 +57,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
             String choice = scanner.nextLine();
     
             if(choice.equals("1")) {
-                PatientRecordUI.display(this.patient, this.scanner);
+                viewMedialRecord();
             }
             else if(choice.equals("2")){
                 updatePersonalInformation();
@@ -83,6 +88,12 @@ public class PatientController extends BaseController<PatientMenuUI> {
                super.invalidOption();
             }
         }
+    }
+
+    private void viewMedialRecord(){
+        MedicalRecord[] records = patientService.getMedicalRecordsByPatientId(patient.getId());
+
+        PatientRecordUI.display(this.patient, this.scanner, records);
     }
 
 

@@ -6,14 +6,19 @@ import enums.MedicalRecordType;
 
 public class MedicalRecord extends BaseEntity {
     private String patientId;
+    private String doctorId;
     private MedicalRecordType type;
     private String details;
 
     public MedicalRecord(
+        String patientId,
+        String doctorId,
         MedicalRecordType type,
         String details
     ) {
         super();
+        this.patientId = patientId;
+        this.doctorId = doctorId;
         this.type = type;
         this.details = details;
     }
@@ -21,6 +26,7 @@ public class MedicalRecord extends BaseEntity {
     public MedicalRecord(
         String id,
         String patientId,
+        String doctorId,
         MedicalRecordType type,
         String details,
         LocalDateTime createdAt,
@@ -28,6 +34,7 @@ public class MedicalRecord extends BaseEntity {
     ){
         super(id, createdAt, updatedAt);
         this.patientId = patientId;
+        this.doctorId = doctorId;
         this.type = type;
         this.details = details;
     }
@@ -48,6 +55,7 @@ public class MedicalRecord extends BaseEntity {
         return String.join(",",
             id,
             patientId,
+            doctorId,
             type.toString(),
             details,
             createdAt.toString(),

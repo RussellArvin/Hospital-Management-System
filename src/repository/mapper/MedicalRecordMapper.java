@@ -12,10 +12,11 @@ public class MedicalRecordMapper implements BaseMapper<MedicalRecord> {
         return new MedicalRecord(
             parts[0],
             parts[1],
-            MedicalRecordType.valueOf(parts[2]),
-            parts[3],
-            LocalDateTime.parse(parts[4]),
-            LocalDateTime.parse(parts[5])
+            parts[2],
+            MedicalRecordType.valueOf(parts[3]),
+            parts[4],
+            LocalDateTime.parse(parts[5]),
+            LocalDateTime.parse(parts[6])
         );
     }
 }

@@ -11,6 +11,7 @@ import repository.AdministratorRepository;
 import repository.AppointmentOutcomeRepository;
 import repository.AppointmentRepository;
 import repository.DoctorRepository;
+import repository.MedicalRecordRepository;
 import repository.MedicineRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
@@ -40,6 +41,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private AppointmentRepository appointmentRepository;
     private AppointmentOutcomeRepository appointmentOutcomeRepository;
     private PrescriptionRepository prescriptionRepository;
+    private MedicalRecordRepository medicalRecordRepository;
 
     private AuthService authService;
     private UserService userService;
@@ -66,6 +68,8 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.appointmentRepository = new AppointmentRepository();
         this.appointmentOutcomeRepository = new AppointmentOutcomeRepository();
         this.prescriptionRepository = new PrescriptionRepository();
+        this.medicalRecordRepository = new MedicalRecordRepository();
+
 
         this.authService = new AuthService(
             this.patientRepository,
@@ -84,7 +88,7 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
         this.appointmentOutcomeService = new AppointmentOutcomeService(appointmentOutcomeRepository, prescriptionRepository, appointmentRepository, doctorRepository, patientRepository, medicineRepository);
         this.doctorService = new DoctorService(doctorRepository,appointmentRepository,patientRepository);
-        this.patientService = new PatientService(patientRepository, appointmentRepository, doctorRepository);
+        this.patientService = new PatientService(patientRepository, appointmentRepository, doctorRepository, medicalRecordRepository);
     }
 
     public void handleUserInput() {
@@ -163,7 +167,8 @@ public class MainController extends BaseController<LoginMenuUI> {
                     this.appointmentService,
                     this.appointmentScheduleService,
                     this.appointmentOutcomeService,
-                    this.inventoryService
+                    this.inventoryService,
+                    this.patientService
                 );
                 patientController.handleUserInput();
                 break;

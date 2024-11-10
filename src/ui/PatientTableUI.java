@@ -29,7 +29,7 @@ public class PatientTableUI {
         this.currentIndex = 0;
     }
 
-    public void display() {
+    public void display(boolean isUpdating) {
         while (true) {
             clearScreen();
             displayTable();
@@ -97,7 +97,7 @@ public class PatientTableUI {
         }
         
         clearScreen();
-        new PatientRecordUI().display(patient, scanner);
+        PatientRecordUI.display(patient, scanner,null);
     }
 
     private void displayTable() {
