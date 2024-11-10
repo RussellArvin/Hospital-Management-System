@@ -1,5 +1,7 @@
 package service;
 
+import java.util.Arrays;
+
 import enums.AppointmentServiceType;
 import enums.AppointmentStatus;
 import model.Appointment;
@@ -78,6 +80,22 @@ public class AppointmentOutcomeService {
             details[i] = mapDetail(outcome);
         }
         return details;
+    }
+
+    public AppointmentOutcomeDetail[] findAllPatientCompleted(String patientId){
+        Appointment[] appointments = appointmentRepository.findManyByPatientId(patientId);
+        Appointment[] completedAppointments = Arrays.stream(appointments)
+            .filter(appointment -> appointment.getStatus() == AppointmentStatus.COMPLETED)
+            .toArray(Appointment[]::new);
+
+        AppointmentOutcomeDetail[] outcomes = new AppointmentOutcomeDetail[completedAppointments.length];
+
+        for(int i = 0; i < outcomes.length; i++){
+            String appointmentId  = completedAppointments[i].getId();
+            AppointmentOutcome rawOutcome = appointmentOutcomeRepository.findOneByAppointmentId(appointmentId);
+            outcomes[i] = mapDetail(rawOutcome);
+        }
+        return outcomes;
     }
 
     public AppointmentOutcomeDetail[] findAllConfirmed(){

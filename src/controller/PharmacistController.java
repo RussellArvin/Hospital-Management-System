@@ -10,14 +10,14 @@ import service.InventoryService;
 import service.ReplenishmentRequestService;
 import ui.InventoryTableUI;
 import ui.PharmacistMenuUI;
-import ui.PharmacyPrescriptionUI;
+import ui.AppointmentOutcomeTableUI;
 import ui.ReplenishmentRequestTableUI;
 
 public class PharmacistController extends BaseController<PharmacistMenuUI> {
     private Pharmacist pharmacist;
     private InventoryService inventoryService;
     private ReplenishmentRequestService replenishmentRequestService;
-    private PharmacyPrescriptionUI prescriptionUI;
+    private AppointmentOutcomeTableUI outcomeUI;
 
     public PharmacistController(
         Scanner scanner,
@@ -30,7 +30,7 @@ public class PharmacistController extends BaseController<PharmacistMenuUI> {
         this.pharmacist = pharmacist;
         this.inventoryService = inventoryService;
         this.replenishmentRequestService = replenishmentRequestService;
-        this.prescriptionUI = new PharmacyPrescriptionUI(appointmentOutcomeService);
+        this.outcomeUI = new AppointmentOutcomeTableUI(appointmentOutcomeService,null);
     }
 
     public void handleUserInput() {
@@ -38,9 +38,9 @@ public class PharmacistController extends BaseController<PharmacistMenuUI> {
             menu.printOptions();
             String choice = scanner.nextLine();
             if(choice.equals("1")){
-                prescriptionUI.display(scanner,false);
+                outcomeUI.display(scanner,false);
             } else if(choice.equals("2")){
-                prescriptionUI.display(scanner,true);
+                outcomeUI.display(scanner,true);
             } else if(choice.equals("3")) {
                 viewInventory();
             } else if(choice.equals("4")){

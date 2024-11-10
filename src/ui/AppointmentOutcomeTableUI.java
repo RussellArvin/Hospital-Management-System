@@ -6,23 +6,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import model.AppointmentOutcomeDetail;
+import model.Patient;
 import model.Prescription;
 import model.PrescriptionWithMedicine;
 import service.AppointmentOutcomeService;
 import enums.PrescriptionStatus;
+import enums.UserRole;
 
-public class PharmacyPrescriptionUI {
+public class AppointmentOutcomeTableUI {
     private static final int COLUMNS = 6;
     private final AppointmentOutcomeService appointmentOutcomeService;
     private AppointmentOutcomeDetail[] outcomes;
+    private Patient patient;
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     
-    public PharmacyPrescriptionUI(AppointmentOutcomeService appointmentOutcomeService) {
+    public AppointmentOutcomeTableUI(AppointmentOutcomeService appointmentOutcomeService, Patient patient) {
         this.appointmentOutcomeService = appointmentOutcomeService;
+        this.patient = patient;
     }
     
     private void refreshOutcomes() {
-        this.outcomes = appointmentOutcomeService.findAllConfirmed();
+        if(patient == null) this.outcomes = appointmentOutcomeService.findAllConfirmed();
+        else this.outcomes = appointmentOutcomeService.findAllPatientCompleted(patient.getId());
     }
     
     public void display(Scanner scanner, boolean isDispensing) {
@@ -192,7 +197,7 @@ public class PharmacyPrescriptionUI {
         
         System.out.format("%n");
         System.out.format(mainSeparator);
-        System.out.format("| %-82s |%n", "PENDING PRESCRIPTIONS");
+        System.out.format("| %-82s |%n", "APPOINTMENT OUTCOMES");
         System.out.format(mainSeparator);
         System.out.format("| %-36s | %-20s | %-20s | %-20s | %-8s | %-10s |%n", 
             "Outcome ID", "Doctor", "Patient", "Medicine", "Amount", "Status");
@@ -247,14 +252,16 @@ public class PharmacyPrescriptionUI {
             currentPage, totalPages, outcomes.length);
         
         // Add a summary section
-        System.out.println("\nSummary of Pending Prescriptions:");
-        for (AppointmentOutcomeDetail outcome : outcomes) {
-            long pendingCount = Arrays.stream(outcome.getPrescriptions())
-                .filter(p -> p.getStatus() == PrescriptionStatus.PENDING)
-                .count();
-            if (pendingCount > 0) {
-                System.out.format("Outcome %s: %d pending prescription(s)%n",
-                    outcome.getId(), pendingCount);
+        if(patient == null){
+            System.out.println("\nSummary of Pending Prescriptions:");
+            for (AppointmentOutcomeDetail outcome : outcomes) {
+                long pendingCount = Arrays.stream(outcome.getPrescriptions())
+                    .filter(p -> p.getStatus() == PrescriptionStatus.PENDING)
+                    .count();
+                if (pendingCount > 0) {
+                    System.out.format("Outcome %s: %d pending prescription(s)%n",
+                        outcome.getId(), pendingCount);
+                }
             }
         }
     }

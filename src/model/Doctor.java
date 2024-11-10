@@ -30,6 +30,14 @@ public class Doctor extends User {
         return this.startWorkHours;
     }
 
+    public void setWorkHours(
+        int startWorkHours,
+        int endWorkHours
+    ) {
+        this.startWorkHours = startWorkHours;
+        this.endWorkHours = endWorkHours;
+    }
+
     public int getEndWorkHours(){
         return this.endWorkHours;
     }

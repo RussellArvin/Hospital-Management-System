@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import model.Patient;
 
-public class MedicalRecordUI {
+public class PatientRecordUI {
 
    public static void display(Patient patient, Scanner scanner) {
        // Define column widths

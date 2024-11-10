@@ -10,10 +10,11 @@ import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.InventoryService;
 import service.MedicalRecordService;
+import ui.AppointmentOutcomeTableUI;
 import ui.AppointmentScheduleUI;
 import ui.AppointmentTableUI;
 import ui.CreateAppointmentUI;
-import ui.MedicalRecordUI;
+import ui.PatientRecordUI;
 import ui.PatientMenuUI;
 import validator.InputValidator;
 
@@ -24,6 +25,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
     private AppointmentService appointmentService;
     private AppointmentScheduleService appointmentScheduleService;
     private AppointmentTableUI appointmentTableUI;
+    private AppointmentOutcomeTableUI outcomeUI;
     
     public PatientController(
         Scanner scanner,
@@ -41,6 +43,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
         this.appointmentService = appointmentService;
         this.appointmentScheduleService = appointmentScheduleService;
         this.appointmentTableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, appointmentOutcomeService, inventoryService, patient, UserRole.PATIENT);
+        this.outcomeUI = new AppointmentOutcomeTableUI(appointmentOutcomeService, patient);
     }
 
     public void handleUserInput() {
@@ -49,7 +52,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
             String choice = scanner.nextLine();
     
             if(choice.equals("1")) {
-                MedicalRecordUI.display(this.patient, this.scanner);
+                PatientRecordUI.display(this.patient, this.scanner);
             }
             else if(choice.equals("2")){
                 updatePersonalInformation();
@@ -68,6 +71,9 @@ public class PatientController extends BaseController<PatientMenuUI> {
             }
             else if(choice.equals("7")){
                 appointmentTableUI.display(scanner,AppointmentAction.VIEW);
+            }
+            else if(choice.equals("8")){
+                outcomeUI.display(scanner,false);
             }
             else if(choice.equals("9")) {
                 super.handleLogout(this.patient);

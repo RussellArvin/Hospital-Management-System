@@ -12,11 +12,12 @@ public class InputValidator {
         return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
     }
 
-    public static boolean validateDate(String date) {
-        try {
-            LocalDate.parse(date);
+    public static boolean validateWorkingHours(String hoursString){
+        try{
+            int hours = Integer.parseInt(hoursString);
+            if(hours > 24 || hours < 0) return false;
             return true;
-        } catch (DateTimeParseException e) {
+        }catch(Exception e){
             return false;
         }
     }

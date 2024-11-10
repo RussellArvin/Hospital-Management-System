@@ -20,8 +20,10 @@ import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.AuthService;
+import service.DoctorService;
 import service.InventoryService;
 import service.MedicalRecordService;
+import service.PatientService;
 import service.ReplenishmentRequestService;
 import service.StaffService;
 import service.UserService;
@@ -48,6 +50,8 @@ public class MainController extends BaseController<LoginMenuUI> {
     private AppointmentService appointmentService;
     private AppointmentScheduleService appointmentScheduleService;
     private AppointmentOutcomeService appointmentOutcomeService;
+    private DoctorService doctorService;
+    private PatientService patientService;
 
 
     public MainController(Scanner scanner) {
@@ -79,6 +83,8 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.appointmentService = new AppointmentService(appointmentRepository, doctorRepository, patientRepository);
         this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
         this.appointmentOutcomeService = new AppointmentOutcomeService(appointmentOutcomeRepository, prescriptionRepository, appointmentRepository, doctorRepository, patientRepository, medicineRepository);
+        this.doctorService = new DoctorService(doctorRepository,appointmentRepository,patientRepository);
+        this.patientService = new PatientService(patientRepository, appointmentRepository, doctorRepository);
     }
 
     public void handleUserInput() {
@@ -168,7 +174,10 @@ public class MainController extends BaseController<LoginMenuUI> {
                     this.appointmentService,
                     this.appointmentOutcomeService,
                     appointmentScheduleService,
-                    inventoryService
+                    patientService,
+                    inventoryService,
+                    doctorService
+                    
                 );
                 doctorController.handleUserInput();
                 break;
