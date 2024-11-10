@@ -1,21 +1,14 @@
 package service;
 
 import model.User;
-import repository.AdministratorRepository;
-import repository.DoctorRepository;
-import repository.PatientRepository;
-import repository.PharmacistRepository;
 
 public class AuthService {
     private UserService userService;
 
     public AuthService(
-        PatientRepository patientRepository,
-        DoctorRepository doctorRepository,
-        PharmacistRepository pharmacistRepository,
-        AdministratorRepository administratorRepository
+        UserService userService
     ) {
-        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
+        this.userService = userService;
     }
 
     public User Login(String id, String password, boolean isStaff) {

@@ -70,19 +70,13 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.prescriptionRepository = new PrescriptionRepository();
         this.medicalRecordRepository = new MedicalRecordRepository();
 
-
-        this.authService = new AuthService(
-            this.patientRepository,
-            this.doctorRepository, 
-            this.pharmacistRepository,
-            this.administratorRepository
-        );
+        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
+        this.authService = new AuthService(userService);
 
         this.inventoryService = new InventoryService(medicineRepository);
 
         this.medicalRecordService = new MedicalRecordService(patientRepository);
         this.replenishmentRequestService = new ReplenishmentRequestService(replenishmentRequestRepository, medicineRepository, pharmacistRepository);
-        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
         this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,this.userService);
         this.appointmentService = new AppointmentService(appointmentRepository, doctorRepository, patientRepository);
         this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
