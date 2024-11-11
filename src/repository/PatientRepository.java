@@ -1,9 +1,7 @@
 package repository;
 
-import java.util.List;
 
 import model.Patient;
-import model.PatientVital;
 import repository.base.CsvRepository;
 import repository.mapper.PatientMapper;
 
