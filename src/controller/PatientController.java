@@ -5,6 +5,7 @@ import java.util.Scanner;
 import enums.UserRole;
 import enums.AppointmentAction;
 import model.MedicalRecord;
+import model.MedicalRecordDetail;
 import model.Patient;
 import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
@@ -91,7 +92,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
     }
 
     private void viewMedialRecord(){
-        MedicalRecord[] records = patientService.getMedicalRecordsByPatientId(patient.getId());
+        MedicalRecordDetail[] records = patientService.getMedicalRecordsByPatientId(patient.getId());
 
         PatientRecordUI.display(this.patient, this.scanner, records);
     }

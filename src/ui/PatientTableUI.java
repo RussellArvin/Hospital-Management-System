@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import model.MedicalRecord;
+import model.MedicalRecordDetail;
 import model.Patient;
 import service.PatientService;
 import enums.MedicalRecordType;
@@ -194,7 +195,7 @@ public class PatientTableUI {
             return;
         }
 
-        MedicalRecord[] records = patientService.getMedicalRecordsByPatientId(patientId);
+        MedicalRecordDetail[] records = patientService.getMedicalRecordsByPatientId(patientId);
         
         clearScreen();
         PatientRecordUI.display(patient, scanner,records);

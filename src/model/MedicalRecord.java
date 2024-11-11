@@ -51,6 +51,10 @@ public class MedicalRecord extends BaseEntity {
         return this.patientId;
     }
 
+    public String getDoctorId(){
+        return this.doctorId;
+    }
+
     public String toCsvString(){
         return String.join(",",
             id,

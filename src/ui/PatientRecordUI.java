@@ -4,11 +4,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
 import model.MedicalRecord;
+import model.MedicalRecordDetail;
 import model.Patient;
 import enums.MedicalRecordType;
 
 public class PatientRecordUI {
-    public static void display(Patient patient, Scanner scanner, MedicalRecord[] records) {
+    public static void display(Patient patient, Scanner scanner, MedicalRecordDetail[] records) {
         // Define column widths and formats
         String leftAlignFormat = "| %-15s | %-30s |%n";
         String headerFormat = "| %-47s |%n";
@@ -46,13 +47,13 @@ public class PatientRecordUI {
         System.out.format(separator);
 
         // Filter records by type
-        MedicalRecord[] diagnoses = Arrays.stream(records)
+        MedicalRecordDetail[] diagnoses = Arrays.stream(records)
             .filter(record -> record.getType() == MedicalRecordType.DIAGNOSIS)
-            .toArray(MedicalRecord[]::new);
+            .toArray(MedicalRecordDetail[]::new);
 
-        MedicalRecord[] treatments = Arrays.stream(records)
+        MedicalRecordDetail[] treatments = Arrays.stream(records)
             .filter(record -> record.getType() == MedicalRecordType.TREATMENT)
-            .toArray(MedicalRecord[]::new);
+            .toArray(MedicalRecordDetail[]::new);
 
         // Display Diagnoses
         System.out.format(headerFormat, "DIAGNOSES");
@@ -60,9 +61,10 @@ public class PatientRecordUI {
         if (diagnoses.length == 0) {
             System.out.format(leftAlignFormat, "Status", "No diagnoses recorded");
         } else {
-            for (MedicalRecord diagnosis : diagnoses) {
+            for (MedicalRecordDetail diagnosis : diagnoses) {
                 System.out.format(leftAlignFormat, "Details", diagnosis.getDetails());
                 System.out.format(leftAlignFormat, "Date", diagnosis.getCreatedAt().format(dateFormat));
+                System.out.format(leftAlignFormat, "Doctor", diagnosis.getDoctor().getName());
                 System.out.format(separator);
             }
         }

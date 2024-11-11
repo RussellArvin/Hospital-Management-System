@@ -9,6 +9,7 @@ import enums.MedicalRecordType;
 import model.Appointment;
 import model.Doctor;
 import model.MedicalRecord;
+import model.MedicalRecordDetail;
 import model.Patient;
 import repository.AppointmentRepository;
 import repository.DoctorRepository;
@@ -54,11 +55,20 @@ public class PatientService {
                 .orElse(null);                      
     }
 
-    public MedicalRecord[] getMedicalRecordsByPatientId(String patientId){
+    public MedicalRecordDetail[] getMedicalRecordsByPatientId(String patientId){
         Patient patient = patientRepository.findOne(patientId);
         if(patient == null) return null;
 
-        return medicalRecordRepository.findManyByPatientId(patientId);
+        MedicalRecord[] rawRecords =  medicalRecordRepository.findManyByPatientId(patientId);
+        MedicalRecordDetail[] records = new MedicalRecordDetail[rawRecords.length];
+
+        for(int i = 0; i < records.length; i ++){
+            MedicalRecord rawRecord = rawRecords[i];
+            Doctor doctor = doctorRepository.findOne(rawRecord.getDoctorId());
+
+            records[i] = MedicalRecordDetail.fromMedicalRecord(rawRecord, doctor);
+        }
+        return records;
     }
 
     public String createMedicalRecord(
