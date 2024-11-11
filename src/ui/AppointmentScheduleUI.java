@@ -8,6 +8,7 @@ import model.AppointmentDetail;
 import model.Doctor;
 import enums.UserRole;
 import service.AppointmentService;
+import util.Constant;
 
 public class AppointmentScheduleUI {
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -19,8 +20,8 @@ public class AppointmentScheduleUI {
     public static void display(Scanner scanner, AppointmentService appointmentService, UserRole role, Doctor doctor) {
         String doctorId = null;
         String doctorName = "";
-        int startWorkHours = 9; // default value
-        int endWorkHours = 17;  // default value
+        int startWorkHours = Constant.DEFAULT_START_WORK_HOURS;
+        int endWorkHours = Constant.DEFAULT_END_WORK_HOURS;
         
         if (role == UserRole.PATIENT) {
             // For patients, prompt for doctor name
