@@ -360,6 +360,9 @@ public class AppointmentTableUI {
         else if(role == UserRole.ADMINISTRATOR){
             this.appointments = this.appointmentService.findCompleted();
             return;
+        } else if(role == UserRole.NURSE){
+            this.appointments = appointmentService.findToday();
+            return;
         }
         // Add other role conditions here when needed
         this.appointments = null;

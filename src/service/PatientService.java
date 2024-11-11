@@ -34,25 +34,44 @@ public class PatientService {
         this.medicalRecordRepository = medicalRecordRepository;
     }
 
+    public Patient[] findAll(){
+        return this.patientRepository.findAll();
+    }
+
     public LocalDateTime lastAppointmentWithDoctor(
             String doctorId, 
             String patientId
         ){
-            Doctor doctor = doctorRepository.findOne(doctorId);
+
             Patient patient = patientRepository.findOne(patientId);
-            if(patient == null || doctor == null) return null;
+            if(patient == null) return null;
 
             Appointment[] appointments = appointmentRepository.findManyByPatientId(patientId);
-            
+
+            if(doctorId != null){
+                Doctor doctor = doctorRepository.findOne(doctorId);
+                if(doctor == null) return null;
+                return Arrays.stream(appointments)
+                    .filter(appointment -> 
+                        appointment.getDoctorId().equals(doctorId) && 
+                        appointment.getStatus() == AppointmentStatus.COMPLETED
+                    )
+                    .map(Appointment::getStartDateTime)
+                    .sorted(Comparator.reverseOrder())  
+                    .findFirst()                        
+                    .orElse(null);      
+            }
+
             return Arrays.stream(appointments)
-                .filter(appointment -> 
-                    appointment.getDoctorId().equals(doctorId) && 
-                    appointment.getStatus() == AppointmentStatus.COMPLETED
-                )
-                .map(Appointment::getStartDateTime)
-                .sorted(Comparator.reverseOrder())  
-                .findFirst()                        
-                .orElse(null);                      
+            .filter(appointment -> 
+                appointment.getStatus() == AppointmentStatus.COMPLETED
+            )
+            .map(Appointment::getStartDateTime)
+            .sorted(Comparator.reverseOrder())  
+            .findFirst()                        
+            .orElse(null);      
+            
+                        
     }
 
     public MedicalRecordDetail[] getMedicalRecordsByPatientId(String patientId){

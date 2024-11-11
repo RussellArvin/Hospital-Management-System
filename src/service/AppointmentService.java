@@ -102,6 +102,16 @@ public class AppointmentService {
         }
     }
 
+    public AppointmentDetail[] findToday(){
+        Appointment[] appointments = appointmentRepository.findAll();
+        Appointment[] todayAppointments = Arrays.stream(appointments)
+            .filter(appointment -> appointment.getStartDateTime().toLocalDate() == LocalDate.now() && 
+                                appointment.getStatus() == AppointmentStatus.CONFIRMED)
+            .toArray(AppointmentDetail[]::new);
+
+        return mapDetails(todayAppointments);
+    }
+
     public AppointmentDetail[] findCompleted(){
         return this.findByStatus(AppointmentStatus.COMPLETED);
     }
@@ -148,25 +158,8 @@ public class AppointmentService {
     }
 
     public AppointmentDetail[] findByDoctor(String doctorId){
-        Doctor doctor = doctorRepository.findOne(doctorId);
-
         Appointment[] appointments = appointmentRepository.findManyByDoctorId(doctorId);
-        AppointmentDetail[] details = new AppointmentDetail[appointments.length];
-
-        for(int i = 0; i < appointments.length; i++){
-            Appointment appointment = appointments[i];
-            Patient patient = patientRepository.findOne(appointment.getPatientId());
-
-            //Create object from static factory method
-            details[i] = AppointmentDetail.fromAppointment(
-                appointment, 
-                doctor, 
-                patient
-            );
-
-        }
-
-        return details;
+        return mapDetails(appointments);
 
     }
 
@@ -182,67 +175,41 @@ public class AppointmentService {
             .toArray(AppointmentDetail[]::new);
     }
 
-    public AppointmentDetail[] findAll(){
-        Appointment[] appointments = appointmentRepository.findAll();
+    private AppointmentDetail mapDetail(Appointment appointment){
+        Doctor doctor = doctorRepository.findOne(appointment.getDoctorId());
+        Patient patient = patientRepository.findOne(appointment.getPatientId());
+
+        //Create object from static factory method
+        return AppointmentDetail.fromAppointment(
+            appointment, 
+            doctor, 
+            patient
+        );
+    }
+
+    private AppointmentDetail[] mapDetails(Appointment[] appointments){
         AppointmentDetail[] details = new AppointmentDetail[appointments.length];
 
         for(int i = 0; i < appointments.length; i++){
-            Appointment appointment = appointments[i];
-            Doctor doctor = doctorRepository.findOne(appointment.getDoctorId());
-            Patient patient = patientRepository.findOne(appointment.getPatientId());
-
-            //Create object from static factory method
-            details[i] = AppointmentDetail.fromAppointment(
-                appointment, 
-                doctor, 
-                patient
-            );
-
+            details[i] = mapDetail(appointments[i]);
         }
 
         return details;
+    }
+
+    public AppointmentDetail[] findAll(){
+        Appointment[] appointments = appointmentRepository.findAll();
+        return mapDetails(appointments);
     }
 
     private AppointmentDetail[] findByStatus(AppointmentStatus status){
         Appointment[] appointments = appointmentRepository.findManyByStatus(status);
-        AppointmentDetail[] details = new AppointmentDetail[appointments.length];
-
-        for(int i = 0; i < appointments.length; i++){
-            Appointment appointment = appointments[i];
-            Doctor doctor = doctorRepository.findOne(appointment.getDoctorId());
-            Patient patient = patientRepository.findOne(appointment.getPatientId());
-
-            //Create object from static factory method
-            details[i] = AppointmentDetail.fromAppointment(
-                appointment, 
-                doctor, 
-                patient
-            );
-
-        }
-        return details;
+        return mapDetails(appointments);
 
     }
 
     public AppointmentDetail[] findByPatient(String patientId){
-        Patient patient = patientRepository.findOne(patientId);
-
         Appointment[] appointments = appointmentRepository.findManyByPatientId(patientId);
-        AppointmentDetail[] details = new AppointmentDetail[appointments.length];
-
-        for(int i = 0; i < appointments.length; i++){
-            Appointment appointment = appointments[i];
-            Doctor doctor = doctorRepository.findOne(appointment.getDoctorId());
-
-            //Create object from static factory method
-            details[i] = AppointmentDetail.fromAppointment(
-                appointment, 
-                doctor, 
-                patient
-            );
-
-        }
-
-        return details;
+        return mapDetails(appointments);
     }
 }

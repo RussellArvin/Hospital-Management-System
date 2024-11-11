@@ -191,7 +191,7 @@ public class MainController extends BaseController<LoginMenuUI> {
                 administratorController.handleUserInput();
                 break;
             case NURSE:
-                NurseController nurseController =  new NurseController(scanner, (Nurse) user);
+                NurseController nurseController =  new NurseController(scanner, (Nurse) user, patientService, appointmentService);
                 nurseController.handleUserInput();
                 break;
             default:

@@ -26,23 +26,23 @@ public class DoctorService {
         this.patientRepository = patientRepository;
     }
 
-public Patient[] getDoctorPatients(String doctorId) {
-    Appointment[] appointments = appointmentRepository.findManyByDoctorId(doctorId);
-    appointments = Arrays.stream(appointments)
-        .filter(appointment -> 
-            appointment.getStatus() != AppointmentStatus.DOCTOR_CANCELLED && 
-            appointment.getStatus() != AppointmentStatus.PATIENT_CANCELLED
-        )
-        .toArray(Appointment[]::new);
-    
-    // Get unique patient IDs and fetch patient details
-    return Arrays.stream(appointments)
-        .map(Appointment::getPatientId)  
-        .distinct()                      
-        .map(patientRepository::findOne) 
-        .filter(Objects::nonNull)        
-        .toArray(Patient[]::new);     
-}
+    public Patient[] getDoctorPatients(String doctorId) {
+        Appointment[] appointments = appointmentRepository.findManyByDoctorId(doctorId);
+        appointments = Arrays.stream(appointments)
+            .filter(appointment -> 
+                appointment.getStatus() != AppointmentStatus.DOCTOR_CANCELLED && 
+                appointment.getStatus() != AppointmentStatus.PATIENT_CANCELLED
+            )
+            .toArray(Appointment[]::new);
+        
+        // Get unique patient IDs and fetch patient details
+        return Arrays.stream(appointments)
+            .map(Appointment::getPatientId)  
+            .distinct()                      
+            .map(patientRepository::findOne) 
+            .filter(Objects::nonNull)        
+            .toArray(Patient[]::new);     
+    }
 
     public String setAvailability(
         String doctorId,
