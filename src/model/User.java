@@ -88,6 +88,8 @@ public abstract class User extends BaseEntity{
             password, 
             new String(salt, StandardCharsets.UTF_8), // from salt
             name,
+            String.valueOf(age),
+            gender.toString(),
             createdAt.toString(), 
             updatedAt.toString()
         );

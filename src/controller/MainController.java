@@ -7,12 +7,14 @@ import model.Doctor;
 import model.Patient;
 import model.Pharmacist;
 import model.User;
+import model.Nurse;
 import repository.AdministratorRepository;
 import repository.AppointmentOutcomeRepository;
 import repository.AppointmentRepository;
 import repository.DoctorRepository;
 import repository.MedicalRecordRepository;
 import repository.MedicineRepository;
+import repository.NurseRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 import repository.PrescriptionRepository;
@@ -43,6 +45,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private AppointmentOutcomeRepository appointmentOutcomeRepository;
     private PrescriptionRepository prescriptionRepository;
     private MedicalRecordRepository medicalRecordRepository;
+    private NurseRepository nurseRepository;
 
     private AuthService authService;
     private UserService userService;
@@ -70,13 +73,14 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.appointmentOutcomeRepository = new AppointmentOutcomeRepository();
         this.prescriptionRepository = new PrescriptionRepository();
         this.medicalRecordRepository = new MedicalRecordRepository();
+        this.nurseRepository = new NurseRepository();
 
-        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository);
+        this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository, nurseRepository);
         this.authService = new AuthService(userService);
         this.inventoryService = new InventoryService(medicineRepository);
         this.medicalRecordService = new MedicalRecordService(patientRepository);
         this.replenishmentRequestService = new ReplenishmentRequestService(replenishmentRequestRepository, medicineRepository, pharmacistRepository);
-        this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,this.userService);
+        this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,nurseRepository,this.userService);
         this.appointmentService = new AppointmentService(appointmentRepository, doctorRepository, patientRepository);
         this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
         this.appointmentOutcomeService = new AppointmentOutcomeService(appointmentOutcomeRepository, prescriptionRepository, appointmentRepository, doctorRepository, patientRepository, medicineRepository);
@@ -182,6 +186,10 @@ public class MainController extends BaseController<LoginMenuUI> {
                     inventoryService
                 );
                 administratorController.handleUserInput();
+                break;
+            case NURSE:
+                NurseController nurseController =  new NurseController(scanner, (Nurse) user);
+                nurseController.handleUserInput();
                 break;
             default:
                 System.out.println("Invalid role!");

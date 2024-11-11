@@ -6,6 +6,7 @@ import java.util.Scanner;
 import model.User;
 import model.Administrator;
 import model.Doctor;
+import model.Nurse;
 import model.Pharmacist;
 import service.StaffService;
 import enums.Gender;
@@ -56,6 +57,7 @@ public class StaffTableUI {
                         System.out.println("1. " + UserRole.ADMINISTRATOR);
                         System.out.println("2. " + UserRole.DOCTOR);
                         System.out.println("3. " + UserRole.PHARMACIST);
+                        System.out.println("4. " + UserRole.NURSE);
                         System.out.print("Choose type: ");
                         
                         String typeChoice = scanner.nextLine();
@@ -70,6 +72,9 @@ public class StaffTableUI {
                                 break;
                             case "3":
                                 role = UserRole.PHARMACIST;
+                                break;
+                            case "4":
+                                role = UserRole.NURSE;
                                 break;
                             default:
                                 throw new IllegalArgumentException("Invalid user type");
@@ -266,6 +271,8 @@ public class StaffTableUI {
             return "Doctor";
         } else if (user instanceof Pharmacist) {
             return "Pharmacist";
+        } else if(user instanceof Nurse){
+            return "Nurse";
         }
         return "Unknown";
     }
@@ -296,6 +303,7 @@ public class StaffTableUI {
         System.out.println("1. Administrator");
         System.out.println("2. Doctor");
         System.out.println("3. Pharmacist");
+        System.out.println("4. Nurse");
         System.out.print("Choose role: ");
         
         String choice = scanner.nextLine();
@@ -310,6 +318,9 @@ public class StaffTableUI {
                 break;
             case "3":
                 targetRole = "Pharmacist";
+                break;
+            case "4":
+                targetRole = "Nurse";
                 break;
             default:
                 return users;

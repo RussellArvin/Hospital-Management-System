@@ -8,9 +8,11 @@ import model.Administrator;
 import model.Doctor;
 import model.Patient;
 import model.Pharmacist;
+import model.Nurse;
 import model.User;
 import repository.AdministratorRepository;
 import repository.DoctorRepository;
+import repository.NurseRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 
@@ -19,17 +21,20 @@ public class UserService {
     private PharmacistRepository pharmacistRepository;
     private DoctorRepository doctorRepository;
     private PatientRepository patientRepository;
+    private NurseRepository nurseRepository;
 
     public UserService(
         AdministratorRepository administratorRepository,
         PharmacistRepository pharmacistRepository,
         DoctorRepository doctorRepository,
-        PatientRepository patientRepository
+        PatientRepository patientRepository,
+        NurseRepository nurseRepository
     ) {
         this.administratorRepository = administratorRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
+        this.nurseRepository = nurseRepository;
     }
 
     public User findOne(String id, boolean findNonStaff, boolean findStaff) {
@@ -42,6 +47,10 @@ public class UserService {
     
             Pharmacist pharmacist = pharmacistRepository.findOne(id);
             if (pharmacist != null) return pharmacist;
+
+            Nurse nurse = nurseRepository.findOne(id);
+            if(nurse != null) return nurse;
+
         }
 
         if(findNonStaff){
@@ -68,6 +77,9 @@ public class UserService {
             case ADMINISTRATOR:
                 administratorRepository.update((Administrator) user);
                 break;
+            case NURSE:
+                nurseRepository.update((Nurse) user);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown user role: " + role);
         }
@@ -90,6 +102,9 @@ public class UserService {
             case ADMINISTRATOR:
                 administratorRepository.delete((Administrator) user);
                 break;
+            case NURSE:
+                nurseRepository.delete((Nurse) user);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown user role: " + role);
         }
@@ -110,6 +125,7 @@ public class UserService {
             Patient.class, UserRole.PATIENT,
             Doctor.class, UserRole.DOCTOR,
             Pharmacist.class, UserRole.PHARMACIST,
-            Administrator.class, UserRole.ADMINISTRATOR
+            Administrator.class, UserRole.ADMINISTRATOR,
+            Nurse.class, UserRole.NURSE
     );
 }

@@ -8,8 +8,10 @@ import model.Administrator;
 import model.Doctor;
 import model.Pharmacist;
 import model.User;
+import model.Nurse;
 import repository.AdministratorRepository;
 import repository.DoctorRepository;
+import repository.NurseRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 import util.Constant;
@@ -19,6 +21,7 @@ public class StaffService {
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
     private AdministratorRepository administratorRepository;
+    private NurseRepository nurseRepository;
     private UserService userService;
 
     public StaffService(
@@ -26,11 +29,13 @@ public class StaffService {
         PharmacistRepository pharmacistRepository,
         AdministratorRepository administratorRepository,
         PatientRepository patientRepository,
+        NurseRepository nurseRepository,
         UserService userService
     ) {
         this.doctorRepository = doctorRepository;
         this.pharmacistRepository = pharmacistRepository;
         this.administratorRepository = administratorRepository;
+        this.nurseRepository = nurseRepository;
         this.userService = userService;
     }
 
@@ -38,13 +43,15 @@ public class StaffService {
         Doctor[] doctors = this.doctorRepository.findAll();
         Pharmacist[] pharmacists = this.pharmacistRepository.findAll();
         Administrator[] administrators = this.administratorRepository.findAll();
+        Nurse[] nurses = this.nurseRepository.findAll();
     
-        User[] staff = new User[doctors.length + pharmacists.length + administrators.length];
+        User[] staff = new User[doctors.length + pharmacists.length + administrators.length + nurses.length];
     
-        // Copy all three arrays
+        // Copy all arrays
         System.arraycopy(doctors, 0, staff, 0, doctors.length);
         System.arraycopy(pharmacists, 0, staff, doctors.length, pharmacists.length);
         System.arraycopy(administrators, 0, staff, doctors.length + pharmacists.length, administrators.length);
+        System.arraycopy(nurses, 0, staff, doctors.length + pharmacists.length + administrators.length, nurses.length);
     
         return staff;
     }
@@ -111,6 +118,18 @@ public class StaffService {
                         currentDate
                     );
                     doctorRepository.save(doctor);
+                case NURSE:
+                    Nurse nurse = new Nurse(
+                        id,
+                        hashedPassword,
+                        salt,
+                        name,
+                        age,
+                        gender,
+                        currentDate,
+                        currentDate
+                    );
+                    nurseRepository.save(nurse);
                 default:
                     break;
             }
@@ -130,6 +149,9 @@ public class StaffService {
 
         Pharmacist pharmacist = pharmacistRepository.findOne(id);
         if (pharmacist != null) return true;
+
+        Nurse nurse = nurseRepository.findOne(id);
+        if(nurse != null) return true;
 
         return false;
     }
