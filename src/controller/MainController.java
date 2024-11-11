@@ -36,19 +36,6 @@ import util.Constant;
 import enums.UserRole;
 
 public class MainController extends BaseController<LoginMenuUI> {
-    private PatientRepository patientRepository;
-    private DoctorRepository doctorRepository;
-    private PharmacistRepository pharmacistRepository;
-    private AdministratorRepository administratorRepository;
-    private MedicineRepository medicineRepository;
-    private ReplenishmentRequestRepository replenishmentRequestRepository;
-    private AppointmentRepository appointmentRepository;
-    private AppointmentOutcomeRepository appointmentOutcomeRepository;
-    private PrescriptionRepository prescriptionRepository;
-    private MedicalRecordRepository medicalRecordRepository;
-    private NurseRepository nurseRepository;
-    private PatientVitalRepository patientVitalRepository;
-
     private AuthService authService;
     private UserService userService;
     private MedicalRecordService medicalRecordService;
@@ -65,18 +52,18 @@ public class MainController extends BaseController<LoginMenuUI> {
     public MainController(Scanner scanner) {
         super(new LoginMenuUI(),scanner);
 
-        this.patientRepository = new PatientRepository();
-        this.doctorRepository = new DoctorRepository();
-        this.pharmacistRepository = new PharmacistRepository();
-        this.administratorRepository = new AdministratorRepository();
-        this.medicineRepository = new MedicineRepository();
-        this.replenishmentRequestRepository = new ReplenishmentRequestRepository();
-        this.appointmentRepository = new AppointmentRepository();
-        this.appointmentOutcomeRepository = new AppointmentOutcomeRepository();
-        this.prescriptionRepository = new PrescriptionRepository();
-        this.medicalRecordRepository = new MedicalRecordRepository();
-        this.nurseRepository = new NurseRepository();
-        this.patientVitalRepository = new PatientVitalRepository();
+        PatientRepository patientRepository = new PatientRepository();
+        DoctorRepository doctorRepository = new DoctorRepository();
+        PharmacistRepository pharmacistRepository = new PharmacistRepository();
+        AdministratorRepository administratorRepository = new AdministratorRepository();
+        MedicineRepository medicineRepository = new MedicineRepository();
+        ReplenishmentRequestRepository replenishmentRequestRepository = new ReplenishmentRequestRepository();
+        AppointmentRepository appointmentRepository = new AppointmentRepository();
+        AppointmentOutcomeRepository appointmentOutcomeRepository = new AppointmentOutcomeRepository();
+        PrescriptionRepository prescriptionRepository = new PrescriptionRepository();
+        MedicalRecordRepository medicalRecordRepository = new MedicalRecordRepository();
+        NurseRepository nurseRepository = new NurseRepository();
+        PatientVitalRepository patientVitalRepository = new PatientVitalRepository();
 
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository, nurseRepository);
         this.authService = new AuthService(userService);
