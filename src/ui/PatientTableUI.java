@@ -8,6 +8,7 @@ import java.util.Scanner;
 import model.MedicalRecord;
 import model.MedicalRecordDetail;
 import model.Patient;
+import model.PatientVital;
 import service.PatientService;
 import enums.MedicalRecordType;
 
@@ -196,9 +197,10 @@ public class PatientTableUI {
         }
 
         MedicalRecordDetail[] records = patientService.getMedicalRecordsByPatientId(patientId);
+        PatientVital vital = patientService.geLatestPatientVitalByPatientId(patientId);
         
         clearScreen();
-        PatientRecordUI.display(patient, scanner,records);
+        PatientRecordUI.display(patient, scanner,records,vital);
     }
 
     private void displayTable() {

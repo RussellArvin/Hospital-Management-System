@@ -18,6 +18,7 @@ public class AuthService {
             return null;
             
         } catch(Exception e){
+            System.out.println(e.toString());
             return "Something went wrong when updating password";
         }
     }

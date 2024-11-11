@@ -6,10 +6,11 @@ import java.util.Scanner;
 import model.MedicalRecord;
 import model.MedicalRecordDetail;
 import model.Patient;
+import model.PatientVital;
 import enums.MedicalRecordType;
 
 public class PatientRecordUI {
-    public static void display(Patient patient, Scanner scanner, MedicalRecordDetail[] records) {
+    public static void display(Patient patient, Scanner scanner, MedicalRecordDetail[] records, PatientVital vital) {
         // Define column widths and formats
         String leftAlignFormat = "| %-15s | %-30s |%n";
         String headerFormat = "| %-47s |%n";
@@ -44,6 +45,25 @@ public class PatientRecordUI {
         System.out.format(headerFormat, "MEDICAL INFORMATION");
         System.out.format(separator);
         System.out.format(leftAlignFormat, "Blood Type", patient.getBloodType());
+        System.out.format(separator);
+
+        // Vital Signs (if available)
+        System.out.format(headerFormat, "VITAL SIGNS");
+        System.out.format(separator);
+        if (vital != null) {
+            System.out.format(leftAlignFormat, "Blood Oxygen", vital.getBloodOxygen() + "%");
+            System.out.format(leftAlignFormat, "Height", vital.getHeight() + " cm");
+            System.out.format(leftAlignFormat, "Weight", vital.getWeight() + " kg");
+            System.out.format(leftAlignFormat, "Blood Pressure", vital.getBloodPressure() + " mmHg");
+            
+            // Calculate and display BMI
+            double heightInMeters = vital.getHeight() / 100.0;
+            double bmi = vital.getWeight() / (heightInMeters * heightInMeters);
+            System.out.format(leftAlignFormat, "BMI", String.format("%.1f", bmi));
+            System.out.format(leftAlignFormat, "Last Updated", vital.getUpdatedAt().format(dateFormat));
+        } else {
+            System.out.format(leftAlignFormat, "Status", "No vital signs recorded");
+        }
         System.out.format(separator);
 
         // Filter records by type
