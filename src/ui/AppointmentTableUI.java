@@ -55,8 +55,8 @@ public class AppointmentTableUI {
         refreshAppointments();
         
         while (true) {
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+            //System.out.print("\033[H\033[2J");
+            //System.out.flush();
             
             displayTable(currentIndex, PAGE_SIZE);
             
@@ -356,6 +356,10 @@ public class AppointmentTableUI {
                 default:
                     break;
             }
+        }
+        else if(role == UserRole.ADMINISTRATOR){
+            this.appointments = this.appointmentService.findCompleted();
+            return;
         }
         // Add other role conditions here when needed
         this.appointments = null;
