@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import enums.UserRole;
 import enums.AppointmentAction;
-import model.MedicalRecord;
 import model.MedicalRecordDetail;
 import model.Patient;
 import service.AppointmentOutcomeService;
