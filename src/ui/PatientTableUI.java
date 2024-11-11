@@ -4,8 +4,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Scanner;
-
-import model.MedicalRecord;
 import model.MedicalRecordDetail;
 import model.Patient;
 import model.PatientVital;
