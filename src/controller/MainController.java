@@ -183,7 +183,10 @@ public class MainController extends BaseController<LoginMenuUI> {
                     (Administrator) user,
                     replenishmentRequestService,
                     staffService,
-                    inventoryService
+                    inventoryService,
+                    appointmentService,
+                    appointmentScheduleService,
+                    appointmentOutcomeService
                 );
                 administratorController.handleUserInput();
                 break;

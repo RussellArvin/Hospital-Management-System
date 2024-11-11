@@ -102,6 +102,10 @@ public class AppointmentService {
         }
     }
 
+    public AppointmentDetail[] findCompleted(){
+        return this.findByStatus(AppointmentStatus.COMPLETED);
+    }
+
     public AppointmentDetail[] findPendingApprovedByPatient(String patientId){
         AppointmentDetail[] appointments = this.findByPatient(patientId);
 
@@ -197,6 +201,27 @@ public class AppointmentService {
         }
 
         return details;
+    }
+
+    private AppointmentDetail[] findByStatus(AppointmentStatus status){
+        Appointment[] appointments = appointmentRepository.findManyByStatus(status);
+        AppointmentDetail[] details = new AppointmentDetail[appointments.length];
+
+        for(int i = 0; i < appointments.length; i++){
+            Appointment appointment = appointments[i];
+            Doctor doctor = doctorRepository.findOne(appointment.getDoctorId());
+            Patient patient = patientRepository.findOne(appointment.getPatientId());
+
+            //Create object from static factory method
+            details[i] = AppointmentDetail.fromAppointment(
+                appointment, 
+                doctor, 
+                patient
+            );
+
+        }
+        return details;
+
     }
 
     public AppointmentDetail[] findByPatient(String patientId){
