@@ -16,6 +16,7 @@ import repository.MedicalRecordRepository;
 import repository.MedicineRepository;
 import repository.NurseRepository;
 import repository.PatientRepository;
+import repository.PatientVitalRepository;
 import repository.PharmacistRepository;
 import repository.PrescriptionRepository;
 import repository.ReplenishmentRequestRepository;
@@ -46,6 +47,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private PrescriptionRepository prescriptionRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private NurseRepository nurseRepository;
+    private PatientVitalRepository patientVitalRepository;
 
     private AuthService authService;
     private UserService userService;
@@ -74,6 +76,7 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.prescriptionRepository = new PrescriptionRepository();
         this.medicalRecordRepository = new MedicalRecordRepository();
         this.nurseRepository = new NurseRepository();
+        this.patientVitalRepository = new PatientVitalRepository();
 
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository, nurseRepository);
         this.authService = new AuthService(userService);
@@ -85,7 +88,7 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
         this.appointmentOutcomeService = new AppointmentOutcomeService(appointmentOutcomeRepository, prescriptionRepository, appointmentRepository, doctorRepository, patientRepository, medicineRepository);
         this.doctorService = new DoctorService(doctorRepository,appointmentRepository,patientRepository);
-        this.patientService = new PatientService(patientRepository, appointmentRepository, doctorRepository, medicalRecordRepository);
+        this.patientService = new PatientService(patientRepository, appointmentRepository, doctorRepository, medicalRecordRepository, patientVitalRepository);
     }
 
     public void handleUserInput() {

@@ -7,6 +7,7 @@ import enums.AppointmentAction;
 import model.MedicalRecord;
 import model.MedicalRecordDetail;
 import model.Patient;
+import model.PatientVital;
 import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
@@ -93,8 +94,9 @@ public class PatientController extends BaseController<PatientMenuUI> {
 
     private void viewMedialRecord(){
         MedicalRecordDetail[] records = patientService.getMedicalRecordsByPatientId(patient.getId());
+        PatientVital vital = patientService.geLatestPatientVitalByPatientId(patient.getId());
 
-        PatientRecordUI.display(this.patient, this.scanner, records);
+        PatientRecordUI.display(this.patient, this.scanner, records,vital);
     }
 
 

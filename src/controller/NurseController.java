@@ -9,6 +9,7 @@ import model.Patient;
 import service.AppointmentService;
 import service.PatientService;
 import ui.AppointmentTableUI;
+import ui.CreatePatientVitalUI;
 import ui.NurseMenuUI;
 import ui.PatientTableUI;
 
@@ -16,6 +17,7 @@ public class NurseController extends BaseController<NurseMenuUI> {
     private Nurse nurse;
     private PatientService patientService;
     private AppointmentTableUI appointmentTableUI;
+    private CreatePatientVitalUI createPatientVitalUI;
 
     public NurseController(
         Scanner scanner,
@@ -27,6 +29,7 @@ public class NurseController extends BaseController<NurseMenuUI> {
         this.nurse = nurse;
         this.patientService = patientService;
         this.appointmentTableUI = new AppointmentTableUI(appointmentService, null, null, null, nurse, UserRole.NURSE);
+        this.createPatientVitalUI = new CreatePatientVitalUI(scanner, patientService);
     }
 
     public void handleUserInput(){
@@ -41,6 +44,9 @@ public class NurseController extends BaseController<NurseMenuUI> {
                     viewTodaysAppointments();
             }
             else if(choice.equals("3")){
+                createPatientVitalUI.display();
+            }
+            else if(choice.equals("4")){
                 super.handleLogout(nurse);
                 break;
             } else {

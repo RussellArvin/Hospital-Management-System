@@ -1,0 +1,2 @@
+id,patientId,bloodOxygen,height,weight,bloodPressure,createdAt,updatedAt
+00e0983c-20c1-45b7-b49a-e2df934b30df,P001,99,180,92,90,2024-11-12T01:54:36.394810,2024-11-12T01:54:36.394846
