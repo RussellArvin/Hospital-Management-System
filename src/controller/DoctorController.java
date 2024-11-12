@@ -24,6 +24,7 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
     private AppointmentTableUI tableUI;
     private DoctorService doctorService;
     private PatientService patientService;
+    private AppointmentScheduleUI appointmentScheduleUI;
 
     public DoctorController(
         Scanner scanner,
@@ -41,6 +42,7 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
         this.tableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, appointmentOutcomeService, inventoryService, doctor, UserRole.DOCTOR);
         this.doctorService = doctorService;
         this.patientService = patientService;
+        this.appointmentScheduleUI = new AppointmentScheduleUI(scanner, appointmentService, UserRole.DOCTOR, doctor);
     }
 
     public void handleUserInput(){
@@ -88,7 +90,7 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
     }
 
     private void viewPersonalSchedule(){
-        AppointmentScheduleUI.display(scanner, appointmentService, UserRole.DOCTOR, doctor);
+        appointmentScheduleUI.display();
     }
 
     private void acceptDeclineAppointments(){
