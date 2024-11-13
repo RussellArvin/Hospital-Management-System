@@ -21,7 +21,7 @@ import java.util.*;
  * The service reads data from Excel files and creates corresponding objects
  * with default passwords and necessary validation.
  *
- * @author [Your Name]
+ * @author Russell Arvin
  * @version 1.0
  */
 public class InitialisationService {
