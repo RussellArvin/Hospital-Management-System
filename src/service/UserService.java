@@ -120,6 +120,7 @@ public class UserService {
             .orElseThrow(() -> new IllegalArgumentException("Unknown user type: " + user.getClass()));
     }
 
+    //Mapping function
     private static final Map<Class<? extends User>, UserRole> ROLE_MAPPINGS = 
         Map.of(
             Patient.class, UserRole.PATIENT,
