@@ -76,7 +76,7 @@ public class AppointmentScheduleUI {
         initializeDoctorInfo();
         while (true) {
             clearScreen();
-            AppointmentDetail[] appointments = appointmentService.getDoctorAppointmentsByDate(doctorId, currentDate);
+            AppointmentDetail[] appointments = appointmentService.findDoctorAppointmentsByDate(doctorId, currentDate);
             displaySchedule(appointments);
             
             displayOptions();

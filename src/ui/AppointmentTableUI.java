@@ -335,10 +335,10 @@ public class AppointmentTableUI {
             switch (action) {
                 case CANCEL:
                 case RESCHEDULE:
-                    this.appointments = appointmentService.findPendingApprovedByPatient(user.getId());
+                    this.appointments = appointmentService.findPendingCompletedByPatientId(user.getId());
                     return;
                 case VIEW:
-                    this.appointments = appointmentService.findApprovedByPatient(user.getId());
+                    this.appointments = appointmentService.findConfirmedByPatientId(user.getId());
                     return;
                 default:
                     break;
@@ -348,7 +348,7 @@ public class AppointmentTableUI {
             switch (action) {
                 case OUTCOME:
                 case VIEW:
-                    this.appointments = appointmentService.findApprovedByDoctor(user.getId());
+                    this.appointments = appointmentService.findCompletedByDoctor(user.getId());
                     return;
                 case APPROVE:
                     this.appointments = appointmentService.findRequestedByDoctor(user.getId());

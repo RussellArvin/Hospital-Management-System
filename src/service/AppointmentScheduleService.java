@@ -55,8 +55,8 @@ public class AppointmentScheduleService {
             return false;
         }
 
-        AppointmentDetail[] doctorAppointments = appointmentService.findByDoctor(doctorId);
-        AppointmentDetail[] patientAppointments = appointmentService.findByPatient(patientId);
+        AppointmentDetail[] doctorAppointments = appointmentService.findManyByDoctorId(doctorId);
+        AppointmentDetail[] patientAppointments = appointmentService.findManyByPatientId(patientId);
 
         // Check if either doctor or patient has conflicting appointments
         if (!isTimeSlotAvailable(doctorAppointments, startDateTime, endDateTime)) {
@@ -98,7 +98,7 @@ public class AppointmentScheduleService {
         }
 
         // Check if patient is available at this time
-        AppointmentDetail[] patientAppointments = appointmentService.findByPatient(patientId);
+        AppointmentDetail[] patientAppointments = appointmentService.findManyByPatientId(patientId);
         if (!isTimeSlotAvailable(patientAppointments, startDateTime, endDateTime)) {
             System.out.println("Patient has another appointment at this time");
             return new Doctor[0];

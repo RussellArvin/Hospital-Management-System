@@ -20,12 +20,12 @@ public class ReplenishmentRequestRepository extends CsvRepository<ReplenishmentR
         return super.findAll(ReplenishmentRequest.class);
     }
 
-    public ReplenishmentRequest[] findByStatus(ReplenishmentRequestStatus status){
+    public ReplenishmentRequest[] findManyByStatus(ReplenishmentRequestStatus status){
         List<String> lines = this.fileManager.findLinesByColumnValue("status",status.toString());
         return super.mapLines(lines, ReplenishmentRequest.class);
     }
 
-    public ReplenishmentRequest[] findByPharmacist(String pharmarcistId){
+    public ReplenishmentRequest[] findManyByPharmacist(String pharmarcistId){
         List<String> lines = this.fileManager.findLinesByColumnValue("pharmacistId",pharmarcistId);
         return super.mapLines(lines, ReplenishmentRequest.class);
     }

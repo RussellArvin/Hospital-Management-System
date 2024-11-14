@@ -78,7 +78,7 @@ public class ReplenishmentRequestService {
     }
 
     public ReplenishmentRequestDetail[] getRequests() {
-        ReplenishmentRequest[] requests = replenishmentRequestRepository.findByStatus(ReplenishmentRequestStatus.PENDING);
+        ReplenishmentRequest[] requests = replenishmentRequestRepository.findManyByStatus(ReplenishmentRequestStatus.PENDING);
         ReplenishmentRequestDetail[] details = new ReplenishmentRequestDetail[requests.length];
         
         for (int i = 0; i < requests.length; i++) {
@@ -100,7 +100,7 @@ public class ReplenishmentRequestService {
 
     public ReplenishmentRequestDetail[] getPharmacistRequests(String pharmacistID){
         Pharmacist pharmacist = pharmacistRepository.findOne(pharmacistID);
-        ReplenishmentRequest[] requests = replenishmentRequestRepository.findByPharmacist(pharmacistID);
+        ReplenishmentRequest[] requests = replenishmentRequestRepository.findManyByPharmacist(pharmacistID);
         ReplenishmentRequestDetail[] details = new ReplenishmentRequestDetail[requests.length];
 
         for (int i = 0; i < requests.length; i++) {

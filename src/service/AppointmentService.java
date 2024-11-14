@@ -113,11 +113,11 @@ public class AppointmentService {
     }
 
     public AppointmentDetail[] findCompleted(){
-        return this.findByStatus(AppointmentStatus.COMPLETED);
+        return this.findManyByStatus(AppointmentStatus.COMPLETED);
     }
 
-    public AppointmentDetail[] findPendingApprovedByPatient(String patientId){
-        AppointmentDetail[] appointments = this.findByPatient(patientId);
+    public AppointmentDetail[] findPendingCompletedByPatientId(String patientId){
+        AppointmentDetail[] appointments = this.findManyByPatientId(patientId);
 
         return Arrays.stream(appointments)
         .filter(appointment -> appointment.getStatus() == AppointmentStatus.REQUESTED || 
@@ -125,8 +125,8 @@ public class AppointmentService {
         .toArray(AppointmentDetail[]::new);
     }
 
-    public AppointmentDetail[] findApprovedByPatient(String patientId){
-        AppointmentDetail[] appointments = this.findByPatient(patientId);
+    public AppointmentDetail[] findConfirmedByPatientId(String patientId){
+        AppointmentDetail[] appointments = this.findManyByPatientId(patientId);
 
         return Arrays.stream(appointments)
         .filter(appointment -> appointment.getStatus() == AppointmentStatus.CONFIRMED)
@@ -134,7 +134,7 @@ public class AppointmentService {
     }
 
     public AppointmentDetail[] findRequestedByDoctor(String doctorId) {
-        AppointmentDetail[] appointments = this.findByDoctor(doctorId);
+        AppointmentDetail[] appointments = this.findManyByDoctorId(doctorId);
         
         return Arrays.stream(appointments)
             .filter(appointment -> appointment.getStatus() == AppointmentStatus.REQUESTED)
@@ -142,29 +142,21 @@ public class AppointmentService {
     }
 
     public AppointmentDetail[] findCompletedByDoctor(String doctorId) {
-        AppointmentDetail[] appointments = this.findByDoctor(doctorId);
+        AppointmentDetail[] appointments = this.findManyByDoctorId(doctorId);
         
         return Arrays.stream(appointments)
             .filter(appointment -> appointment.getStatus() == AppointmentStatus.COMPLETED)
             .toArray(AppointmentDetail[]::new);
     }
 
-    public AppointmentDetail[] findApprovedByDoctor(String doctorId) {
-        AppointmentDetail[] appointments = this.findByDoctor(doctorId);
-        
-        return Arrays.stream(appointments)
-            .filter(appointment -> appointment.getStatus() == AppointmentStatus.CONFIRMED)
-            .toArray(AppointmentDetail[]::new);
-    }
-
-    public AppointmentDetail[] findByDoctor(String doctorId){
+    public AppointmentDetail[] findManyByDoctorId(String doctorId){
         Appointment[] appointments = appointmentRepository.findManyByDoctorId(doctorId);
         return mapDetails(appointments);
 
     }
 
-    public AppointmentDetail[] getDoctorAppointmentsByDate(String doctorId, LocalDate date){
-        AppointmentDetail[] appointments = this.findByDoctor(doctorId);
+    public AppointmentDetail[] findDoctorAppointmentsByDate(String doctorId, LocalDate date){
+        AppointmentDetail[] appointments = this.findManyByDoctorId(doctorId);
 
         return Arrays.stream(appointments)
             .filter(appointment -> 
@@ -202,13 +194,13 @@ public class AppointmentService {
         return mapDetails(appointments);
     }
 
-    private AppointmentDetail[] findByStatus(AppointmentStatus status){
+    private AppointmentDetail[] findManyByStatus(AppointmentStatus status){
         Appointment[] appointments = appointmentRepository.findManyByStatus(status);
         return mapDetails(appointments);
 
     }
 
-    public AppointmentDetail[] findByPatient(String patientId){
+    public AppointmentDetail[] findManyByPatientId(String patientId){
         Appointment[] appointments = appointmentRepository.findManyByPatientId(patientId);
         return mapDetails(appointments);
     }
