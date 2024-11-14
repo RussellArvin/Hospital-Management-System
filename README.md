@@ -231,12 +231,6 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
   - Issue prescriptions
   - Set availability
   
-- **Nurse Module**
-  - Track patient vitals
-  - Record medical notes
-  - Monitor patient status
-  - Manage patient care plans
-  
 - **Pharmacist Dashboard**
   - Manage prescriptions
   - Track medicine inventory
