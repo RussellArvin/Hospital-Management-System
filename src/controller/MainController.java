@@ -39,6 +39,9 @@ import util.Constant;
 /**
  * MainController class responsible for handling the main flow of the application.
  * Manages login, registration, and navigation between different roles and functionalities.
+ * 
+ * @author Tan Jou Yuan 
+ * @version 1.0
  */
 public class MainController extends BaseController<LoginMenuUI> {
     private AuthService authService;  // Handles user authentication
