@@ -160,18 +160,10 @@ public class InitialisationService {
                     Constant.DEFAULT_START_WORK_HOURS, Constant.DEFAULT_END_WORK_HOURS,
                     currentDateTime, currentDateTime));
                 break;
-                case NURSE:
+            case NURSE:
                 validateStaffId(id, "N");
-                nurses.add(new Nurse(
-                    id,                  // Staff ID
-                    hashedPassword,      // Hashed password
-                    salt,               // Salt
-                    name,               // Name
-                    age,                // Age
-                    gender,             // Gender
-                    currentDateTime,    // Created at
-                    currentDateTime     // Updated at
-                ));
+                nurses.add(new Nurse(id, hashedPassword, salt, name, age, gender,
+                    currentDateTime, currentDateTime));
                 break;
             case PHARMACIST:
                 validateStaffId(id, "P");
@@ -216,17 +208,21 @@ public class InitialisationService {
                 String[] parts = lines.get(i).split(",");
                 validateDataFormat(parts, 6, i);
                 
-                byte[] salt = PasswordUtil.generateSalt();
-                String hashedPassword = PasswordUtil.hashPassword(Constant.DEFAULT_PASSWORD, salt);
-                
+                String id = parts[0].trim();
+                String name = parts[1].trim();
                 LocalDate dob = LocalDate.parse(parts[2].trim());
-                int age = Period.between(dob, LocalDate.now()).getYears();
                 Gender gender = Gender.valueOf(parts[3].trim().toUpperCase());
                 BloodType bloodType = parseBloodType(parts[4].trim());
                 String email = parts[5].trim();
                 
+                int age = Period.between(dob, LocalDate.now()).getYears();
+                byte[] salt = PasswordUtil.generateSalt();
+                String hashedPassword = PasswordUtil.hashPassword(Constant.DEFAULT_PASSWORD, salt);
+                
+                validatePatientData(id, name, email, i);
+                
                 patients[i] = new Patient(
-                    parts[0].trim(), hashedPassword, salt, parts[1].trim(),
+                    id, hashedPassword, salt, name,
                     age, dob, gender, bloodType, 0, email
                 );
             }
@@ -289,15 +285,74 @@ public class InitialisationService {
     }
 
     /**
+     * Validates patient data according to business rules.
+     *
+     * @param id Patient ID
+     * @param name Patient name
+     * @param email Patient email
+     * @param lineNumber Line number in Excel file
+     * @throws IllegalArgumentException if validation fails
+     */
+    private void validatePatientData(String id, String name, String email, int lineNumber) {
+        if (!id.startsWith("P")) {
+            throw new IllegalArgumentException(
+                "Invalid patient ID format at line " + (lineNumber + 1) + 
+                ". Must start with 'P': " + id
+            );
+        }
+        
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                "Patient name cannot be empty at line " + (lineNumber + 1)
+            );
+        }
+        
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException(
+                "Invalid email format at line " + (lineNumber + 1) + ": " + email
+            );
+        }
+    }
+
+    /**
      * Parses blood type string to BloodType enum.
+     * Handles formats like "A+", "B-", "AB+", "O-" etc.
      *
      * @param bloodTypeStr Blood type string from Excel
      * @return Corresponding BloodType enum value
+     * @throws IllegalArgumentException if blood type format is invalid
      */
     private BloodType parseBloodType(String bloodTypeStr) {
-        return BloodType.valueOf(
-            bloodTypeStr.replace("+", "_POSITIVE").replace("-", "_NEGATIVE")
-        );
+        if (bloodTypeStr == null || bloodTypeStr.trim().isEmpty()) {
+            throw new IllegalArgumentException("Blood type cannot be empty");
+        }
+
+        String normalizedType = bloodTypeStr.trim().toUpperCase();
+        
+        try {
+            switch (normalizedType) {
+                case "A+":
+                    return BloodType.A_POSITIVE;
+                case "A-":
+                    return BloodType.A_NEGATIVE;
+                case "B+":
+                    return BloodType.B_POSITIVE;
+                case "B-":
+                    return BloodType.B_NEGATIVE;
+                case "AB+":
+                    return BloodType.AB_POSITIVE;
+                case "AB-":
+                    return BloodType.AB_NEGATIVE;
+                case "O+":
+                    return BloodType.O_POSITIVE;
+                case "O-":
+                    return BloodType.O_NEGATIVE;
+                default:
+                    throw new IllegalArgumentException("Invalid blood type format: " + bloodTypeStr);
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error parsing blood type '" + bloodTypeStr + "': " + e.getMessage());
+        }
     }
 
     /**

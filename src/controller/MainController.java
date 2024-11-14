@@ -25,6 +25,7 @@ import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.AuthService;
 import service.DoctorService;
+import service.InitialisationService;
 import service.InventoryService;
 import service.MedicalRecordService;
 import service.PatientService;
@@ -47,6 +48,7 @@ public class MainController extends BaseController<LoginMenuUI> {
     private AppointmentOutcomeService appointmentOutcomeService;
     private DoctorService doctorService;
     private PatientService patientService;
+    private InitialisationService initialisationService;
 
 
     public MainController(Scanner scanner) {
@@ -76,9 +78,11 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.appointmentOutcomeService = new AppointmentOutcomeService(appointmentOutcomeRepository, prescriptionRepository, appointmentRepository, doctorRepository, patientRepository, medicineRepository);
         this.doctorService = new DoctorService(doctorRepository,appointmentRepository,patientRepository);
         this.patientService = new PatientService(patientRepository, appointmentRepository, doctorRepository, medicalRecordRepository, patientVitalRepository);
+        this.initialisationService = new InitialisationService(administratorRepository, patientRepository, pharmacistRepository, doctorRepository, nurseRepository, medicineRepository);
     }
 
     public void handleUserInput() {
+        initialisationService.initialise();
         while(true) {
             menu.printOptions();
             String choice = scanner.nextLine();
