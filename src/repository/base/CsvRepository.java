@@ -30,6 +30,11 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
         }
     }
 
+    public T findLatest(){
+        String line = this.fileManager.getLastLine();
+        return mapper.fromCsvString(line);
+    }
+
     public T findOne(String id) {
         String line = this.fileManager.readLine(id);
         if(line == null) return null;

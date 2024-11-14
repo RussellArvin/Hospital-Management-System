@@ -38,6 +38,25 @@ public class CsvFileManager {
         }
     }
 
+    public String getLastLine() {
+        String lastLine = null;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            // Skip the header line
+            reader.readLine();
+            
+            // Read through all lines, keeping track of the last one
+            while ((line = reader.readLine()) != null) {
+                lastLine = line;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading last line from CSV: " + e.getMessage());
+        }
+        
+        return lastLine;
+    }
+
     public String readLine(String searchId) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;

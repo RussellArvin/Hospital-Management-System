@@ -1,12 +1,17 @@
 package service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.Comparator;
 
 import enums.AppointmentStatus;
+import enums.BloodType;
+import enums.Gender;
 import enums.MedicalRecordType;
 import model.Appointment;
+import model.BaseEntity;
 import model.Doctor;
 import model.MedicalRecord;
 import model.MedicalRecordDetail;
@@ -17,6 +22,8 @@ import repository.DoctorRepository;
 import repository.MedicalRecordRepository;
 import repository.PatientRepository;
 import repository.PatientVitalRepository;
+import util.Constant;
+import util.PasswordUtil;
 
 public class PatientService {
     private PatientRepository patientRepository;
@@ -37,6 +44,59 @@ public class PatientService {
         this.doctorRepository = doctorRepository;
         this.medicalRecordRepository = medicalRecordRepository;
         this.patientVitalRepository = patientVitalRepository;
+    }
+
+    public String create(
+        String name,
+        LocalDate dateOfBirth,
+        Gender gender,
+        BloodType bloodType,
+        int phoneNumber,
+        String email
+    ){
+        try{
+            Patient patient = patientRepository.findLatest();
+            String id = generateNextPatientId(patient.getId());
+            byte[] salt = PasswordUtil.generateSalt();
+            String hashedPassword = PasswordUtil.hashPassword(Constant.DEFAULT_PASSWORD, salt);
+            Patient newPatient = new Patient(
+                id, 
+                hashedPassword, 
+                salt, 
+                name, 
+                Period.between(dateOfBirth, LocalDate.now()).getYears(), 
+                dateOfBirth, 
+                gender, 
+                bloodType, 
+                phoneNumber, 
+                email
+            );
+            patientRepository.save(newPatient);
+            System.out.println("Your userID is: " + id);
+            return null;
+        } catch(Exception e){
+            return "Something went wrong when creating the patient";
+        }
+    }
+
+    private String generateNextPatientId(String currentId) {
+        // If no current ID exists, start with P001
+        if (currentId == null || currentId.isEmpty()) {
+            return "P001";
+        }
+        
+        // Extract the numeric part
+        String numStr = currentId.substring(1); // Remove 'P'
+        
+        try {
+            // Parse the number and add 1
+            int nextNum = Integer.parseInt(numStr) + 1;
+            
+            // Format back to 3 digits with leading zeros
+            return String.format("P%03d", nextNum);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid patient ID format: " + currentId);
+        }
     }
 
     public Patient[] findAll(){

@@ -33,6 +33,7 @@ import service.ReplenishmentRequestService;
 import service.StaffService;
 import service.UserService;
 import ui.LoginMenuUI;
+import ui.RegisterPatientUI;
 import util.Constant;
 import enums.UserRole;
 
@@ -92,14 +93,21 @@ public class MainController extends BaseController<LoginMenuUI> {
  
             }
             else if(choice.equals("2")){
-                handleLogin(true);
+                handlePatientRegister();
             }
             else if(choice.equals("3")){
+                handleLogin(true);
+            }
+            else if(choice.equals("4")){
                 return;
             } else {
                 System.out.println("Invalid option!");;
             }
         }
+    }
+
+    private void handlePatientRegister(){
+        RegisterPatientUI.display(scanner, patientService);
     }
 
     private void handleLogin(boolean isStaff){
