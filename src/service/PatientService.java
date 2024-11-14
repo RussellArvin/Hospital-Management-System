@@ -11,7 +11,6 @@ import enums.BloodType;
 import enums.Gender;
 import enums.MedicalRecordType;
 import model.Appointment;
-import model.BaseEntity;
 import model.Doctor;
 import model.MedicalRecord;
 import model.MedicalRecordDetail;
