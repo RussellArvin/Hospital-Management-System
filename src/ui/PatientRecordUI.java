@@ -37,7 +37,7 @@ public class PatientRecordUI {
         // Contact Information
         System.out.format(headerFormat, "CONTACT INFORMATION");
         System.out.format(separator);
-        System.out.format(leftAlignFormat, "Phone", patient.getPhoneNumber());
+        System.out.format(leftAlignFormat, "Phone", (patient.getPhoneNumber() == 0) ? "No phone number" : patient.getPhoneNumber());
         System.out.format(leftAlignFormat, "Email", patient.getEmail());
         System.out.format(separator);
 
