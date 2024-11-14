@@ -183,6 +183,8 @@ public class InitialisationService {
                 administrators.add(new Administrator(id, hashedPassword, salt, name,
                     age, gender, currentDateTime, currentDateTime));
                 break;
+            default:
+                break;
         }
     }
 

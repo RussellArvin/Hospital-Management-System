@@ -20,7 +20,6 @@ import ui.PatientTableUI;
 
 public class DoctorController extends BaseController<DoctorMenuUI> {
     private Doctor doctor;
-    private AppointmentService appointmentService;
     private AppointmentTableUI tableUI;
     private DoctorService doctorService;
     private PatientService patientService;
@@ -38,7 +37,6 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
     ) {
         super(new DoctorMenuUI(), scanner);
         this.doctor = doctor;
-        this.appointmentService = appointmentService;
         this.tableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, appointmentOutcomeService, inventoryService, doctor, UserRole.DOCTOR);
         this.doctorService = doctorService;
         this.patientService = patientService;
