@@ -2,29 +2,49 @@ package repository.base;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.RandomAccessFile;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class to manage CSV file operations such as creating files, reading lines, writing lines,
+ * appending lines, and finding records by column value.
+ * @author Russell Arvin
+ * @version 1.0
+ */
 public class CsvFileManager {
     private final String filePath;
     private final String header;
 
+    /**
+     * Constructs a CsvFileManager for a given file path and header.
+     * 
+     * @param filePath the file path of the CSV file
+     * @param header the header row for the CSV file
+     */
     public CsvFileManager(String filePath, String header) {
         this.filePath = filePath;
         this.header = header;
         createFileIfNotExists();
     }
 
+    /**
+     * Returns the header of the CSV file.
+     * 
+     * @return the header of the CSV file
+     */
     public String getHeader(){
         return this.header;
     }
 
+    /**
+     * Creates the CSV file if it does not exist and writes the header row.
+     */
     public void createFileIfNotExists() {
         File file = new File(filePath);
         file.getParentFile().mkdirs();
@@ -38,6 +58,11 @@ public class CsvFileManager {
         }
     }
 
+    /**
+     * Reads the last line from the CSV file, excluding the header.
+     * 
+     * @return the last data line in the CSV file
+     */
     public String getLastLine() {
         String lastLine = null;
         
@@ -57,6 +82,12 @@ public class CsvFileManager {
         return lastLine;
     }
 
+    /**
+     * Reads a line from the CSV file matching the given search ID.
+     * 
+     * @param searchId the ID to search for in the first column
+     * @return the line that matches the search ID, or null if not found
+     */
     public String readLine(String searchId) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -78,41 +109,51 @@ public class CsvFileManager {
         return null;
     }
 
-public void appendLine(String line) {
-   try {
-       // Read last character to check if file ends with newline
-       boolean needsNewline = false;
-       File file = new File(filePath);
-       
-       if (file.length() > 0) {
-           try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
-               if (file.length() > 0) {
-                   raf.seek(file.length() - 1);
-                   int lastChar = raf.read();
-                   needsNewline = lastChar != '\n';
-               }
-           }
-       }
+    /**
+     * Appends a new line to the CSV file, ensuring proper newline formatting.
+     * 
+     * @param line the line to append
+     */
+    public void appendLine(String line) {
+        try {
+            // Read last character to check if file ends with newline
+            boolean needsNewline = false;
+            File file = new File(filePath);
+            
+            if (file.length() > 0) {
+                try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+                    if (file.length() > 0) {
+                        raf.seek(file.length() - 1);
+                        int lastChar = raf.read();
+                        needsNewline = lastChar != '\n';
+                    }
+                }
+            }
 
-       // Open file in append mode
-       try (FileWriter fw = new FileWriter(filePath, true)) {
-           // If file is empty, write header
-           if (file.length() == 0) {
-               fw.write(header + System.lineSeparator());
-           }
-           // Add newline if needed
-           else if (needsNewline) {
-               fw.write(System.lineSeparator());
-           }
-           
-           // Write the new line with a line separator
-           fw.write(line + System.lineSeparator());
-       }
-   } catch (IOException e) {
-       throw new RuntimeException("Error appending to CSV: " + e.getMessage());
-   }
-}
+            // Open file in append mode
+            try (FileWriter fw = new FileWriter(filePath, true)) {
+                // If file is empty, write header
+                if (file.length() == 0) {
+                    fw.write(header + System.lineSeparator());
+                }
+                // Add newline if needed
+                else if (needsNewline) {
+                    fw.write(System.lineSeparator());
+                }
+                
+                // Write the new line with a line separator
+                fw.write(line + System.lineSeparator());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error appending to CSV: " + e.getMessage());
+        }
+    }
 
+    /**
+     * Reads all lines from the CSV file, excluding the header, and returns them as a list.
+     * 
+     * @return a list of all data lines in the CSV file
+     */
     public List<String> readAllLines() {
         List<String> lines = new ArrayList<>();
         boolean isFirstLine = true;  // Flag to track header line
@@ -130,8 +171,13 @@ public void appendLine(String line) {
             throw new RuntimeException("Error reading CSV: " + e.getMessage());
         }
         return lines;
-     }
+    }
 
+    /**
+     * Writes a list of lines to the CSV file, overwriting any existing content.
+     * 
+     * @param lines the list of lines to write to the CSV file
+     */
     public void writeAllLines(List<String> lines) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             for (String line : lines) {
@@ -142,7 +188,11 @@ public void appendLine(String line) {
         }
     }
 
-
+    /**
+     * Writes a single line to the CSV file.
+     * 
+     * @param line the line to write to the CSV file
+     */
     public void writeLine(String line) {
         try (FileWriter fw = new FileWriter(filePath, true);
              BufferedWriter bw = new BufferedWriter(fw);
@@ -155,6 +205,14 @@ public void appendLine(String line) {
         }
     }
 
+    /**
+     * Finds and returns all lines in the CSV file where the specified column matches the given search value.
+     * 
+     * @param columnName the column to search by
+     * @param searchValue the value to search for in the specified column
+     * @return a list of lines where the column value matches the search value
+     * @throws IllegalArgumentException if the column name or search value is invalid
+     */
     public List<String> findLinesByColumnValue(String columnName, String searchValue) {
         if (columnName == null || columnName.trim().isEmpty()) {
             throw new IllegalArgumentException("Column name cannot be null or empty");
@@ -205,6 +263,14 @@ public void appendLine(String line) {
         return matchingLines;
     }
 
+    /**
+     * Finds and returns the first line in the CSV file where the specified column matches the given search value.
+     * 
+     * @param columnName the column to search by
+     * @param searchValue the value to search for in the specified column
+     * @return the first matching line, or null if not found
+     * @throws IllegalArgumentException if the column name is invalid
+     */
     public String findLineByColumnValue(String columnName, String searchValue) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             // Read header line first
@@ -243,6 +309,12 @@ public void appendLine(String line) {
         return null;
     }
 
+    /**
+     * Deletes the line with the given ID from the CSV file.
+     * 
+     * @param id the ID of the line to delete
+     * @throws RuntimeException if no record with the given ID is found
+     */
     public void deleteLine(String id) {
         List<String> allLines = new ArrayList<>();
         boolean found = false;
