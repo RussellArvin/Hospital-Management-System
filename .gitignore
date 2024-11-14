@@ -1,2 +1,18 @@
+# Compiled class files
 *.class
+
+# CSV data files
 *.csv
+
+# Bin and Data directories
+bin/
+data/
+
+# IDE-specific files
+.idea/
+.vscode/
+*.iml
+
+# Temp files
+*~
+.DS_Store
