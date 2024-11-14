@@ -1,50 +1,64 @@
 @echo off
 echo Creating directories...
-mkdir bin 2>nul
-mkdir data 2>nul
+if not exist bin mkdir bin
+if not exist data mkdir data
+if not exist src\repository\mapper mkdir src\repository\mapper
+
+echo Cleaning bin directory...
+del /Q /S bin\*
 
 echo Compiling Java files...
+set CLASSPATH=bin
 
-rem 1. Compile enums (since they are referenced by other classes)
-javac -d bin src/enums/*.java
+:: 1. Compile constants, enums, and base
+echo Compiling base files...
+javac -d bin src\util\Constant.java
+javac -d bin -cp %CLASSPATH% src\enums\*.java
+javac -d bin -cp %CLASSPATH% src\model\Entity.java
+javac -d bin -cp %CLASSPATH% src\model\BaseEntity.java
+javac -d bin -cp %CLASSPATH% src\controller\Controller.java
+javac -d bin -cp %CLASSPATH% src\repository\mapper\BaseMapper.java
+javac -d bin -cp %CLASSPATH% src\util\*.java
+javac -d bin -cp %CLASSPATH% src\validator\*.java
 
-rem 2. Compile base models and interfaces (e.g., Entity and BaseEntity)
-javac -d bin -cp bin src/model/Entity.java
-javac -d bin -cp bin src/model/BaseEntity.java
+:: 2. Compile all models
+echo Compiling models...
+javac -d bin -cp %CLASSPATH% src\model\*.java
 
-rem 3. Compile controller base class
-javac -d bin -cp bin src/controller/Controller.java
+:: 3. Compile mapper implementations
+echo Compiling mappers...
+javac -d bin -cp %CLASSPATH% src\repository\mapper\*.java
 
-rem 4. Compile models (which depend on enums and base classes)
-javac -d bin -cp bin src/model/*.java
+:: 4. Compile repository base
+echo Compiling repository base...
+javac -d bin -cp %CLASSPATH% src\repository\base\CsvFileManager.java
+javac -d bin -cp %CLASSPATH% src\repository\base\CsvRepository.java
 
-rem 5. Compile repository base classes
-javac -d bin -cp bin src/repository/base/*.java
+:: 5. Compile repositories
+echo Compiling repositories...
+javac -d bin -cp %CLASSPATH% src\repository\*.java
 
-rem 6. Compile repository mappers (depends on models)
-javac -d bin -cp bin src/repository/mapper/*.java
+:: 6. Compile rest of application
+echo Compiling services...
+javac -d bin -cp %CLASSPATH% src\service\*.java
 
-rem 7. Compile repositories (depends on mappers and base repository)
-javac -d bin -cp bin src/repository/*.java
+echo Compiling UI...
+javac -d bin -cp %CLASSPATH% src\ui\*.java
 
-rem 8. Compile services (depends on repositories and models)
-javac -d bin -cp bin src/service/*.java
+echo Compiling controllers...
+javac -d bin -cp %CLASSPATH% src\controller\BaseController.java
+javac -d bin -cp %CLASSPATH% src\controller\*.java
 
-rem 9. Compile UI classes (depends on models)
-javac -d bin -cp bin src/ui/*.java
-
-rem 10. Compile utilities and validators
-javac -d bin -cp bin src/util/*.java
-javac -d bin -cp bin src/validator/*.java
-
-rem 11. Compile controllers (depends on almost everything)
-javac -d bin -cp bin src/controller/*.java
-
-rem 12. Finally compile main class
-javac -d bin -cp bin src/main/*.java
+echo Compiling main...
+javac -d bin -cp %CLASSPATH% src\main\*.java
 
 echo Compilation complete.
-echo Running the application...
-java -cp bin main.Main
 
-pause
+:: Check if Main class exists and run
+if exist bin\main\Main.class (
+    echo Running the application...
+    java -cp bin main.Main
+) else (
+    echo Error: Main class not found!
+    exit /b 1
+)
