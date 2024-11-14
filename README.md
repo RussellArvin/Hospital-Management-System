@@ -4,20 +4,31 @@ A comprehensive Java-based command-line interface application for managing hospi
 
 ## 📑 Table of Contents
 
-1. Introduction
-2. Design Considerations
-   - Basic Object-Oriented Principles
-   - SOLID Principles
-   - Design Choices and Trade-offs
-3. UML Class Diagram
-4. System Features
-   - Required Features
-   - Additional Features
-5. Getting Started
-6. System Initialization
-7. Architecture
-8. Development
-9. Reflection
+1. [Project Overview](#-project-overview)
+2. [Design Considerations](#-design-considerations)
+   - [Basic Object-Oriented Principles](#basic-object-oriented-principles)
+   - [SOLID Principles](#solid-principles)
+   - [Design Choices and Trade-offs](#design-choices-and-trade-offs)
+3. [Getting Started](#-getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+4. [System Initialization](#-system-initialization)
+   - [Initial Data Structure](#initial-data-structure)
+   - [Excel File Formats](#excel-file-formats)
+   - [Default Credentials](#default-credentials)
+5. [Architecture](#-architecture)
+   - [Project Structure](#project-structure)
+   - [Custom CSV Persistence Layer](#custom-csv-persistence-layer)
+6. [Key Features](#-key-features)
+   - [Multi-Role User System](#multi-role-user-system)
+   - [Additional Features](#additional-features)
+7. [Reflection](#-reflection)
+   - [Technical Challenges](#technical-challenges)
+   - [Lessons Learned](#lessons-learned)
+   - [Future Improvements](#future-improvements)
+8. [License](#-license)
+9. [Contact](#-contact)
+10. [Acknowledgments](#-acknowledgments)
 
 ## 🏥 Project Overview
 
@@ -241,17 +252,13 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
 
 1. **Enhanced Nurse Module**
    - Vital signs tracking and monitoring
-   - Patient observation records
-   - Care plan management
-   - Shift handover notes
-   - Patient status updates
+   - Viewing of appointments for the day
+   - Viewing patient records
 
 2. **Advanced Table Navigation**
    - Column sorting capabilities
    - Pagination for large datasets
-   - Search and filter functionality
    - Dynamic table rendering
-   - Data export options
 
 3. **Architectural Enhancements**
    - Generic repository implementation
