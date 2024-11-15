@@ -1,19 +1,40 @@
 package model;
 
-import enums.Gender;
 import enums.BloodType;
-
+import enums.Gender;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * The Patient class represents a patient in the system, extending the User class.
+ * It includes additional details specific to a patient, such as date of birth, blood type,
+ * contact information, and other identifying details.
+ * 
+ * @author Lim Jun Howe 
+ * @version 1.0 
+ */
 public class Patient extends User {
-    private LocalDate dateOfBirth; 
+
+    private LocalDate dateOfBirth;
     private BloodType bloodType;
     private int phoneNumber;
     private String email;
 
-
+    /**
+     * Constructs a Patient with the specified details.
+     *
+     * @param id           The unique ID of the patient.
+     * @param password     The password of the patient.
+     * @param salt         The salt used for password hashing.
+     * @param name         The name of the patient.
+     * @param age          The age of the patient.
+     * @param dateOfBirth  The date of birth of the patient.
+     * @param gender       The gender of the patient.
+     * @param bloodType    The blood type of the patient.
+     * @param phoneNumber  The contact phone number of the patient.
+     * @param email        The email address of the patient.
+     */
     public Patient(
         String id,
         String password,
@@ -25,14 +46,30 @@ public class Patient extends User {
         BloodType bloodType,
         int phoneNumber,
         String email
-    ){
-        super(id,password,salt,name,age,gender);
+    ) {
+        super(id, password, salt, name, age, gender);
         this.dateOfBirth = dateOfBirth;
         this.bloodType = bloodType;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
     
+    /**
+     * Constructs a Patient with detailed information including timestamps.
+     *
+     * @param id           The unique ID of the patient.
+     * @param password     The password of the patient.
+     * @param salt         The salt used for password hashing.
+     * @param name         The name of the patient.
+     * @param age          The age of the patient.
+     * @param dateOfBirth  The date of birth of the patient.
+     * @param gender       The gender of the patient.
+     * @param bloodType    The blood type of the patient.
+     * @param phoneNumber  The contact phone number of the patient.
+     * @param email        The email address of the patient.
+     * @param createdAt    The date and time when the patient record was created.
+     * @param updatedAt    The date and time when the patient record was last updated.
+     */
     public Patient(
         String id,
         String password,
@@ -46,7 +83,7 @@ public class Patient extends User {
         String email,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
-    ){
+    ) {
         super(id, password, salt, name, age, gender, createdAt, updatedAt);
         this.dateOfBirth = dateOfBirth;
         this.bloodType = bloodType;
@@ -54,26 +91,56 @@ public class Patient extends User {
         this.email = email;
     }
 
-    public void setPhoneNumber(int phoneNumber){
+    /**
+     * Sets the contact phone number of the patient.
+     *
+     * @param phoneNumber The contact phone number to set.
+     */
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setEmail(String email){
+    /**
+     * Sets the email address of the patient.
+     *
+     * @param email The email address to set.
+     */
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public int getPhoneNumber(){
+    /**
+     * Gets the contact phone number of the patient.
+     *
+     * @return The phone number of the patient.
+     */
+    public int getPhoneNumber() {
         return this.phoneNumber;
     }
 
-    public String getEmail(){
+    /**
+     * Gets the email address of the patient.
+     *
+     * @return The email address of the patient.
+     */
+    public String getEmail() {
         return this.email;
     }
 
-    public BloodType getBloodType(){
+    /**
+     * Gets the blood type of the patient.
+     *
+     * @return The blood type of the patient.
+     */
+    public BloodType getBloodType() {
         return this.bloodType;
     }
 
+    /**
+     * Returns a CSV string representation of the patient, including all relevant attributes.
+     *
+     * @return A CSV-formatted string containing patient data.
+     */
     @Override
     public String toCsvString() {
         return String.join(",",
@@ -92,7 +159,12 @@ public class Patient extends User {
         );
     }
 
-        public LocalDate getDateOfBirth() {
-            return this.dateOfBirth;
-        }
+    /**
+     * Gets the date of birth of the patient.
+     *
+     * @return The date of birth of the patient.
+     */
+    public LocalDate getDateOfBirth() {
+        return this.dateOfBirth;
+    }
 }
