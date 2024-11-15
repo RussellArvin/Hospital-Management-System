@@ -1,8 +1,9 @@
 package service;
 
 import model.*;
-import model.Nurse;
 import repository.*;
+import repository.base.CsvRepository;
+import repository.mapper.AdministratorMapper;
 import util.*;
 import enums.*;
 import java.time.*;
@@ -29,7 +30,7 @@ public class InitialisationService {
     private static final String PATIENT_FILE = "initial-data/Patient_List.xlsx";
     private static final String STAFF_FILE = "initial-data/Staff_List.xlsx";
 
-    private final AdministratorRepository administratorRepository;
+    private final  CsvRepository<Administrator,AdministratorMapper>administratorRepository;
     private final PatientRepository patientRepository;
     private final PharmacistRepository pharmacistRepository;
     private final DoctorRepository doctorRepository;
@@ -47,7 +48,7 @@ public class InitialisationService {
      * @param medicineRepository Repository for Medicine entities
      */
     public InitialisationService(
-            AdministratorRepository administratorRepository,
+        CsvRepository<Administrator,AdministratorMapper> administratorRepository,
             PatientRepository patientRepository,
             PharmacistRepository pharmacistRepository,
             DoctorRepository doctorRepository,

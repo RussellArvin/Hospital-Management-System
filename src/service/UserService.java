@@ -9,11 +9,12 @@ import model.Nurse;
 import model.Patient;
 import model.Pharmacist;
 import model.User;
-import repository.AdministratorRepository;
 import repository.DoctorRepository;
 import repository.NurseRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
+import repository.base.CsvRepository;
+import repository.mapper.AdministratorMapper;
 
 /**
  * The UserService class provides methods for managing users, including finding, updating, 
@@ -23,7 +24,7 @@ import repository.PharmacistRepository;
  * @version 1.0
  */
 public class UserService {
-    private AdministratorRepository administratorRepository;
+    private CsvRepository<Administrator,AdministratorMapper> administratorRepository;
     private PharmacistRepository pharmacistRepository;
     private DoctorRepository doctorRepository;
     private PatientRepository patientRepository;
@@ -39,7 +40,7 @@ public class UserService {
      * @param nurseRepository         Repository for managing nurses.
      */
     public UserService(
-        AdministratorRepository administratorRepository,
+        CsvRepository<Administrator,AdministratorMapper> administratorRepository,
         PharmacistRepository pharmacistRepository,
         DoctorRepository doctorRepository,
         PatientRepository patientRepository,

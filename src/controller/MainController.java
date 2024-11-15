@@ -8,7 +8,6 @@ import model.Nurse;
 import model.Patient;
 import model.Pharmacist;
 import model.User;
-import repository.AdministratorRepository;
 import repository.AppointmentOutcomeRepository;
 import repository.AppointmentRepository;
 import repository.DoctorRepository;
@@ -20,6 +19,8 @@ import repository.PatientVitalRepository;
 import repository.PharmacistRepository;
 import repository.PrescriptionRepository;
 import repository.ReplenishmentRequestRepository;
+import repository.base.CsvRepository;
+import repository.mapper.AdministratorMapper;
 import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
@@ -68,7 +69,6 @@ public class MainController extends BaseController<LoginMenuUI> {
         PatientRepository patientRepository = new PatientRepository();
         DoctorRepository doctorRepository = new DoctorRepository();
         PharmacistRepository pharmacistRepository = new PharmacistRepository();
-        AdministratorRepository administratorRepository = new AdministratorRepository();
         MedicineRepository medicineRepository = new MedicineRepository();
         ReplenishmentRequestRepository replenishmentRequestRepository = new ReplenishmentRequestRepository();
         AppointmentRepository appointmentRepository = new AppointmentRepository();
@@ -77,6 +77,12 @@ public class MainController extends BaseController<LoginMenuUI> {
         MedicalRecordRepository medicalRecordRepository = new MedicalRecordRepository();
         NurseRepository nurseRepository = new NurseRepository();
         PatientVitalRepository patientVitalRepository = new PatientVitalRepository();
+
+        CsvRepository<Administrator,AdministratorMapper> administratorRepository = new CsvRepository<Administrator,AdministratorMapper>(
+            "data/administrators.csv",
+            "id,password,salt,name,age,gendercreatedAt,updatedAt",
+            new AdministratorMapper()
+        );
 
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository, nurseRepository);
         this.authService = new AuthService(userService);
