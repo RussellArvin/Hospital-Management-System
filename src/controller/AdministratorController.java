@@ -1,9 +1,9 @@
 package controller;
 
-import java.util.Scanner;
-
 import enums.AppointmentAction;
 import enums.UserRole;
+import java.util.Scanner;
+import java.util.Scanner;
 import model.Administrator;
 import model.Medicine;
 import model.ReplenishmentRequestDetail;
@@ -20,13 +20,36 @@ import ui.InventoryTableUI;
 import ui.ReplenishmentRequestTableUI;
 import ui.StaffTableUI;
 
+/**
+ * The AdministratorController class is responsible for managing the actions available to the administrator
+ * within the system. It interacts with various services and user interfaces to provide functionality
+ * such as managing staff, viewing appointments, handling inventory, and processing replenishment requests.
+ * This controller is designed to handle user input and direct the flow of the administrator's actions
+ * within the system.
+ * 
+ * @author Russel Arvin
+ * @version 1.0
+ */
 public class AdministratorController extends BaseController<AdministratorMenuUI> {
+
     private Administrator admin;
     private StaffService staffService;
     private InventoryService inventoryService;
     private ReplenishmentRequestService replenishmentRequestService;
     private AppointmentTableUI appointmentTableUI;
 
+    /**
+     * Constructs an AdministratorController with the necessary services and administrator details.
+     * 
+     * @param scanner the Scanner object used to get user input
+     * @param admin the administrator object managing the system
+     * @param replenishmentRequestService the service responsible for managing replenishment requests
+     * @param staffService the service responsible for managing staff data
+     * @param inventoryService the service responsible for managing the inventory
+     * @param appointmentService the service responsible for managing appointments
+     * @param appointmentScheduleService the service responsible for scheduling appointments
+     * @param appointmentOutcomeService the service responsible for managing appointment outcomes
+     */
     public AdministratorController(
         Scanner scanner,
         Administrator admin,
@@ -45,6 +68,9 @@ public class AdministratorController extends BaseController<AdministratorMenuUI>
         this.appointmentTableUI = new AppointmentTableUI(appointmentService, appointmentScheduleService, appointmentOutcomeService, inventoryService, admin, UserRole.ADMINISTRATOR);
     }
 
+    /**
+     * Handles the user input by continuously displaying the menu options and processing the selected actions.
+     */
     public void handleUserInput(){
         while(true){
             menu.printOptions();
@@ -69,17 +95,28 @@ public class AdministratorController extends BaseController<AdministratorMenuUI>
         }
     }
 
+    /**
+     * Handles replenishment requests by retrieving and displaying the current requests.
+     */
     private void handleReplenishmentRequests(){
         ReplenishmentRequestDetail[] requests = replenishmentRequestService.getRequests();
         ReplenishmentRequestTableUI.display(requests,scanner,true,replenishmentRequestService,inventoryService,this.admin.getId());
     }
 
+    /**
+     * Handles the management of staff data by displaying the list of all staff members.
+     * 
+     * @param scanner the Scanner object used to get user input
+     */
     private void handleStaffManagement(Scanner scanner) {
         User[] staff = this.staffService.getAllStaffData();
         
         StaffTableUI.display(staff, scanner, staffService);
     }
 
+    /**
+     * Displays the current inventory of medicines available in the system.
+     */
     private void viewInventory() {
         Medicine[] medicine = inventoryService.getAllMedicines();
         InventoryTableUI.display(medicine, scanner, true, inventoryService);

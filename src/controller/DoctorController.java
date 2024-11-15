@@ -1,9 +1,8 @@
 package controller;
 
-import java.util.Scanner;
-
 import enums.AppointmentAction;
 import enums.UserRole;
+import java.util.Scanner;
 import model.Doctor;
 import model.Patient;
 import service.AppointmentOutcomeService;
@@ -18,13 +17,32 @@ import ui.DoctorAvailabilityUI;
 import ui.DoctorMenuUI;
 import ui.PatientTableUI;
 
+/**
+ * Controller class responsible for handling user input and managing actions specific to the Doctor role.
+ * Extends BaseController and interacts with various services and UI components.
+ * 
+ * @author Lim Jun Howe
+ * @version 1.0
+ */
 public class DoctorController extends BaseController<DoctorMenuUI> {
-    private Doctor doctor;
-    private AppointmentTableUI tableUI;
-    private DoctorService doctorService;
-    private PatientService patientService;
-    private AppointmentScheduleUI appointmentScheduleUI;
+    private Doctor doctor;  // The doctor associated with this controller.
+    private AppointmentTableUI tableUI;  // UI for managing appointment tables.
+    private DoctorService doctorService;  // Service for managing doctor-specific data.
+    private PatientService patientService;  // Service for managing patient-specific data.
+    private AppointmentScheduleUI appointmentScheduleUI;  // UI for managing doctor's appointment schedule.
 
+    /**
+     * Constructs a DoctorController with the specified parameters and initializes UI components and services.
+     * 
+     * @param scanner The scanner used for reading user input.
+     * @param doctor The doctor associated with the controller.
+     * @param appointmentService Service for managing appointments.
+     * @param appointmentOutcomeService Service for managing appointment outcomes.
+     * @param appointmentScheduleService Service for managing appointment schedules.
+     * @param patientService Service for managing patient data.
+     * @param inventoryService Service for managing inventory.
+     * @param doctorService Service for managing doctor data.
+     */
     public DoctorController(
         Scanner scanner,
         Doctor doctor,
@@ -43,6 +61,9 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
         this.appointmentScheduleUI = new AppointmentScheduleUI(scanner, appointmentService, UserRole.DOCTOR, doctor);
     }
 
+    /**
+     * Handles user input by presenting options and triggering the corresponding actions.
+     */
     public void handleUserInput(){
         while(true){
             menu.printOptions();
@@ -75,34 +96,55 @@ public class DoctorController extends BaseController<DoctorMenuUI> {
         }
     }
 
+    /**
+     * Updates patient records by displaying a table of the doctor's patients for editing.
+     */
     private void updatePatientRecords(){
         Patient[] patients = doctorService.getDoctorPatients(doctor.getId());
         PatientTableUI patientTableUI = new PatientTableUI(scanner, patientService, doctor.getId(), patients);
         patientTableUI.display(true);
     }
 
+    /**
+     * Views the patient records without editing, displaying a table of the doctor's patients.
+     */
     private void viewPatientRecords(){
         Patient[] patients = doctorService.getDoctorPatients(doctor.getId());
         PatientTableUI patientTableUI = new PatientTableUI(scanner, patientService, doctor.getId(), patients);
         patientTableUI.display(false);
     }
 
+    /**
+     * Views the doctor's personal schedule, displaying scheduled appointments.
+     */
     private void viewPersonalSchedule(){
         appointmentScheduleUI.display();
     }
 
+    /**
+     * Allows the doctor to accept or decline appointments.
+     */
     private void acceptDeclineAppointments(){
-        tableUI.display(scanner,AppointmentAction.APPROVE);
+        tableUI.display(scanner, AppointmentAction.APPROVE);
     }
 
+    /**
+     * Views upcoming appointments for the doctor.
+     */
     private void viewUpcomingAppointments(){
         tableUI.display(scanner, AppointmentAction.VIEW);
     }
 
+    /**
+     * Records the outcome of an appointment.
+     */
     private void recordOutcome(){
         tableUI.display(scanner, AppointmentAction.OUTCOME);
     }
 
+    /**
+     * Sets the doctor's availability for appointments.
+     */
     private void setAvailability(){
         DoctorAvailabilityUI.display(scanner, doctorService, doctor);
     }

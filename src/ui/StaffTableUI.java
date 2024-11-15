@@ -1,20 +1,33 @@
 package ui;
 
+import enums.Gender;
+import enums.UserRole;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
-import model.User;
 import model.Administrator;
 import model.Doctor;
 import model.Nurse;
 import model.Pharmacist;
+import model.User;
 import service.StaffService;
-import enums.Gender;
-import enums.UserRole;
 
+/**
+ * The StaffTableUI class provides a user interface for managing and displaying a list of staff members.
+ * It supports actions such as adding, updating, removing, and filtering users, and allows navigation through the list with pagination.
+ * 
+ * @author Celeste Ho 
+ * @version 1.0
+ */
 public class StaffTableUI {
 
-    
+    /**
+     * Displays the staff table and provides options for managing staff members.
+     * 
+     * @param users         the array of User objects representing the staff members
+     * @param scanner       the Scanner object used to capture user input
+     * @param staffService  the service used to manage staff-related actions
+     */
     public static void display(User[] users, Scanner scanner, StaffService staffService) {
         final int PAGE_SIZE = 10;
         int currentIndex = 0;
@@ -229,6 +242,13 @@ public class StaffTableUI {
         }
     }
 
+    /**
+     * Displays the table of staff members with pagination.
+     * 
+     * @param users      the array of User objects to display
+     * @param startIndex the starting index for the current page
+     * @param pageSize   the number of records to display per page
+     */
     private static void displayTable(User[] users, int startIndex, int pageSize) {
         String format = "| %-10s | %-20s | %-5s | %-8s | %-15s | %-19s | %-19s |%n";
         String separator = "+------------+----------------------+-------+----------+-----------------+---------------------+---------------------+%n";
@@ -264,6 +284,12 @@ public class StaffTableUI {
         System.out.format("Page %d of %d (Total records: %d)%n", currentPage, totalPages, users.length);
     }
 
+    /**
+     * Determines the role of a user based on the specific subclass of the User object.
+     * 
+     * @param user the User object to evaluate
+     * @return the role of the user as a string
+     */
     private static String determineUserRole(User user) {
         if (user instanceof Administrator) {
             return "Administrator";
@@ -277,6 +303,13 @@ public class StaffTableUI {
         return "Unknown";
     }
 
+    /**
+     * Filters the staff list based on criteria such as role, age, or gender.
+     * 
+     * @param users   the array of User objects to filter
+     * @param scanner the Scanner object used to capture user input
+     * @return the filtered array of User objects
+     */
     private static User[] filterUsers(User[] users, Scanner scanner) {
         System.out.println("\nFilter by:");
         System.out.println("1. Role");
@@ -298,6 +331,13 @@ public class StaffTableUI {
         }
     }
 
+    /**
+     * Filters the staff list by role.
+     * 
+     * @param users   the array of User objects to filter
+     * @param scanner the Scanner object used to capture user input
+     * @return the filtered array of User objects
+     */
     private static User[] filterByRole(User[] users, Scanner scanner) {
         System.out.println("\nSelect role:");
         System.out.println("1. Administrator");
@@ -331,6 +371,13 @@ public class StaffTableUI {
             .toArray(User[]::new);
     }
 
+    /**
+     * Filters the staff list by age range.
+     * 
+     * @param users   the array of User objects to filter
+     * @param scanner the Scanner object used to capture user input
+     * @return the filtered array of User objects
+     */
     private static User[] filterByAge(User[] users, Scanner scanner) {
         System.out.print("\nEnter minimum age: ");
         String minAgeStr = scanner.nextLine();
@@ -351,6 +398,13 @@ public class StaffTableUI {
         }
     }
 
+    /**
+     * Filters the staff list by gender.
+     * 
+     * @param users   the array of User objects to filter
+     * @param scanner the Scanner object used to capture user input
+     * @return the filtered array of User objects
+     */
     private static User[] filterByGender(User[] users, Scanner scanner) {
         System.out.println("\nSelect gender:");
         System.out.println("1. Male");

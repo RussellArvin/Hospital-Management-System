@@ -1,14 +1,13 @@
 package service;
 
+import enums.UserRole;
 import java.util.Map;
 import java.util.Optional;
-
-import enums.UserRole;
 import model.Administrator;
 import model.Doctor;
+import model.Nurse;
 import model.Patient;
 import model.Pharmacist;
-import model.Nurse;
 import model.User;
 import repository.AdministratorRepository;
 import repository.DoctorRepository;
@@ -16,6 +15,13 @@ import repository.NurseRepository;
 import repository.PatientRepository;
 import repository.PharmacistRepository;
 
+/**
+ * The UserService class provides methods for managing users, including finding, updating, 
+ * and removing users across different user roles (patients, doctors, pharmacists, administrators, and nurses).
+ * 
+ * @author Natalyn Pong 
+ * @version 1.0
+ */
 public class UserService {
     private AdministratorRepository administratorRepository;
     private PharmacistRepository pharmacistRepository;
@@ -23,6 +29,15 @@ public class UserService {
     private PatientRepository patientRepository;
     private NurseRepository nurseRepository;
 
+    /**
+     * Constructs a UserService with the required repositories.
+     *
+     * @param administratorRepository Repository for managing administrators.
+     * @param pharmacistRepository    Repository for managing pharmacists.
+     * @param doctorRepository        Repository for managing doctors.
+     * @param patientRepository       Repository for managing patients.
+     * @param nurseRepository         Repository for managing nurses.
+     */
     public UserService(
         AdministratorRepository administratorRepository,
         PharmacistRepository pharmacistRepository,
@@ -37,8 +52,16 @@ public class UserService {
         this.nurseRepository = nurseRepository;
     }
 
+    /**
+     * Finds a user by their ID.
+     *
+     * @param id           The ID of the user to find.
+     * @param findNonStaff A flag indicating whether to search for non-staff users (patients).
+     * @param findStaff    A flag indicating whether to search for staff users.
+     * @return The user if found, or null otherwise.
+     */
     public User findOne(String id, boolean findNonStaff, boolean findStaff) {
-        if(findStaff){
+        if (findStaff) {
             Administrator admin = administratorRepository.findOne(id);
             if (admin != null) return admin;
     
@@ -49,11 +72,10 @@ public class UserService {
             if (pharmacist != null) return pharmacist;
 
             Nurse nurse = nurseRepository.findOne(id);
-            if(nurse != null) return nurse;
-
+            if (nurse != null) return nurse;
         }
 
-        if(findNonStaff){
+        if (findNonStaff) {
             Patient patient = patientRepository.findOne(id);
             if (patient != null) return patient;
         }
@@ -61,10 +83,15 @@ public class UserService {
         return null;
     }
 
-    public void updateUser(User user){
+    /**
+     * Updates a user's information in the appropriate repository based on their role.
+     *
+     * @param user The user to update.
+     */
+    public void updateUser(User user) {
         UserRole role = this.determineRole(user);
 
-        switch(role){
+        switch (role) {
             case PATIENT:
                 patientRepository.update((Patient) user);
                 break;
@@ -86,10 +113,15 @@ public class UserService {
         return;
     }
 
-    public void removeUser(User user){
+    /**
+     * Removes a user from the appropriate repository based on their role.
+     *
+     * @param user The user to remove.
+     */
+    public void removeUser(User user) {
         UserRole role = this.determineRole(user);
 
-        switch(role){
+        switch (role) {
             case PATIENT:
                 patientRepository.delete((Patient) user);
                 break;
@@ -111,8 +143,13 @@ public class UserService {
         return;
     }
 
-
-
+    /**
+     * Determines the role of a given user based on their class type.
+     *
+     * @param user The user whose role is to be determined.
+     * @return The UserRole of the user.
+     * @throws IllegalArgumentException If the user type is unknown.
+     */
     public UserRole determineRole(User user) {
         return Optional.ofNullable(user)
             .map(User::getClass)
@@ -120,7 +157,9 @@ public class UserService {
             .orElseThrow(() -> new IllegalArgumentException("Unknown user type: " + user.getClass()));
     }
 
-    //Mapping function
+    /**
+     * A mapping of user classes to their corresponding UserRole enums.
+     */
     private static final Map<Class<? extends User>, UserRole> ROLE_MAPPINGS = 
         Map.of(
             Patient.class, UserRole.PATIENT,

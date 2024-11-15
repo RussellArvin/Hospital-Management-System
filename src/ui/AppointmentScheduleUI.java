@@ -1,15 +1,23 @@
 package ui;
 
+import enums.UserRole;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import model.AppointmentDetail;
 import model.Doctor;
-import enums.UserRole;
 import service.AppointmentService;
 import util.Constant;
 
+/**
+ * The AppointmentScheduleUI class provides a user interface for viewing and interacting
+ * with the appointment schedule for a specific doctor or patient. It supports displaying
+ * the schedule, navigating between days, and handling various user options.
+ * 
+ * @author Russell Arvin 
+ * @version 1.0
+ */
 public class AppointmentScheduleUI {
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -29,6 +37,14 @@ public class AppointmentScheduleUI {
     private LocalDate currentDate;
     private final LocalDate today;
 
+    /**
+     * Constructor for the AppointmentScheduleUI.
+     *
+     * @param scanner the Scanner object for reading user input
+     * @param appointmentService the service responsible for handling appointments
+     * @param userRole the role of the current user (e.g., patient or staff)
+     * @param doctor the doctor associated with the schedule (optional, can be null)
+     */
     public AppointmentScheduleUI(Scanner scanner, AppointmentService appointmentService, 
                                UserRole userRole, Doctor doctor) {
         this.scanner = scanner;
@@ -37,9 +53,13 @@ public class AppointmentScheduleUI {
         this.doctor = doctor;
         this.today = LocalDate.now();
         this.currentDate = today;
-
     }
 
+    /**
+     * Initializes doctor information based on the user's role. Prompts for a doctor's
+     * information if the user is a patient or validates and sets the doctor's information
+     * for staff users.
+     */
     private void initializeDoctorInfo() {
         if (userRole == UserRole.PATIENT) {
             promptForDoctorInfo();
@@ -48,6 +68,10 @@ public class AppointmentScheduleUI {
         }
     }
 
+    /**
+     * Prompts the user to enter a doctor's name and retrieves the doctor's ID.
+     * If the doctor is not found, the user is prompted to try again.
+     */
     private void promptForDoctorInfo() {
         while (doctorId == null) {
             System.out.print("Enter Doctor Name: ");
@@ -62,6 +86,10 @@ public class AppointmentScheduleUI {
         endWorkHours = Constant.DEFAULT_END_WORK_HOURS;
     }
 
+    /**
+     * Validates and sets the doctor's information for staff users.
+     * Throws an exception if the doctor object is null.
+     */
     private void validateAndSetDoctorInfo() {
         if (doctor == null) {
             throw new IllegalArgumentException("Error: Doctor information not provided");
@@ -72,6 +100,9 @@ public class AppointmentScheduleUI {
         endWorkHours = doctor.getEndWorkHours();
     }
 
+    /**
+     * Displays the appointment schedule UI and handles user navigation and interaction.
+     */
     public void display() {
         initializeDoctorInfo();
         while (true) {
@@ -88,11 +119,17 @@ public class AppointmentScheduleUI {
         }
     }
 
+    /**
+     * Clears the console screen for a clean UI experience.
+     */
     private void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
+    /**
+     * Displays navigation options for the user.
+     */
     private void displayOptions() {
         System.out.println("\nOptions:");
         System.out.println("N - Next Day");
@@ -109,6 +146,12 @@ public class AppointmentScheduleUI {
         System.out.print("Choose an option: ");
     }
 
+    /**
+     * Processes the user's choice for navigating the schedule or exiting the menu.
+     *
+     * @param choice the user's choice
+     * @return true to continue, false to exit the menu
+     */
     private boolean processChoice(String choice) {
         switch (choice) {
             case "N":
@@ -139,6 +182,11 @@ public class AppointmentScheduleUI {
         }
     }
 
+    /**
+     * Prompts the user to enter a date for jumping to a specific day in the schedule.
+     *
+     * @return the selected LocalDate, or null if the input is invalid
+     */
     private LocalDate getJumpDate() {
         while (true) {
             System.out.println("\nEnter date (YYYY-MM-DD):");
@@ -165,6 +213,11 @@ public class AppointmentScheduleUI {
         }
     }
     
+    /**
+     * Displays the schedule for the specified appointments on the current date.
+     *
+     * @param appointments the array of appointments to display
+     */
     private void displaySchedule(AppointmentDetail[] appointments) {
         String separator = "+-------+------------------------+".repeat(TOTAL_COLUMNS) + "%n";
         
@@ -175,6 +228,11 @@ public class AppointmentScheduleUI {
         System.out.format(separator);
     }
 
+    /**
+     * Displays the header section of the schedule.
+     *
+     * @param separator the separator string for formatting
+     */
     private void displayHeader(String separator) {
         System.out.format("%n");
         System.out.format(separator);
@@ -186,6 +244,11 @@ public class AppointmentScheduleUI {
         System.out.format(separator);
     }
 
+    /**
+     * Displays the column headers for the schedule.
+     *
+     * @param separator the separator string for formatting
+     */
     private void displayColumnHeaders(String separator) {
         String headerFormat = "| TIME  | %-22s |".repeat(TOTAL_COLUMNS) + "%n";
         System.out.format(headerFormat, 
@@ -197,6 +260,11 @@ public class AppointmentScheduleUI {
         System.out.format(separator);
     }
 
+    /**
+     * Displays the time slots in the schedule and their corresponding appointment details.
+     *
+     * @param appointments the array of appointments to match with time slots
+     */
     private void displayTimeSlots(AppointmentDetail[] appointments) {
         for (int halfHour = 0; halfHour < 12; halfHour++) {
             StringBuilder line = new StringBuilder();
@@ -215,6 +283,13 @@ public class AppointmentScheduleUI {
         }
     }
 
+    /**
+     * Retrieves information about a time slot based on appointments and working hours.
+     *
+     * @param timeSlot the time slot to check
+     * @param appointments the array of appointments to match
+     * @return a string describing the status of the time slot
+     */
     private String getSlotInfo(LocalDateTime timeSlot, AppointmentDetail[] appointments) {
         int currentHour = timeSlot.getHour();
         boolean isWorkHours = currentHour >= startWorkHours && currentHour < endWorkHours;
@@ -228,6 +303,13 @@ public class AppointmentScheduleUI {
         return isWorkHours ? "Available" : "Not Working";
     }
 
+    /**
+     * Finds the appointment that matches a specific time slot.
+     *
+     * @param timeSlot the time slot to match
+     * @param appointments the array of appointments to search
+     * @return the matching appointment, or null if no match is found
+     */
     private AppointmentDetail findAppointmentForTimeSlot(LocalDateTime timeSlot, AppointmentDetail[] appointments) {
         if (appointments != null) {
             for (AppointmentDetail appointment : appointments) {
@@ -239,6 +321,12 @@ public class AppointmentScheduleUI {
         return null;
     }
 
+    /**
+     * Formats the information of an appointment for display.
+     *
+     * @param appointment the appointment to format
+     * @return a string containing the formatted appointment information
+     */
     private String formatAppointmentInfo(AppointmentDetail appointment) {
         if (userRole == UserRole.PATIENT) {
             return "Not Available";

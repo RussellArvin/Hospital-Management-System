@@ -1,13 +1,13 @@
 package controller;
 
+import enums.UserRole;
 import java.util.Scanner;
-
 import model.Administrator;
 import model.Doctor;
+import model.Nurse;
 import model.Patient;
 import model.Pharmacist;
 import model.User;
-import model.Nurse;
 import repository.AdministratorRepository;
 import repository.AppointmentOutcomeRepository;
 import repository.AppointmentRepository;
@@ -35,25 +35,35 @@ import service.UserService;
 import ui.LoginMenuUI;
 import ui.RegisterPatientUI;
 import util.Constant;
-import enums.UserRole;
 
+/**
+ * MainController class responsible for handling the main flow of the application.
+ * Manages login, registration, and navigation between different roles and functionalities.
+ * 
+ * @author Tan Jou Yuan 
+ * @version 1.0
+ */
 public class MainController extends BaseController<LoginMenuUI> {
-    private AuthService authService;
-    private UserService userService;
-    private MedicalRecordService medicalRecordService;
-    private InventoryService inventoryService;
-    private ReplenishmentRequestService replenishmentRequestService;
-    private StaffService staffService;
-    private AppointmentService appointmentService;
-    private AppointmentScheduleService appointmentScheduleService;
-    private AppointmentOutcomeService appointmentOutcomeService;
-    private DoctorService doctorService;
-    private PatientService patientService;
-    private InitialisationService initialisationService;
+    private AuthService authService;  // Handles user authentication
+    private UserService userService;  // Manages user-related operations
+    private MedicalRecordService medicalRecordService;  // Handles medical records
+    private InventoryService inventoryService;  // Manages inventory
+    private ReplenishmentRequestService replenishmentRequestService;  // Handles replenishment requests
+    private StaffService staffService;  // Manages staff-related operations
+    private AppointmentService appointmentService;  // Manages appointments
+    private AppointmentScheduleService appointmentScheduleService;  // Manages appointment schedules
+    private AppointmentOutcomeService appointmentOutcomeService;  // Manages outcomes of appointments
+    private DoctorService doctorService;  // Manages doctor-specific operations
+    private PatientService patientService;  // Manages patient-specific operations
+    private InitialisationService initialisationService;  // Handles initialization of repositories and services
 
-
+    /**
+     * Constructs a MainController and initializes repositories and services.
+     * 
+     * @param scanner Scanner instance for reading user input.
+     */
     public MainController(Scanner scanner) {
-        super(new LoginMenuUI(),scanner);
+        super(new LoginMenuUI(), scanner);
 
         PatientRepository patientRepository = new PatientRepository();
         DoctorRepository doctorRepository = new DoctorRepository();
@@ -73,44 +83,52 @@ public class MainController extends BaseController<LoginMenuUI> {
         this.inventoryService = new InventoryService(medicineRepository);
         this.medicalRecordService = new MedicalRecordService(patientRepository);
         this.replenishmentRequestService = new ReplenishmentRequestService(replenishmentRequestRepository, medicineRepository, pharmacistRepository);
-        this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository,nurseRepository,this.userService);
+        this.staffService = new StaffService(doctorRepository, pharmacistRepository, administratorRepository, patientRepository, nurseRepository, this.userService);
         this.appointmentService = new AppointmentService(appointmentRepository, doctorRepository, patientRepository);
         this.appointmentScheduleService = new AppointmentScheduleService(appointmentService, patientRepository, doctorRepository);
         this.appointmentOutcomeService = new AppointmentOutcomeService(appointmentOutcomeRepository, prescriptionRepository, appointmentRepository, doctorRepository, patientRepository, medicineRepository);
-        this.doctorService = new DoctorService(doctorRepository,appointmentRepository,patientRepository);
+        this.doctorService = new DoctorService(doctorRepository, appointmentRepository, patientRepository);
         this.patientService = new PatientService(patientRepository, appointmentRepository, doctorRepository, medicalRecordRepository, patientVitalRepository);
         this.initialisationService = new InitialisationService(administratorRepository, patientRepository, pharmacistRepository, doctorRepository, nurseRepository, medicineRepository);
     }
 
+    /**
+     * Handles the main input loop for the application, allowing users to log in, register, or exit.
+     */
     public void handleUserInput() {
         initialisationService.initialise();
-        while(true) {
+        while (true) {
             menu.printOptions();
             String choice = scanner.nextLine();
 
-            if(choice.equals("1")){
+            if (choice.equals("1")) {
                 handleLogin(false);
- 
-            }
-            else if(choice.equals("2")){
+            } else if (choice.equals("2")) {
                 handlePatientRegister();
-            }
-            else if(choice.equals("3")){
+            } else if (choice.equals("3")) {
                 handleLogin(true);
-            }
-            else if(choice.equals("4")){
+            } else if (choice.equals("4")) {
                 return;
             } else {
-                System.out.println("Invalid option!");;
+                System.out.println("Invalid option!");
             }
         }
     }
 
-    private void handlePatientRegister(){
+    /**
+     * Initiates the patient registration process.
+     */
+    private void handlePatientRegister() {
         RegisterPatientUI.display(scanner, patientService);
     }
 
-    private void handleLogin(boolean isStaff){
+    /**
+     * Manages the login process, authenticating a user based on their ID and password.
+     * If the password is the default, prompts the user to change it.
+     * 
+     * @param isStaff True if the login is for staff, false otherwise.
+     */
+    private void handleLogin(boolean isStaff) {
         System.out.print("Enter ID: ");
         String id = scanner.nextLine();
 
@@ -118,17 +136,17 @@ public class MainController extends BaseController<LoginMenuUI> {
         String password = scanner.nextLine();
         User user = authService.Login(id, password, isStaff);
 
-        if(user == null) {
+        if (user == null) {
             System.out.println("\nLogin failed. Invalid ID or password.");
             return;
         } else {
             System.out.println("\nLogin Successful");
             System.out.println("Welcome, " + user.getName());
-            if(password.equals(Constant.DEFAULT_PASSWORD)) {
+            if (password.equals(Constant.DEFAULT_PASSWORD)) {
                 System.out.println("Please enter an updated password: ");
                 String updatedPassword = scanner.nextLine();
                 String error = authService.setPassword(user, updatedPassword);
-                if(error != null) {
+                if (error != null) {
                     System.out.println(error);
                     return;
                 }
@@ -137,11 +155,15 @@ public class MainController extends BaseController<LoginMenuUI> {
         }
     }
 
-
+    /**
+     * Directs the logged-in user to the appropriate controller based on their role.
+     * 
+     * @param user The authenticated user whose role is to be handled.
+     */
     private void handleUserRole(User user) {
         UserRole role = userService.determineRole(user);
 
-        switch(role){
+        switch (role) {
             case PATIENT:
                 PatientController patientController = new PatientController(
                     this.scanner,
@@ -165,7 +187,6 @@ public class MainController extends BaseController<LoginMenuUI> {
                     patientService,
                     inventoryService,
                     doctorService
-                    
                 );
                 doctorController.handleUserInput();
                 break;
@@ -193,7 +214,12 @@ public class MainController extends BaseController<LoginMenuUI> {
                 administratorController.handleUserInput();
                 break;
             case NURSE:
-                NurseController nurseController =  new NurseController(scanner, (Nurse) user, patientService, appointmentService);
+                NurseController nurseController = new NurseController(
+                    scanner,
+                    (Nurse) user,
+                    patientService,
+                    appointmentService
+                );
                 nurseController.handleUserInput();
                 break;
             default:

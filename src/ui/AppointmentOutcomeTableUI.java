@@ -1,32 +1,59 @@
 package ui;
 
+import enums.PrescriptionStatus;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 import java.util.Arrays;
-
+import java.util.Scanner;
 import model.AppointmentOutcomeDetail;
 import model.Patient;
 import model.Prescription;
 import model.PrescriptionWithMedicine;
 import service.AppointmentOutcomeService;
-import enums.PrescriptionStatus;
 
+/**
+ * The AppointmentOutcomeTableUI class provides a user interface for managing and displaying
+ * appointment outcomes. It supports viewing details of outcomes, managing prescriptions, 
+ * and handling medicine dispensing.
+ * 
+ * @author Tan Jou Yuan
+ * @version 1.0
+ */
 public class AppointmentOutcomeTableUI {
     private final AppointmentOutcomeService appointmentOutcomeService;
     private AppointmentOutcomeDetail[] outcomes;
     private Patient patient;
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     
+    /**
+     * Constructor for AppointmentOutcomeTableUI.
+     *
+     * @param appointmentOutcomeService the service responsible for managing appointment outcomes
+     * @param patient the patient associated with the outcomes (optional, can be null)
+     */
     public AppointmentOutcomeTableUI(AppointmentOutcomeService appointmentOutcomeService, Patient patient) {
         this.appointmentOutcomeService = appointmentOutcomeService;
         this.patient = patient;
     }
     
+    /**
+     * Refreshes the outcomes data by fetching the latest confirmed outcomes
+     * or completed outcomes for a specific patient.
+     */
     private void refreshOutcomes() {
-        if(patient == null) this.outcomes = appointmentOutcomeService.findAllConfirmed();
-        else this.outcomes = appointmentOutcomeService.findAllPatientCompleted(patient.getId());
+        if(patient == null) {
+            this.outcomes = appointmentOutcomeService.findAllConfirmed();
+        } else {
+            this.outcomes = appointmentOutcomeService.findAllPatientCompleted(patient.getId());
+        }
     }
     
+    /**
+     * Displays the appointment outcomes table and provides options for navigating,
+     * viewing details, and dispensing medicines.
+     *
+     * @param scanner a Scanner object for reading user input
+     * @param isDispensing whether the UI should support dispensing medicines
+     */
     public void display(Scanner scanner, boolean isDispensing) {
         refreshOutcomes();
         
@@ -80,6 +107,11 @@ public class AppointmentOutcomeTableUI {
         }
     }
 
+    /**
+     * Handles viewing the details of a specific appointment outcome.
+     *
+     * @param scanner a Scanner object for reading user input
+     */
     private void handleViewDetails(Scanner scanner) {
         System.out.print("Enter Outcome ID to view details: ");
         String outcomeId = scanner.nextLine();
@@ -115,6 +147,11 @@ public class AppointmentOutcomeTableUI {
         scanner.nextLine();
     }
     
+    /**
+     * Handles dispensing medicine for a specific prescription in an appointment outcome.
+     *
+     * @param scanner a Scanner object for reading user input
+     */
     private void handleDispensing(Scanner scanner) {
         try {
             System.out.print("Enter Outcome ID: ");
@@ -172,6 +209,12 @@ public class AppointmentOutcomeTableUI {
         }
     }
     
+    /**
+     * Finds an appointment outcome by its ID.
+     *
+     * @param outcomeId the ID of the outcome to find
+     * @return the matching AppointmentOutcomeDetail, or null if not found
+     */
     private AppointmentOutcomeDetail findOutcomeById(String outcomeId) {
         return Arrays.stream(outcomes)
             .filter(outcome -> outcome.getId().equals(outcomeId))
@@ -179,6 +222,13 @@ public class AppointmentOutcomeTableUI {
             .orElse(null);
     }
     
+    /**
+     * Finds a prescription by the associated medicine name in a specific appointment outcome.
+     *
+     * @param outcome the appointment outcome containing prescriptions
+     * @param medicineName the name of the medicine to find
+     * @return the matching Prescription, or null if not found
+     */
     private Prescription findPrescriptionByMedicine(AppointmentOutcomeDetail outcome, String medicineName) {
         return Arrays.stream(outcome.getPrescriptions())
             .filter(prescription -> prescription.getMedicine().getName().equalsIgnoreCase(medicineName))
@@ -186,6 +236,12 @@ public class AppointmentOutcomeTableUI {
             .orElse(null);
     }
     
+    /**
+     * Displays the table of appointment outcomes and prescriptions, with pagination.
+     *
+     * @param startIndex the starting index for the current page
+     * @param pageSize the number of items to display per page
+     */
     private void displayTable(int startIndex, int pageSize) {
         String mainSeparator = "+--------------------------------------+----------------------+----------------------+%n";
         String headerFormat = "| %-36s | %-20s | %-20s |%n";
@@ -207,18 +263,14 @@ public class AppointmentOutcomeTableUI {
         
         int displayedOutcomes = 0;
         
-        // Iterate through outcomes based on pagination
         for (int i = startIndex; i < outcomes.length && displayedOutcomes < pageSize; i++) {
             AppointmentOutcomeDetail outcome = outcomes[i];
-            
-            // Print outcome header
             System.out.format(headerFormat,
                 outcome.getId(),
                 outcome.getAppointment().getDoctor().getName(),
                 outcome.getAppointment().getPatient().getName()
             );
             
-            // Print each prescription for this outcome
             PrescriptionWithMedicine[] prescriptions = outcome.getPrescriptions();
             if (prescriptions.length == 0) {
                 System.out.format(prescriptionFormat, "No prescriptions", 0, "N/A");
@@ -232,7 +284,6 @@ public class AppointmentOutcomeTableUI {
                 }
             }
             
-            // Print separator between outcomes
             if (i < outcomes.length - 1 && displayedOutcomes < pageSize - 1) {
                 System.out.format(mainSeparator);
             }
@@ -247,7 +298,6 @@ public class AppointmentOutcomeTableUI {
         System.out.format("Page %d of %d (Total outcomes: %d)%n", 
             currentPage, totalPages, outcomes.length);
         
-        // Add a summary section
         if(patient == null){
             System.out.println("\nSummary of Pending Prescriptions:");
             for (AppointmentOutcomeDetail outcome : outcomes) {

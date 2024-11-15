@@ -1,15 +1,33 @@
 package ui;
 
+import enums.ReplenishmentRequestStatus;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
 import model.ReplenishmentRequestDetail;
 import service.InventoryService;
 import service.ReplenishmentRequestService;
-import enums.ReplenishmentRequestStatus;
 
+/**
+ * The ReplenishmentRequestTableUI class provides a user interface for managing and displaying
+ * replenishment requests. It supports viewing, filtering, creating, approving, and rejecting
+ * replenishment requests based on the user's role (admin or pharmacist).
+ * 
+ * @author Russell Arvin 
+ * @version 1.0
+ */
 public class ReplenishmentRequestTableUI {
-    
+
+    /**
+     * Displays the replenishment request table and provides options for managing requests.
+     *
+     * @param requests          the list of replenishment requests to display
+     * @param scanner           the Scanner object used to capture user input
+     * @param isAdmin           a boolean indicating whether the user has administrative privileges
+     * @param requestService    the service used to manage replenishment requests
+     * @param inventoryService  the service used to manage inventory-related actions
+     * @param userId            the ID of the user accessing the table
+     */
     public static void display(
         ReplenishmentRequestDetail[] requests, 
         Scanner scanner, 
@@ -21,7 +39,7 @@ public class ReplenishmentRequestTableUI {
         final int PAGE_SIZE = 10;
         int currentIndex = 0;
         ReplenishmentRequestDetail[] filteredRequests = requests;
-        
+
         while (true) {
             System.out.print("\033[H\033[2J");
             System.out.flush();
@@ -50,20 +68,18 @@ public class ReplenishmentRequestTableUI {
                         currentIndex += PAGE_SIZE;
                     }
                     break;
-                    
                 case "P":
                     if (currentIndex - PAGE_SIZE >= 0) {
                         currentIndex -= PAGE_SIZE;
                     }
                     break;
-                    
                 case "A":
                     if (isAdmin) {
                         System.out.print("Enter request ID to approve: ");
                         String approveId = scanner.nextLine();
                         
                         String error = requestService.updateRequestStatus(approveId, ReplenishmentRequestStatus.APPROVED);
-                        if(error != null) {
+                        if (error != null) {
                             System.out.println("Error: " + error);
                             System.out.println("Press Enter to continue...");
                             scanner.nextLine();
@@ -72,14 +88,13 @@ public class ReplenishmentRequestTableUI {
                         }
                     }
                     break;
-                    
                 case "R":
                     if (isAdmin) {
                         System.out.print("Enter request ID to reject: ");
                         String rejectId = scanner.nextLine();
                         
                         String error = requestService.updateRequestStatus(rejectId, ReplenishmentRequestStatus.REJECTED);
-                        if(error != null) {
+                        if (error != null) {
                             System.out.println("Error: " + error);
                             System.out.println("Press Enter to continue...");
                             scanner.nextLine();
@@ -88,39 +103,40 @@ public class ReplenishmentRequestTableUI {
                         }
                     }
                     break;
-
                 case "C":
                     if (!isAdmin) {
                         createRequest(requestService, inventoryService, scanner, userId);
-                        // Refresh requests list after creation
                         filteredRequests = requests = requestService.getPharmacistRequests(userId);
                     }
                     break;
-
                 case "F":
                     if (!isAdmin) {
                         filteredRequests = filterByStatus(requests, scanner);
                         currentIndex = 0;
                     }
                     break;
-
                 case "X":
                     if (!isAdmin) {
                         filteredRequests = requests;
                         currentIndex = 0;
                     }
                     break;
-                    
                 case "Q":
                     return;
-                    
                 default:
                     System.out.println("Invalid option. Press Enter to continue...");
                     scanner.nextLine();
             }
         }
     }
-    
+
+    /**
+     * Displays the table of replenishment requests with pagination.
+     *
+     * @param requests  the list of replenishment requests to display
+     * @param startIndex the starting index for the current page
+     * @param pageSize  the number of entries to display per page
+     */
     private static void displayTable(ReplenishmentRequestDetail[] requests, int startIndex, int pageSize) {
         String format = "| %-36s | %-20s | %-20s | %-11s | %-10s | %-19s | %-19s |%n";
         String separator = "+--------------------------------------+----------------------+----------------------+-------------+------------+---------------------+---------------------+%n";
@@ -168,6 +184,13 @@ public class ReplenishmentRequestTableUI {
         }
     }
 
+    /**
+     * Filters the list of requests by status based on user input.
+     *
+     * @param requests the list of requests to filter
+     * @param scanner  the Scanner object used to capture user input
+     * @return the filtered list of requests
+     */
     private static ReplenishmentRequestDetail[] filterByStatus(ReplenishmentRequestDetail[] requests, Scanner scanner) {
         System.out.println("\nSelect status to filter by:");
         System.out.println("1. " + ReplenishmentRequestStatus.PENDING);
@@ -196,10 +219,17 @@ public class ReplenishmentRequestTableUI {
             .filter(request -> request.getStatus() == targetStatus)
             .toArray(ReplenishmentRequestDetail[]::new);
     }
-    
+
+    /**
+     * Creates a new replenishment request for a medicine.
+     *
+     * @param requestService   the service used to manage replenishment requests
+     * @param inventoryService the service used to manage inventory-related actions
+     * @param scanner          the Scanner object used to capture user input
+     * @param userId           the ID of the user creating the request
+     */
     private static void createRequest(ReplenishmentRequestService requestService, InventoryService inventoryService, Scanner scanner, String userId) {
         try {
-            // Get medicine name from user
             System.out.print("\nEnter medicine name: ");
             String medicineName = scanner.nextLine().trim();
             
@@ -210,7 +240,6 @@ public class ReplenishmentRequestTableUI {
                 return;
             }
             
-            // Get medicine ID from service
             String medicineId = inventoryService.getMedicineId(medicineName);
             if (medicineId == null) {
                 System.out.println("Error: Medicine not found");
@@ -219,7 +248,6 @@ public class ReplenishmentRequestTableUI {
                 return;
             }
             
-            // Get new amount from user
             System.out.print("Enter requested amount: ");
             int newAmount;
             try {
@@ -242,14 +270,12 @@ public class ReplenishmentRequestTableUI {
                 return;
             }
             
-            // Confirm request
             System.out.println("\nRequest Summary:");
             System.out.println("Medicine: " + medicineName);
             System.out.println("Amount: " + newAmount);
             System.out.print("Confirm request? (Y/N): ");
             
             if (scanner.nextLine().toUpperCase().equals("Y")) {
-                // Create the request
                 String error = requestService.createRequest(medicineId, userId, newAmount);
                 
                 if (error != null) {
@@ -263,7 +289,6 @@ public class ReplenishmentRequestTableUI {
             
             System.out.println("Press Enter to continue...");
             scanner.nextLine();
-            
         } catch (Exception e) {
             System.out.println("Error: An unexpected error occurred");
             System.out.println("Press Enter to continue...");

@@ -1,16 +1,15 @@
 package ui;
 
+import enums.AppointmentAction;
+import enums.AppointmentServiceType;
+import enums.AppointmentStatus;
+import enums.UserRole;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import enums.AppointmentAction;
-import enums.AppointmentServiceType;
-import enums.AppointmentStatus;
-import enums.UserRole;
 import model.AppointmentDetail;
 import model.PendingPrescription;
 import model.User;
@@ -18,6 +17,20 @@ import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
 import service.InventoryService;
+
+/**
+     * Constructs an AppointmentTableUI instance with the required dependencies.
+     *
+     * @param appointmentService           the appointment service for managing appointments
+     * @param appointmentScheduleService   the service for scheduling appointments
+     * @param appointmentOutcomeService    the service for recording appointment outcomes
+     * @param inventoryService             the inventory service for managing medicines
+     * @param user                         the current user interacting with the UI
+     * @param role                         the role of the current user
+     * 
+     * @author Celeste Ho 
+     * @version 1.0 
+     */
 
 public class AppointmentTableUI {
     private final AppointmentService appointmentService;
@@ -46,7 +59,13 @@ public class AppointmentTableUI {
         this.action = null;
         //refreshAppointments(); // Load initial data
     }
-    
+
+    /**
+     * Displays the appointment table and handles user interactions for the specified action.
+     *
+     * @param scanner the Scanner instance for reading user input
+     * @param action  the action to be performed on the appointments
+     */
     public void display(Scanner scanner, AppointmentAction action) {
         final int PAGE_SIZE = 10;
         int currentIndex = 0;
@@ -138,6 +157,12 @@ public class AppointmentTableUI {
         }
     }
 
+    /**
+     * Finds an appointment by its ID.
+     *
+     * @param appointmentId the ID of the appointment
+     * @return the matching AppointmentDetail, or null if not found
+     */
     private AppointmentDetail findAppointmentById(String appointmentId) {
         return Arrays.stream(appointments)
             .filter(app -> app.getId().equals(appointmentId))
@@ -145,6 +170,11 @@ public class AppointmentTableUI {
             .orElse(null);
     }
 
+    /**
+     * Handles recording the outcome of an appointment.
+     *
+     * @param scanner the Scanner instance for reading user input
+     */
     private void handleOutcome(Scanner scanner) {
         try {
             System.out.print("Enter appointment ID: ");
@@ -244,6 +274,11 @@ public class AppointmentTableUI {
         }
     }
     
+    /**
+     * Handles rescheduling an appointment.
+     *
+     * @param scanner the Scanner instance for reading user input
+     */
     private void handleReschedule(Scanner scanner) {
         try {
             System.out.print("Enter appointment ID to reschedule: ");
@@ -284,7 +319,11 @@ public class AppointmentTableUI {
         }
     }
     
-    
+    /**
+     * Handles approving an appointment.
+     *
+     * @param scanner the Scanner instance for reading user input
+     */
     private void handleApprove(Scanner scanner) {
         System.out.print("Enter appointment ID to approve: ");
         String appointmentId = scanner.nextLine();
@@ -299,6 +338,11 @@ public class AppointmentTableUI {
         }
     }
 
+    /**
+     * Handles cancelling an appointment.
+     *
+     * @param scanner the Scanner instance for reading user input
+     */
     private void handleCancel(Scanner scanner) {
         System.out.print("Enter appointment ID to approve: ");
         String appointmentId = scanner.nextLine();
@@ -313,6 +357,11 @@ public class AppointmentTableUI {
         }
     }
     
+    /**
+     * Handles rejecting an appointment with a reason.
+     *
+     * @param scanner the Scanner instance for reading user input
+     */
     private void handleReject(Scanner scanner) {
         System.out.print("Enter appointment ID to deny: ");
         String appointmentId = scanner.nextLine();
@@ -330,6 +379,9 @@ public class AppointmentTableUI {
         }
     }
 
+    /**
+     * Refreshes the list of appointments based on the current user's role and action.
+     */
     private void refreshAppointments() {
         if(role == UserRole.PATIENT){
             switch (action) {
@@ -368,6 +420,12 @@ public class AppointmentTableUI {
         this.appointments = null;
     }
     
+    /**
+     * Displays a paginated table of appointments.
+     *
+     * @param startIndex the starting index for pagination
+     * @param pageSize   the number of appointments to display per page
+     */
     private void displayTable(int startIndex, int pageSize) {
         String format = "| %-36s | %-20s | %-20s | %-19s | %-19s |%n";
         String separator = "+--------------------------------------+----------------------+----------------------+---------------------+---------------------+%n";
