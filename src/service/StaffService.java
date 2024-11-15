@@ -1,14 +1,13 @@
 package service;
 
-import java.time.LocalDateTime;
-
 import enums.Gender;
 import enums.UserRole;
+import java.time.LocalDateTime;
 import model.Administrator;
 import model.Doctor;
+import model.Nurse;
 import model.Pharmacist;
 import model.User;
-import model.Nurse;
 import repository.AdministratorRepository;
 import repository.DoctorRepository;
 import repository.NurseRepository;
@@ -17,6 +16,14 @@ import repository.PharmacistRepository;
 import util.Constant;
 import util.PasswordUtil;
 
+/**
+ * The StaffService class provides functionality to manage staff data such as doctors, pharmacists,
+ * administrators, and nurses. It allows operations like retrieving staff details, adding new staff,
+ * removing staff, and updating staff attributes like name, password, and age.
+ * 
+ * @author Celeste Ho 
+ * @version 1.0
+ */
 public class StaffService {
     private DoctorRepository doctorRepository;
     private PharmacistRepository pharmacistRepository;
@@ -24,6 +31,16 @@ public class StaffService {
     private NurseRepository nurseRepository;
     private UserService userService;
 
+    /**
+     * Constructs a StaffService with the required repositories.
+     *
+     * @param doctorRepository          Repository for managing doctor data.
+     * @param pharmacistRepository      Repository for managing pharmacist data.
+     * @param administratorRepository   Repository for managing administrator data.
+     * @param patientRepository         Repository for managing patient data (not used here).
+     * @param nurseRepository           Repository for managing nurse data.
+     * @param userService               Service for managing general user data.
+     */
     public StaffService(
         DoctorRepository doctorRepository,
         PharmacistRepository pharmacistRepository,
@@ -39,6 +56,11 @@ public class StaffService {
         this.userService = userService;
     }
 
+    /**
+     * Retrieves all staff data including doctors, pharmacists, administrators, and nurses.
+     *
+     * @return An array of User objects representing all staff members.
+     */
     public User[] getAllStaffData() {
         Doctor[] doctors = this.doctorRepository.findAll();
         Pharmacist[] pharmacists = this.pharmacistRepository.findAll();
@@ -47,7 +69,6 @@ public class StaffService {
     
         User[] staff = new User[doctors.length + pharmacists.length + administrators.length + nurses.length];
     
-        // Copy all arrays
         System.arraycopy(doctors, 0, staff, 0, doctors.length);
         System.arraycopy(pharmacists, 0, staff, doctors.length, pharmacists.length);
         System.arraycopy(administrators, 0, staff, doctors.length + pharmacists.length, administrators.length);
@@ -56,17 +77,32 @@ public class StaffService {
         return staff;
     }
 
-    public String removeUser(String userId){
-        try{
-            User user = userService.findOne(userId,false, true);
+    /**
+     * Removes a user by their ID.
+     *
+     * @param userId The ID of the user to remove.
+     * @return null if successful, otherwise an error message.
+     */
+    public String removeUser(String userId) {
+        try {
+            User user = userService.findOne(userId, false, true);
             userService.removeUser(user);
             return null;
-        }
-        catch(Error e){
+        } catch (Error e) {
             return "Something went wrong when removing the user!";
         }
     }
 
+    /**
+     * Adds a new user with the specified details.
+     *
+     * @param id     The ID of the new user.
+     * @param role   The role of the new user (PHARMACIST, ADMINISTRATOR, DOCTOR, or NURSE).
+     * @param name   The name of the new user.
+     * @param age    The age of the new user.
+     * @param gender The gender of the new user.
+     * @return null if successful, otherwise an error message.
+     */
     public String addUser(
         String id,
         UserRole role,
@@ -74,12 +110,12 @@ public class StaffService {
         int age,
         Gender gender
     ) {
-        try{
+        try {
             byte[] salt = PasswordUtil.generateSalt();
             String hashedPassword = PasswordUtil.hashPassword(Constant.DEFAULT_PASSWORD, salt);
             LocalDateTime currentDate = LocalDateTime.now();
 
-            switch(role){
+            switch (role) {
                 case PHARMACIST:
                     Pharmacist pharmacist = new Pharmacist(
                         id,
@@ -135,12 +171,18 @@ public class StaffService {
             }
             return null;
 
-        } catch(Exception e){
+        } catch (Exception e) {
             return "Something went wrong when creating a user";
         }
     }
 
-    public boolean isDuplicateId(String id){
+    /**
+     * Checks if a user ID is already in use.
+     *
+     * @param id The user ID to check.
+     * @return true if the ID is already in use, false otherwise.
+     */
+    public boolean isDuplicateId(String id) {
         Administrator admin = administratorRepository.findOne(id);
         if (admin != null) return true;
 
@@ -151,41 +193,61 @@ public class StaffService {
         if (pharmacist != null) return true;
 
         Nurse nurse = nurseRepository.findOne(id);
-        if(nurse != null) return true;
+        if (nurse != null) return true;
 
         return false;
     }
 
-    public String updateUserName(String userId, String name){
-        try{
-            User user = userService.findOne(userId,false,true);
+    /**
+     * Updates the name of a user by their ID.
+     *
+     * @param userId The ID of the user to update.
+     * @param name   The new name for the user.
+     * @return null if successful, otherwise an error message.
+     */
+    public String updateUserName(String userId, String name) {
+        try {
+            User user = userService.findOne(userId, false, true);
             user.setName(name);
             userService.updateUser(user);
             return null;
-        } catch(Error e){
+        } catch (Error e) {
             return "Something went wrong when updating the user!";
         }
     }
 
-    public String updateUserPassword(String userId, String password){
-        try{
+    /**
+     * Updates the password of a user by their ID.
+     *
+     * @param userId   The ID of the user to update.
+     * @param password The new password for the user.
+     * @return null if successful, otherwise an error message.
+     */
+    public String updateUserPassword(String userId, String password) {
+        try {
             User user = userService.findOne(userId, false, true);
             user.setPassword(password);
             userService.updateUser(user);
             return null;
-        } catch(Exception e){
+        } catch (Exception e) {
             return "Something went wrong when updating the password!";
         }
-
     }
 
-    public String updateUserAge(String userId, int age){
-        try{
-            User user = userService.findOne(userId,false,true);
+    /**
+     * Updates the age of a user by their ID.
+     *
+     * @param userId The ID of the user to update.
+     * @param age    The new age for the user.
+     * @return null if successful, otherwise an error message.
+     */
+    public String updateUserAge(String userId, int age) {
+        try {
+            User user = userService.findOne(userId, false, true);
             user.setAge(age);
             userService.updateUser(user);
             return null;
-        } catch(Exception e){
+        } catch (Exception e) {
             return "Something went wrong when updating the age!";
         }
     }
