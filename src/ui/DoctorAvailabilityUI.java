@@ -1,11 +1,28 @@
 package ui;
 
 import java.util.Scanner;
-import service.DoctorService;
 import model.Doctor;
+import service.DoctorService;
 import validator.InputValidator;
 
+/**
+ * The DoctorAvailabilityUI class provides a user interface for setting a doctor's availability.
+ * It allows the user to input start and end working hours, validates the inputs, and updates the doctor's availability.
+ * 
+ * @author Tan Jou Yuan 
+ * @version 1.0
+ */
 public class DoctorAvailabilityUI {
+
+    /**
+     * Displays the user interface for setting the availability of a doctor.
+     * Prompts the user to input start and end working hours, validates the inputs,
+     * and updates the doctor's availability through the DoctorService.
+     *
+     * @param scanner       the Scanner object used to capture user input
+     * @param doctorService the service used to manage doctor-related actions
+     * @param doctor        the doctor whose availability is being updated
+     */
     public static void display(Scanner scanner, DoctorService doctorService, Doctor doctor) {
         // Define formatting
         String leftAlignFormat = "| %-30s |%n";
@@ -30,7 +47,7 @@ public class DoctorAvailabilityUI {
         while (startWorkHours == -1) {
             System.out.format(leftAlignFormat, "Enter start hour (0-23):");
             startHoursStr = scanner.nextLine().trim();
-            
+
             if (InputValidator.validateWorkingHours(startHoursStr)) {
                 startWorkHours = Integer.parseInt(startHoursStr);
             } else {
@@ -45,7 +62,7 @@ public class DoctorAvailabilityUI {
         while (endWorkHours == -1) {
             System.out.format(leftAlignFormat, "Enter end hour (0-23):");
             endHoursStr = scanner.nextLine().trim();
-            
+
             if (InputValidator.validateWorkingHours(endHoursStr)) {
                 endWorkHours = Integer.parseInt(endHoursStr);
                 if (endWorkHours <= startWorkHours) {
@@ -66,7 +83,7 @@ public class DoctorAvailabilityUI {
 
         // Update availability
         String result = doctorService.setAvailability(doctor.getId(), startWorkHours, endWorkHours);
-        
+
         if (result == null) {
             System.out.format(leftAlignFormat, "Availability updated successfully!");
         } else {
