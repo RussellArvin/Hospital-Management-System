@@ -13,14 +13,14 @@ import repository.AppointmentRepository;
 import repository.DoctorRepository;
 import repository.MedicalRecordRepository;
 import repository.MedicineRepository;
-import repository.NurseRepository;
 import repository.PatientRepository;
 import repository.PatientVitalRepository;
-import repository.PharmacistRepository;
 import repository.PrescriptionRepository;
 import repository.ReplenishmentRequestRepository;
 import repository.base.CsvRepository;
 import repository.mapper.AdministratorMapper;
+import repository.mapper.NurseMapper;
+import repository.mapper.PharmacistMapper;
 import service.AppointmentOutcomeService;
 import service.AppointmentScheduleService;
 import service.AppointmentService;
@@ -68,20 +68,29 @@ public class MainController extends BaseController<LoginMenuUI> {
 
         PatientRepository patientRepository = new PatientRepository();
         DoctorRepository doctorRepository = new DoctorRepository();
-        PharmacistRepository pharmacistRepository = new PharmacistRepository();
         MedicineRepository medicineRepository = new MedicineRepository();
         ReplenishmentRequestRepository replenishmentRequestRepository = new ReplenishmentRequestRepository();
         AppointmentRepository appointmentRepository = new AppointmentRepository();
         AppointmentOutcomeRepository appointmentOutcomeRepository = new AppointmentOutcomeRepository();
         PrescriptionRepository prescriptionRepository = new PrescriptionRepository();
         MedicalRecordRepository medicalRecordRepository = new MedicalRecordRepository();
-        NurseRepository nurseRepository = new NurseRepository();
         PatientVitalRepository patientVitalRepository = new PatientVitalRepository();
 
         CsvRepository<Administrator,AdministratorMapper> administratorRepository = new CsvRepository<Administrator,AdministratorMapper>(
             "data/administrators.csv",
             "id,password,salt,name,age,gendercreatedAt,updatedAt",
             new AdministratorMapper()
+        );
+        
+        CsvRepository<Nurse, NurseMapper> nurseRepository = new CsvRepository<Nurse,NurseMapper>(
+            "data/nurses.csv",
+            "id,password,salt,name,age,gender,createdAt,updatedAt",
+            new NurseMapper()
+        );
+        CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository = new CsvRepository<Pharmacist, PharmacistMapper>(
+            "data/pharmacists.csv",
+            "id,password,salt,name,age,gender,createdAt,updatedAt",
+            new PharmacistMapper()
         );
 
         this.userService = new UserService(administratorRepository, pharmacistRepository, doctorRepository, patientRepository, nurseRepository);

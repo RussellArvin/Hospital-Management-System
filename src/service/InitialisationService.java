@@ -4,6 +4,8 @@ import model.*;
 import repository.*;
 import repository.base.CsvRepository;
 import repository.mapper.AdministratorMapper;
+import repository.mapper.NurseMapper;
+import repository.mapper.PharmacistMapper;
 import util.*;
 import enums.*;
 import java.time.*;
@@ -32,9 +34,9 @@ public class InitialisationService {
 
     private final  CsvRepository<Administrator,AdministratorMapper>administratorRepository;
     private final PatientRepository patientRepository;
-    private final PharmacistRepository pharmacistRepository;
+    private final CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository;
     private final DoctorRepository doctorRepository;
-    private final NurseRepository nurseRepository;
+    private final CsvRepository<Nurse, NurseMapper> nurseRepository;
     private final MedicineRepository medicineRepository;
 
     /**
@@ -50,9 +52,9 @@ public class InitialisationService {
     public InitialisationService(
             CsvRepository<Administrator,AdministratorMapper> administratorRepository,
             PatientRepository patientRepository,
-            PharmacistRepository pharmacistRepository,
+            CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository,
             DoctorRepository doctorRepository,
-            NurseRepository nurseRepository,
+            CsvRepository<Nurse, NurseMapper> nurseRepository,
             MedicineRepository medicineRepository) {
         this.administratorRepository = administratorRepository;
         this.patientRepository = patientRepository;
