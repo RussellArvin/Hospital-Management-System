@@ -78,18 +78,18 @@ public class MainController extends BaseController<LoginMenuUI> {
 
         CsvRepository<Administrator,AdministratorMapper> administratorRepository = new CsvRepository<Administrator,AdministratorMapper>(
             "data/administrators.csv",
-            "id,password,salt,name,age,gendercreatedAt,updatedAt",
+            Constant.DEFAULT_STAFF_CSV_HEADER,
             new AdministratorMapper()
         );
         
         CsvRepository<Nurse, NurseMapper> nurseRepository = new CsvRepository<Nurse,NurseMapper>(
             "data/nurses.csv",
-            "id,password,salt,name,age,gender,createdAt,updatedAt",
+            Constant.DEFAULT_STAFF_CSV_HEADER,
             new NurseMapper()
         );
         CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository = new CsvRepository<Pharmacist, PharmacistMapper>(
             "data/pharmacists.csv",
-            "id,password,salt,name,age,gender,createdAt,updatedAt",
+            Constant.DEFAULT_STAFF_CSV_HEADER,
             new PharmacistMapper()
         );
 
