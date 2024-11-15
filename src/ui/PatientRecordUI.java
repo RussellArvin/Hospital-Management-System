@@ -1,5 +1,6 @@
 package ui;
 
+import enums.MedicalRecordType;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -7,9 +8,27 @@ import model.MedicalRecord;
 import model.MedicalRecordDetail;
 import model.Patient;
 import model.PatientVital;
-import enums.MedicalRecordType;
 
+/**
+ * The PatientRecordUI class provides a user interface for displaying a patient's medical record.
+ * It organizes and presents various details such as personal information, contact details, vital signs, 
+ * diagnoses, and treatments in a formatted structure.
+ * 
+ * @author Celeste Ho 
+ * @version 1.0
+ */
 public class PatientRecordUI {
+
+    /**
+     * Displays the patient's medical record.
+     * This includes personal details, contact information, vital signs, diagnoses, and treatments. 
+     * The data is presented in a structured and formatted manner for easy readability.
+     *
+     * @param patient the Patient object containing personal and medical information
+     * @param scanner the Scanner object used to capture user input
+     * @param records an array of MedicalRecordDetail objects representing the patient's medical history
+     * @param vital   the PatientVital object containing the patient's vital signs
+     */
     public static void display(Patient patient, Scanner scanner, MedicalRecordDetail[] records, PatientVital vital) {
         // Define column widths and formats
         String leftAlignFormat = "| %-15s | %-30s |%n";
