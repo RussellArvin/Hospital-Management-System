@@ -24,14 +24,4 @@ public class AdministratorRepository extends CsvRepository<Administrator, Admini
     public AdministratorRepository() {
         super(CSV_FILE, CSV_HEADER, new AdministratorMapper());
     }
-
-    /**
-     * Retrieves all Administrator records from the CSV file.
-     *
-     * @return An array of all Administrator objects in the repository.
-     */
-    @Override
-    public Administrator[] findAll() {
-        return super.findAll(Administrator.class);
-    }
 }

@@ -27,16 +27,6 @@ public class MedicalRecordRepository extends CsvRepository<MedicalRecord, Medica
     }
 
     /**
-     * Retrieves all MedicalRecord records from the CSV file.
-     *
-     * @return An array of all MedicalRecord objects in the repository.
-     */
-    @Override
-    public MedicalRecord[] findAll() {
-        return super.findAll(MedicalRecord.class);
-    }
-
-    /**
      * Finds and returns multiple MedicalRecord records associated with the specified patient ID.
      *
      * @param patientId The patient ID to search for.

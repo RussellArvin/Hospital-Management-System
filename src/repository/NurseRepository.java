@@ -24,14 +24,4 @@ public class NurseRepository extends CsvRepository<Nurse, NurseMapper> {
     public NurseRepository() {
         super(CSV_FILE, CSV_HEADER, new NurseMapper());
     }
-
-    /**
-     * Retrieves all Nurse records from the CSV file.
-     *
-     * @return An array of all Nurse objects in the repository.
-     */
-    @Override
-    public Nurse[] findAll() {
-        return super.findAll(Nurse.class);
-    }
 }

@@ -24,14 +24,4 @@ public class PharmacistRepository extends CsvRepository<Pharmacist, PharmacistMa
     public PharmacistRepository() {
         super(CSV_FILE, CSV_HEADER, new PharmacistMapper());
     }
-
-    /**
-     * Retrieves all Pharmacist records from the CSV file.
-     *
-     * @return An array of all Pharmacist objects in the repository.
-     */
-    @Override
-    public Pharmacist[] findAll() {
-        return super.findAll(Pharmacist.class);
-    }
 }

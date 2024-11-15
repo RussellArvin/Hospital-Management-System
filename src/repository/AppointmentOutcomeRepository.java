@@ -39,15 +39,6 @@ public class AppointmentOutcomeRepository extends CsvRepository<AppointmentOutco
         return mapper.fromCsvString(line);
     }
 
-    /**
-     * Retrieves all AppointmentOutcome records from the CSV file.
-     *
-     * @return An array of all AppointmentOutcome objects in the repository.
-     */
-    @Override
-    public AppointmentOutcome[] findAll() {
-        return super.findAll(AppointmentOutcome.class);
-    }
 
     /**
      * Finds and returns multiple AppointmentOutcome records associated with the specified patient ID.

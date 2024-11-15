@@ -26,16 +26,6 @@ public class MedicineRepository extends CsvRepository<Medicine, MedicineMapper> 
     }
 
     /**
-     * Retrieves all Medicine records from the CSV file.
-     *
-     * @return An array of all Medicine objects in the repository.
-     */
-    @Override
-    public Medicine[] findAll() {
-        return super.findAll(Medicine.class);
-    }
-
-    /**
      * Finds and returns a Medicine record by the specified name.
      *
      * @param name The name of the medicine to search for.

@@ -27,16 +27,6 @@ public class PrescriptionRepository extends CsvRepository<Prescription, Prescrip
     }
 
     /**
-     * Retrieves all Prescription records from the CSV file.
-     *
-     * @return An array of all Prescription objects in the repository.
-     */
-    @Override
-    public Prescription[] findAll() {
-        return super.findAll(Prescription.class);
-    }
-
-    /**
      * Finds and returns multiple Prescription records associated with the specified appointment outcome ID.
      *
      * @param outcomeId The appointment outcome ID to search for.

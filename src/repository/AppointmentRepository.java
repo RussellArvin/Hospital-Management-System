@@ -27,15 +27,6 @@ public class AppointmentRepository extends CsvRepository<Appointment, Appointmen
         super(CSV_FILE, CSV_HEADER, new AppointmentMapper());
     }
 
-    /**
-     * Retrieves all Appointment records from the CSV file.
-     *
-     * @return An array of all Appointment objects in the repository.
-     */
-    @Override
-    public Appointment[] findAll() {
-        return super.findAll(Appointment.class);
-    }
 
     /**
      * Finds and returns multiple Appointment records associated with the specified doctor ID.
