@@ -27,16 +27,6 @@ public class PatientVitalRepository extends CsvRepository<PatientVital, PatientV
     }
 
     /**
-     * Retrieves all PatientVital records from the CSV file.
-     *
-     * @return An array of all PatientVital objects in the repository.
-     */
-    @Override
-    public PatientVital[] findAll() {
-        return super.findAll(PatientVital.class);
-    }
-
-    /**
      * Finds and returns multiple PatientVital records associated with the specified patient ID.
      *
      * @param patientId The patient ID to search for.

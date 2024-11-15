@@ -1,6 +1,7 @@
 package repository.base;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ import repository.mapper.BaseMapper;
  * @author Celeste Ho 
  * @version 1.0 
  */
-public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T>> {
+public class CsvRepository<T extends BaseEntity, M extends BaseMapper<T>> {
 
     protected final CsvFileManager fileManager;
     protected final M mapper;
@@ -30,7 +31,7 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
      * @param header   The CSV header for the file.
      * @param mapper   The mapper for converting CSV data to entities and vice versa.
      */
-    protected CsvRepository(String filePath, String header, M mapper) {
+    public CsvRepository(String filePath, String header, M mapper) {
         this.fileManager = new CsvFileManager(filePath, header);
         this.mapper = mapper;
     }
@@ -110,11 +111,18 @@ public abstract class CsvRepository<T extends BaseEntity, M extends BaseMapper<T
     }
 
     /**
-     * Abstract method to find and return all entities as an array.
+     * Finds and returns all entities from the CSV file as an array of type T.
      *
-     * @return An array of all entities.
+     * @return An array containing all entities from the CSV file
      */
-    public abstract T[] findAll();
+    public T[] findAll() {
+        List<String> lines = this.fileManager.readAllLines();
+        @SuppressWarnings("unchecked")
+        Class<T> entityClass = (Class<T>) ((ParameterizedType)mapper.getClass().getGenericInterfaces()[0])
+            .getActualTypeArguments()[0];
+        return mapLines(lines, entityClass);
+    }
+
 
     /**
      * Updates an existing entity in the CSV file. Throws an exception if the entity is not found.

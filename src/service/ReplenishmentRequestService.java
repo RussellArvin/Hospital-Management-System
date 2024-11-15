@@ -6,8 +6,9 @@ import model.Pharmacist;
 import model.ReplenishmentRequest;
 import model.ReplenishmentRequestDetail;
 import repository.MedicineRepository;
-import repository.PharmacistRepository;
 import repository.ReplenishmentRequestRepository;
+import repository.base.CsvRepository;
+import repository.mapper.PharmacistMapper;
 
 /**
  * The ReplenishmentRequestService class provides functionality for managing 
@@ -20,7 +21,7 @@ import repository.ReplenishmentRequestRepository;
 public class ReplenishmentRequestService {
     private ReplenishmentRequestRepository replenishmentRequestRepository;
     private MedicineRepository medicineRepository;
-    private PharmacistRepository pharmacistRepository;
+    private CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository;
 
     /**
      * Constructs a ReplenishmentRequestService with the required repositories.
@@ -32,7 +33,7 @@ public class ReplenishmentRequestService {
     public ReplenishmentRequestService(
         ReplenishmentRequestRepository replenishmentRequestRepository,
         MedicineRepository medicineRepository,
-        PharmacistRepository pharmacistRepository
+        CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository
     ) {
         this.replenishmentRequestRepository = replenishmentRequestRepository;
         this.medicineRepository = medicineRepository;

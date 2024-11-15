@@ -26,16 +26,6 @@ public class DoctorRepository extends CsvRepository<Doctor, DoctorMapper> {
     }
 
     /**
-     * Retrieves all Doctor records from the CSV file.
-     *
-     * @return An array of all Doctor objects in the repository.
-     */
-    @Override
-    public Doctor[] findAll() {
-        return super.findAll(Doctor.class);
-    }
-
-    /**
      * Finds and returns a Doctor record by the specified name.
      *
      * @param name The name of the doctor to search for.

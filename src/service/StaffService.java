@@ -8,11 +8,12 @@ import model.Doctor;
 import model.Nurse;
 import model.Pharmacist;
 import model.User;
-import repository.AdministratorRepository;
 import repository.DoctorRepository;
-import repository.NurseRepository;
 import repository.PatientRepository;
-import repository.PharmacistRepository;
+import repository.base.CsvRepository;
+import repository.mapper.AdministratorMapper;
+import repository.mapper.NurseMapper;
+import repository.mapper.PharmacistMapper;
 import util.Constant;
 import util.PasswordUtil;
 
@@ -26,9 +27,9 @@ import util.PasswordUtil;
  */
 public class StaffService {
     private DoctorRepository doctorRepository;
-    private PharmacistRepository pharmacistRepository;
-    private AdministratorRepository administratorRepository;
-    private NurseRepository nurseRepository;
+    private CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository;
+    private CsvRepository<Administrator,AdministratorMapper> administratorRepository;
+    private CsvRepository<Nurse, NurseMapper> nurseRepository;
     private UserService userService;
 
     /**
@@ -43,10 +44,10 @@ public class StaffService {
      */
     public StaffService(
         DoctorRepository doctorRepository,
-        PharmacistRepository pharmacistRepository,
-        AdministratorRepository administratorRepository,
+        CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository,
+        CsvRepository<Administrator,AdministratorMapper> administratorRepository,
         PatientRepository patientRepository,
-        NurseRepository nurseRepository,
+        CsvRepository<Nurse, NurseMapper> nurseRepository,
         UserService userService
     ) {
         this.doctorRepository = doctorRepository;

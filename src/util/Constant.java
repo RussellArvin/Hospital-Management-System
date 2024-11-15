@@ -23,4 +23,9 @@ public class Constant {
      * The default ending hour of work for staff members (in 24-hour format). 
      */
     public static final int DEFAULT_END_WORK_HOURS = 17;
+
+    /**
+     *  The default CSV headers for staff CSV files
+     */
+    public static final String DEFAULT_STAFF_CSV_HEADER = "id,password,salt,name,age,gendercreatedAt,updatedAt";
 }

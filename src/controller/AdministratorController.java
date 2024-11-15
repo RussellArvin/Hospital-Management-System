@@ -3,7 +3,6 @@ package controller;
 import enums.AppointmentAction;
 import enums.UserRole;
 import java.util.Scanner;
-import java.util.Scanner;
 import model.Administrator;
 import model.Medicine;
 import model.ReplenishmentRequestDetail;

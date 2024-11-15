@@ -9,11 +9,12 @@ import model.Nurse;
 import model.Patient;
 import model.Pharmacist;
 import model.User;
-import repository.AdministratorRepository;
 import repository.DoctorRepository;
-import repository.NurseRepository;
 import repository.PatientRepository;
-import repository.PharmacistRepository;
+import repository.base.CsvRepository;
+import repository.mapper.AdministratorMapper;
+import repository.mapper.NurseMapper;
+import repository.mapper.PharmacistMapper;
 
 /**
  * The UserService class provides methods for managing users, including finding, updating, 
@@ -23,11 +24,11 @@ import repository.PharmacistRepository;
  * @version 1.0
  */
 public class UserService {
-    private AdministratorRepository administratorRepository;
-    private PharmacistRepository pharmacistRepository;
+    private CsvRepository<Administrator,AdministratorMapper> administratorRepository;
+    private CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository;
     private DoctorRepository doctorRepository;
     private PatientRepository patientRepository;
-    private NurseRepository nurseRepository;
+    private CsvRepository<Nurse, NurseMapper> nurseRepository;
 
     /**
      * Constructs a UserService with the required repositories.
@@ -39,11 +40,11 @@ public class UserService {
      * @param nurseRepository         Repository for managing nurses.
      */
     public UserService(
-        AdministratorRepository administratorRepository,
-        PharmacistRepository pharmacistRepository,
+        CsvRepository<Administrator,AdministratorMapper> administratorRepository,
+        CsvRepository<Pharmacist, PharmacistMapper> pharmacistRepository,
         DoctorRepository doctorRepository,
         PatientRepository patientRepository,
-        NurseRepository nurseRepository
+        CsvRepository<Nurse, NurseMapper> nurseRepository
     ) {
         this.administratorRepository = administratorRepository;
         this.pharmacistRepository = pharmacistRepository;

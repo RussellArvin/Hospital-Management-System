@@ -26,16 +26,6 @@ public class PatientRepository extends CsvRepository<Patient, PatientMapper> {
     }
 
     /**
-     * Retrieves all Patient records from the CSV file.
-     *
-     * @return An array of all Patient objects in the repository.
-     */
-    @Override
-    public Patient[] findAll() {
-        return super.findAll(Patient.class);
-    }
-
-    /**
      * Finds and returns a Patient record by the specified name.
      *
      * @param patientName The name of the patient to search for.

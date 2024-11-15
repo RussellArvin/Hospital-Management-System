@@ -28,16 +28,6 @@ public class ReplenishmentRequestRepository extends CsvRepository<ReplenishmentR
     }
 
     /**
-     * Retrieves all ReplenishmentRequest records from the CSV file.
-     *
-     * @return An array of all ReplenishmentRequest objects in the repository.
-     */
-    @Override
-    public ReplenishmentRequest[] findAll() {
-        return super.findAll(ReplenishmentRequest.class);
-    }
-
-    /**
      * Finds and returns multiple ReplenishmentRequest records with the specified status.
      *
      * @param status The status of the replenishment requests to search for.
