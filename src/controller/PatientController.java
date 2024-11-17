@@ -112,7 +112,7 @@ public class PatientController extends BaseController<PatientMenuUI> {
      */
     private void viewMedialRecord() {
         MedicalRecordDetail[] records = patientService.getMedicalRecordsByPatientId(patient.getId());
-        PatientVital vital = patientService.geLatestPatientVitalByPatientId(patient.getId());
+        PatientVital vital = patientService.getLatestPatientVitalByPatientId(patient.getId());
         PatientRecordUI.display(this.patient, this.scanner, records, vital);
     }
 

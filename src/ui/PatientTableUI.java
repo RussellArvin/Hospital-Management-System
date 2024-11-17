@@ -221,7 +221,7 @@ public class PatientTableUI {
         }
 
         MedicalRecordDetail[] records = patientService.getMedicalRecordsByPatientId(patientId);
-        PatientVital vital = patientService.geLatestPatientVitalByPatientId(patientId);
+        PatientVital vital = patientService.getLatestPatientVitalByPatientId(patientId);
 
         clearScreen();
         PatientRecordUI.display(patient, scanner, records, vital);

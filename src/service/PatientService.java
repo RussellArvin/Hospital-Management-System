@@ -202,7 +202,7 @@ public class PatientService {
      * @param patientId The ID of the patient.
      * @return The latest PatientVital data, or null if no data is available.
      */
-    public PatientVital geLatestPatientVitalByPatientId(String patientId) {
+    public PatientVital getLatestPatientVitalByPatientId(String patientId) {
         PatientVital[] vitals = this.patientVitalRepository.findManyByPatientId(patientId);
 
         if (vitals == null || vitals.length == 0) {
